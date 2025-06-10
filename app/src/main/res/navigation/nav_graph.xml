@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.shopenest.homescreen.view.HomeFragment"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_homeFragment_to_seeAllFragment"
+            app:destination="@id/seeAllFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_detailsProductFragment"
+            app:destination="@id/detailsProductFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/favFragment"
+        android:name="com.example.shopenest.favouritescreen.view.FavFragment"
+        tools:layout="@layout/fragment_fav" />
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.shopenest.cartscreen.view.CartFragment"
+        tools:layout="@layout/fragment_cart" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.shopenest.profile.view.ProfileFragment"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/seeAllFragment"
+        android:name="com.example.shopenest.homescreen.view.SeeAllFragment"
+        tools:layout="@layout/fragment_see_all">
+        <argument
+            android:name="position"
+            android:defaultValue="0"
+            app:argType="integer" />
+        <argument
+            android:name="id"
+            android:defaultValue="451595567394L"
+            app:argType="long" />
+        <argument
+            android:name="isItFromTheBrand"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/action_seeAllFragment_to_detailsProductFragment"
+            app:destination="@id/detailsProductFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsProductFragment"
+        android:name="com.example.shopenest.homescreen.view.DetailsProductFragment"
+        tools:layout="@layout/fragment_details_product">
+
+
+        <argument
+            android:name="idProductDetails"
+            app:argType="long" />
+
+    </fragment>
+
+
+</navigation>
