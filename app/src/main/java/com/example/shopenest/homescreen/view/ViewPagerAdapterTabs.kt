@@ -1,4 +1,4 @@
-package com.example.shopenest.homescreen
+package com.example.shopenest.homescreen.view
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

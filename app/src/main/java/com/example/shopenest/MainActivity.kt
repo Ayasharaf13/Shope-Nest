@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         if (navHostFragment != null) {
             navController = navHostFragment.navController
         }
-     
+
 
         // Set up the ActionBar with NavController
 

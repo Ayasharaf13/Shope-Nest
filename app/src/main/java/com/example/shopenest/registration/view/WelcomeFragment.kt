@@ -5,11 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.navigation.fragment.findNavController
 import com.example.shopenest.R
 
 
 class WelcomeFragment : Fragment() {
 
+    lateinit var buttonLogin: Button
+    lateinit var buttonSignUp: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,6 +28,33 @@ class WelcomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_welcome, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        buttonLogin = view.findViewById(R.id.buttonWelcomeLogin)
+        buttonSignUp = view.findViewById(R.id.buttonWelcomeSignUp)
+
+        buttonLogin.setOnClickListener {
+
+            val loginFragment = LoginFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, loginFragment)
+                .addToBackStack(null) // Optional: adds to back stack
+                .commit()
+        }
+
+        buttonSignUp.setOnClickListener {
+
+            val signupFragment = SignupFragment()
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, signupFragment)
+                .addToBackStack(null) // Optional: adds to back stack
+                .commit()
+
+        }
+
     }
 
     companion object {

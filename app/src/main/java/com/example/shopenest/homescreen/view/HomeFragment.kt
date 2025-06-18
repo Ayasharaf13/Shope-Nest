@@ -19,7 +19,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -27,13 +26,11 @@ import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.shopenest.R
 import com.example.shopenest.db.ConcreteLocalSource
 import com.example.shopenest.homescreen.GenericAdapterSliderImage
 
-import com.example.shopenest.homescreen.ViewPagerAdapterTabs
 import com.example.shopenest.homescreen.viewmodel.HomeViewModel
 import com.example.shopenest.homescreen.viewmodel.HomeViewModelFactory
 import com.example.shopenest.model.Repository
@@ -41,8 +38,6 @@ import com.example.shopenest.network.ShoppingClient
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.*
-import net.lucode.hackware.magicindicator.MagicIndicator
-import net.lucode.hackware.magicindicator.buildins.commonnavigator.CommonNavigator
 
 
 class HomeFragment : Fragment() {
@@ -51,7 +46,7 @@ class HomeFragment : Fragment() {
     lateinit var homeViewModel: HomeViewModel
     lateinit var homeViewModelFactory: HomeViewModelFactory
     lateinit var adapter: BrandAdapter
-    lateinit var tabsAdapter:ViewPagerAdapterTabs
+    lateinit var tabsAdapter: ViewPagerAdapterTabs
     lateinit var tablLayout: TabLayout
     private val tabTextList = arrayOf( "Women", "Man","Kid")
     private lateinit var search:EditText

@@ -5,9 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.navigation.fragment.findNavController
+import com.example.shopenest.AuthActivity
 import com.example.shopenest.R
 
 class OnboardingFragmentOne : Fragment() {
+
+    lateinit var buttonSkip:Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,6 +28,17 @@ class OnboardingFragmentOne : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_onboarding_one, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        buttonSkip = view.findViewById(R.id.buttonPage1)
+
+  buttonSkip.setOnClickListener {
+      (activity as? AuthActivity)?.goToNextPage(0)
+  }
+
     }
 
     companion object {
