@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import com.example.shopenest.AuthActivity
+import com.example.shopenest.OnboardingActivity
 import com.example.shopenest.R
 
 class OnboardingFragmentTwo : Fragment() {
@@ -32,15 +33,9 @@ class OnboardingFragmentTwo : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         buttonSkip = view.findViewById(R.id.buttonPage2)
         buttonSkip.setOnClickListener{
-            (activity as? AuthActivity)?.goToNextPage(1)
-        }
-      /*  buttonSkip.setOnClickListener{
-            val action = OnboardingFragmentTwoDirections
-                .actionOnboardingFragmentTwoToOnboardingFragmentThree()
-            findNavController().navigate(action)
+            (activity as? OnboardingActivity)?.goToNextPage(1)
         }
 
-       */
     }
 
     companion object {

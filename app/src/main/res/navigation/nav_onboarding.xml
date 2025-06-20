@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_onboarding"
+    app:startDestination="@id/onboardingFragmentOne">
+    <fragment
+        android:id="@+id/onboardingFragmentOne"
+        android:name="com.example.shopenest.onboardingscreen.view.OnboardingFragmentOne"
+        android:label="fragment_onboarding_one"
+        tools:layout="@layout/fragment_onboarding_one" />
+    <fragment
+        android:id="@+id/onboardingFragmentTwo"
+        android:name="com.example.shopenest.onboardingscreen.view.OnboardingFragmentTwo"
+        android:label="OnboardingFragmentTwo" />
+    <fragment
+        android:id="@+id/onboardingFragmentThree2"
+        android:name="com.example.shopenest.onboardingscreen.view.OnboardingFragmentThree"
+        android:label="OnboardingFragmentThree" />
+</navigation>

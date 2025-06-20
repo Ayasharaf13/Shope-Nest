@@ -1,5 +1,6 @@
 package com.example.shopenest.onboardingscreen.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -36,25 +37,20 @@ lateinit var buttonSkip: Button
 
         buttonSkip = view.findViewById(R.id.buttonPage3)
         buttonSkip.setOnClickListener{
-            val fragmentB = WelcomeFragment()
-            val onboardingFragmentThree = OnboardingFragmentThree()
+
+
+            val intent = Intent(requireActivity(), AuthActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish() // optional: prevent going back to onboarding
 
 
 
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, fragmentB)
-                .addToBackStack(null) // Optional: adds to back stack
-                .commit()
-           // (activity as? AuthActivity)?.goToNextPage(2)
-        }
-      /*  buttonSkip.setOnClickListener{
-            val action = OnboardingFragmentThreeDirections
-                .actionOnboardingFragmentThreeToWelcomeFragment()
-            findNavController().navigate(action)
+            // (activity as? AuthActivity)?.goToNextPage(2)
         }
 
-       */
     }
+
+
 
     companion object {
         /**

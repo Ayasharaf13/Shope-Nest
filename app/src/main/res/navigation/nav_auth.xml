@@ -3,32 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_auth"
-    app:startDestination="@id/onboardingFragmentOne">
+    app:startDestination="@id/welcomeFragment">
 
-    <fragment
-        android:id="@+id/onboardingFragmentOne"
-        android:name="com.example.shopenest.onboardingscreen.view.OnboardingFragmentOne"
-        android:label="fragment_onboarding_one"
-        tools:layout="@layout/fragment_onboarding_one" >
-
-    </fragment>
-    <fragment
-        android:id="@+id/onboardingFragmentTwo"
-        android:name="com.example.shopenest.onboardingscreen.view.OnboardingFragmentTwo"
-        android:label="OnboardingFragmentTwo"
-        tools:layout="@layout/fragment_onboarding_two">
-
-    </fragment>
-    <fragment
-        android:id="@+id/onboardingFragmentThree"
-        android:name="com.example.shopenest.onboardingscreen.view.OnboardingFragmentThree"
-        android:label="OnboardingFragmentThree"
-        tools:layout="@layout/fragment_onboarding_three">
-
-        <action
-            android:id="@+id/action_onboardingFragmentThree_to_welcomeFragment"
-            app:destination="@id/welcomeFragment" />
-    </fragment>
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.shopenest.registration.view.LoginFragment"

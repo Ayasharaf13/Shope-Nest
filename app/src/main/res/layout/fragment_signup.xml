@@ -94,19 +94,17 @@
 
     <Button
         android:id="@+id/buttonSignUp"
-        android:layout_width="335dp"
-        android:layout_height="53dp"
-        android:layout_marginTop="101dp"
+        android:layout_width="282dp"
+        android:layout_height="55dp"
         android:layout_marginEnd="45dp"
-        android:layout_marginBottom="177dp"
+        android:layout_marginBottom="80dp"
         android:backgroundTint="@color/black"
         android:fontFamily="@font/inter18ptregular"
         android:text="Sign up"
         android:textAllCaps="false"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPasswordSignUp" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

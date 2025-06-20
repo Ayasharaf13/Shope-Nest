@@ -84,10 +84,10 @@
 
     <Button
         android:id="@+id/buttonLogin"
-        android:layout_width="335dp"
-        android:layout_height="53dp"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="152dp"
+        android:layout_width="282dp"
+        android:layout_height="55dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginBottom="80dp"
         android:backgroundTint="@color/black"
         android:fontFamily="@font/inter18ptregular"
         android:text="Log in "

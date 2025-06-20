@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.navigation.fragment.findNavController
 import com.example.shopenest.AuthActivity
+import com.example.shopenest.OnboardingActivity
 import com.example.shopenest.R
 
 class OnboardingFragmentOne : Fragment() {
@@ -36,7 +37,8 @@ class OnboardingFragmentOne : Fragment() {
         buttonSkip = view.findViewById(R.id.buttonPage1)
 
   buttonSkip.setOnClickListener {
-      (activity as? AuthActivity)?.goToNextPage(0)
+      (activity as? OnboardingActivity)?.goToNextPage(0)
+
   }
 
     }

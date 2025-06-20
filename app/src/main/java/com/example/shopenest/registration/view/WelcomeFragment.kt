@@ -37,21 +37,17 @@ class WelcomeFragment : Fragment() {
         buttonSignUp = view.findViewById(R.id.buttonWelcomeSignUp)
 
         buttonLogin.setOnClickListener {
+            val action = WelcomeFragmentDirections
+                .actionWelcomeFragmentToLoginFragment()
+            findNavController().navigate(action)
 
-            val loginFragment = LoginFragment()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, loginFragment)
-                .addToBackStack(null) // Optional: adds to back stack
-                .commit()
         }
 
         buttonSignUp.setOnClickListener {
 
-            val signupFragment = SignupFragment()
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, signupFragment)
-                .addToBackStack(null) // Optional: adds to back stack
-                .commit()
+            val action = WelcomeFragmentDirections
+                .actionWelcomeFragmentToSignupFragment()
+            findNavController().navigate(action)
 
         }
 
