@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "251236390820",
+    "project_id": "shope-nest",
+    "storage_bucket": "shope-nest.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251236390820:android:fa61b1e0e13335229ad331",
+        "android_client_info": {
+          "package_name": "com.example.shopenest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251236390820-t5adu5bak02l9g1l1haucvh9nov8qv19.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shopenest",
+            "certificate_hash": "aa0b1a1ea620622a505e2c8fabb24e457e8c9924"
+          }
+        },
+        {
+          "client_id": "251236390820-rvd79pvj6ad9eme2eflnpui4au0jupae.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAMEH3-5gEwMVj4bOibsXHoruRXU-bXt0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251236390820-rvd79pvj6ad9eme2eflnpui4au0jupae.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

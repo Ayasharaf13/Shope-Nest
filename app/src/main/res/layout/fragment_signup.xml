@@ -11,7 +11,7 @@
         android:id="@+id/textSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="148dp"
+        android:layout_marginStart="130dp"
         android:layout_marginTop="40dp"
         android:fontFamily="@font/poppinsbold"
         android:text="Sign up"
@@ -33,15 +33,21 @@
 
     <EditText
         android:id="@+id/editTextTextPersonNameSignUp"
-        android:layout_width="350dp"
+
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="31dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/rounded_edit_box"
         android:ems="10"
         android:hint="example@gmail.com"
         android:inputType="textPersonName"
-        android:minHeight="48dp"
+        android:minHeight="54dp"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+
         app:layout_constraintTop_toBottomOf="@+id/textEmailSignUp" />
 
     <TextView
@@ -56,55 +62,99 @@
 
     <EditText
         android:id="@+id/editTextTextPasswordSignUp"
-        android:layout_width="350dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="31dp"
-        android:layout_marginTop="15dp"
+        app:passwordToggleEnabled="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/rounded_edit_box"
+
+        app:endIconMode="@drawable/iconeye"
         android:ems="10"
-        android:drawableRight="@drawable/iconeye"
         android:hint="must be 8 characters "
         android:inputType="textPassword"
-        android:minHeight="48dp"
+        android:minHeight="54dp"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textCreatePasswordSignUp" />
 
     <TextView
         android:id="@+id/textConfirmPasswordSignUp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="15dp"
         android:layout_marginStart="31dp"
         android:layout_marginTop="20dp"
-        android:text="TextView"
+        android:text="Confirm password"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextTextPasswordSignUp" />
 
     <EditText
         android:id="@+id/editTextConfirmPasswordSignUp"
-        android:layout_width="350dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="31dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="24dp"
+        android:background="@drawable/rounded_edit_box"
+
         android:ems="10"
         android:hint="repeat password"
         android:inputType="textPassword"
-        android:drawableRight="@drawable/iconeye"
-        android:minHeight="48dp"
+        android:minHeight="54dp"
+        android:padding="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+
         app:layout_constraintTop_toBottomOf="@+id/textConfirmPasswordSignUp" />
 
     <Button
         android:id="@+id/buttonSignUp"
-        android:layout_width="282dp"
-        android:layout_height="55dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginBottom="80dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="40dp"
         android:backgroundTint="@color/black"
         android:fontFamily="@font/inter18ptregular"
+
         android:text="Sign up"
         android:textAllCaps="false"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textRegisterWith"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/inter18ptregular"
+        android:gravity="center_horizontal"
+        android:text="Or Register with"
+        app:layout_constraintBottom_toTopOf="@+id/googleButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/googleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:background="@drawable/round_background_google"
+        android:contentDescription="Google Sign-In"
+        android:paddingLeft="45dp"
+
+        android:paddingTop="18dp"
+        android:paddingRight="45dp"
+        android:paddingBottom="18dp"
+        android:src="@drawable/googleicon"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSignUp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
     id 'org.jetbrains.kotlin.android'
     id 'org.jetbrains.kotlin.kapt'
     id 'androidx.navigation.safeargs.kotlin'
@@ -18,7 +19,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.shopenest"
-        minSdk 21
+        minSdk 26
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -103,8 +104,23 @@ dependencies {
 
     implementation 'com.github.hackware1993:MagicIndicator:1.7.0'
 
+   // implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
 
+ //   implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-auth:23.1.0'
+
+
+    // Also add the dependencies for the Credential Manager libraries and specify their versions
+    implementation("androidx.credentials:credentials:1.0.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.0.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.0.0")
+
+
+
+    // Also add the dependency for the Google Play services library and specify its version
+  // implementation 'com.google.android.gms:play-services-auth:21.2.0'
     // implementation 'com.github.denzcoskun:ImageSlideshow:0.1.2'
+
 
   //  implementation 'com.github.smarteist:autoimageslider:1.4.1'
  // implementation 'com.github.smarteist:autoimageslider:1.4.0'
