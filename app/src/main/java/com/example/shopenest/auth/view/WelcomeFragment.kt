@@ -1,4 +1,4 @@
-package com.example.shopenest.registration.view
+package com.example.shopenest.auth.view
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

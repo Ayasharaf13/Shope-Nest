@@ -24,9 +24,12 @@
         <item name="android:textColorPrimary">@color/black</item> <!-- Title color -->
     </style>
 
-    <style name="CustomTabLayoutStyle" parent="Widget.Design.TabLayout">
-        <item name="tabSelectedTextColor">#FFF</item>
+    <style name="CustomTabLayoutStyle" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">14sp</item>
+        <item name="textAllCaps">false</item>
     </style>
+
+
 
     <style name="AppTheme.Button" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/custom_button</item>

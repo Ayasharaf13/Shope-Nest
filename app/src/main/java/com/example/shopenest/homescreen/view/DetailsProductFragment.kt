@@ -34,6 +34,7 @@ class DetailsProductFragment : Fragment() {
     lateinit var detailsProductFactory: HomeViewModelFactory
     lateinit var textDetails:TextView
     lateinit var textTitle:TextView
+    lateinit var textPrice:TextView
     lateinit var  slidProducts:ViewPager2
     lateinit var sliderImageAdapter: GenericAdapterSliderImage<ImageProduct>
 
@@ -81,6 +82,8 @@ class DetailsProductFragment : Fragment() {
          textDetails = view.findViewById(R.id.textDetails)
         textTitle = view.findViewById(R.id.textNameProduct)
         slidProducts = view.findViewById(R.id.productSlider)
+        textPrice = view.findViewById(R.id.textPrice)
+
       //  GenericAdapterSliderImage()
 
 
@@ -111,6 +114,8 @@ class DetailsProductFragment : Fragment() {
           textDetails.text =   responce.product.body_html
                 textTitle.text = responce.product.title
               val imagess =  responce.product.images
+             textPrice.text =   responce.product.variants.firstOrNull()?.price
+
                 sliderImageAdapter =  GenericAdapterSliderImage<ImageProduct>(imagess,requireContext(),  bind = { product, view, position ->
 
                  var imageView =   view.findViewById<ImageView>(R.id.imageView)

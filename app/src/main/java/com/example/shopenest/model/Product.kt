@@ -21,9 +21,11 @@ data class Product(
     val status: String = "",
     val adminGraphqlApiId: String = "",
     val image:ImageProduct = ImageProduct(),
-   // val variants: List<Variant>,
+    val variants: List<Variant> = List(3) { Variant() },
+
+    // val variants: List<Variant>  = List<Variant>(),
    // val options: List<Option>,
-    val images: List<ImageProduct> = emptyList(),
+    val images: List<ImageProduct> = emptyList()
 
 
 

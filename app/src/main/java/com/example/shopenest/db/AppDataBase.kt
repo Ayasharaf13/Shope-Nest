@@ -8,7 +8,7 @@ import androidx.room.TypeConverters
 import com.example.shopenest.model.Product
 import com.example.shopenest.utilities.Converter
 
-@Database (entities = [Product::class], version = 1 ,exportSchema = true)
+@Database (entities = [Product::class], version = 3 ,exportSchema = true)
 
 @TypeConverters(Converter::class)
 abstract class AppDataBase :RoomDatabase() {

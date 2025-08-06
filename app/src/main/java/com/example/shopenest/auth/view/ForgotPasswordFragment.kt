@@ -1,4 +1,4 @@
-package com.example.shopenest.registration.view
+package com.example.shopenest.auth.view
 
 import android.content.ContentValues.TAG
 import android.os.Bundle
@@ -16,7 +16,6 @@ import com.example.shopenest.R
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.ktx.Firebase
 
 class ForgotPasswordFragment : Fragment() {
 
@@ -57,6 +56,7 @@ class ForgotPasswordFragment : Fragment() {
 
             val action =
                 ForgotPasswordFragmentDirections.actionForgotPasswordFragmentToLoginFragment()
+
             findNavController().navigate(action)
 
         }

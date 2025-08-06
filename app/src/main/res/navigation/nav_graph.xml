@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_homeFragment_to_detailsProductFragment"
             app:destination="@id/detailsProductFragment" />
+
+
+
     </fragment>
     <fragment
         android:id="@+id/favFragment"
@@ -30,22 +33,40 @@
         tools:layout="@layout/fragment_profile" />
     <fragment
         android:id="@+id/seeAllFragment"
-        android:name="com.example.shopenest.homescreen.view.SeeAllFragment"
+        android:name="com.example.shopenest.search.view.SeeAllFragment"
         tools:layout="@layout/fragment_see_all">
         <argument
             android:name="position"
             android:defaultValue="0"
             app:argType="integer" />
         <argument
-            android:name="id"
+            android:name="title"
             android:defaultValue="451595567394L"
-            app:argType="long" />
+            app:argType="string" />
         <argument
             android:name="isItFromTheBrand"
             app:argType="boolean" />
+
+
         <action
             android:id="@+id/action_seeAllFragment_to_detailsProductFragment"
             app:destination="@id/detailsProductFragment" />
+        <action
+            android:id="@+id/action_seeAllFragment_to_bottomFilterDialogFragment"
+            app:destination="@id/bottomFilterDialogFragment" />
+        <argument
+            android:name="rangePrice1"
+            app:argType="float"
+            android:defaultValue="0" />
+        <argument
+            android:name="rangePrice2"
+            app:argType="float"
+            android:defaultValue="0" />
+        <argument
+            android:name="isApply"
+            app:argType="boolean"
+            android:defaultValue="false" />
+
     </fragment>
     <fragment
         android:id="@+id/detailsProductFragment"
@@ -58,6 +79,18 @@
             app:argType="long" />
 
     </fragment>
+
+
+    <dialog
+        android:id="@+id/bottomFilterDialogFragment"
+        android:name="com.example.shopenest.search.view.BottomFilterDialogFragment"
+        android:label="fragment_bottom_filter_dialog"
+        tools:layout="@layout/fragment_bottom_filter_dialog" >
+
+        <action
+            android:id="@+id/action_bottomFilterDialogFragment_to_seeAllFragment"
+            app:destination="@id/seeAllFragment" />
+    </dialog>
 
 
 </navigation>

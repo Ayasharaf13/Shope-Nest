@@ -4,6 +4,7 @@ import com.example.shopenest.model.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -66,13 +67,29 @@ class ShoppingClient:RemoteSource{
         return apiService.getProductsForSectionManCategory()
     }
 
-    override suspend fun getProductsForBrands(id:Long): ShoppingProducts {
+    override suspend fun getProductsForBrands(vendor:String): ShoppingProducts {
 
-        return apiService.getProductsForBrands(id)
+        return apiService.getProductsForBrands(vendor)
     }
 
     override suspend fun getProductsDetails(id: Long): ProductResponse {
         return apiService.getProductsDetails(id)
+    }
+
+    override suspend fun createCustomer(customer: ResponseCustomer): Response<ResponseCustomer> {
+        return apiService.createCustomer(customer)
+    }
+
+    override suspend fun getCustomerByEmail(email: String): Response<Customers> {
+        return apiService.getCustomerByEmail(email)
+    }
+
+    override suspend fun getCountCustomer(): CountCustomer {
+        return apiService.getCountCustomer()
+    }
+
+    override suspend fun deleteCustomer(customerId: Long): Response<Unit> {
+        return apiService.deleteCustomer(customerId)
     }
 
 

@@ -2,6 +2,7 @@ package com.example.shopenest.utilities
 
 import androidx.room.TypeConverter
 import com.example.shopenest.model.ImageProduct
+import com.example.shopenest.model.Variant
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -31,6 +32,21 @@ class Converter {
         val type = object : TypeToken<List<ImageProduct>>() {}.type
         return Gson().fromJson(json, type)
     }
+
+
+    @TypeConverter
+    fun fromVariantList(value: List<Variant>): String {
+        return Gson().toJson(value)
+    }
+
+    @TypeConverter
+    fun toVariantList(value: String): List<Variant> {
+        val type = object : TypeToken<List<Variant>>() {}.type
+        return Gson().fromJson(value, type)
+    }
+
+
+
 
 
 }

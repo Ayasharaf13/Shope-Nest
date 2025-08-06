@@ -38,12 +38,12 @@ class BrandAdapter (var context:View): ListAdapter<SmartCollection, BrandAdapter
             .load(brand.image.src)
             .placeholder(R.drawable.ic_launcher_background) // Optional placeholder
             .into(holder.imageBrand)
-         var idBrand =    brand.id
+         var titleBrand =    brand.title
 
 
            holder.imageBrand.setOnClickListener {
-               Log.i("brandId: ",idBrand.toString())
-               val  action : NavDirections =  HomeFragmentDirections.actionHomeFragmentToSeeAllFragment(id =idBrand , isItFromTheBrand = true)
+               Log.i("brandId: ",titleBrand.toString())
+               val  action : NavDirections =  HomeFragmentDirections.actionHomeFragmentToSeeAllFragment(title = titleBrand , isItFromTheBrand = true)
                Navigation.findNavController(context).navigate(action);
 
 

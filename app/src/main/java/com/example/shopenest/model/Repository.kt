@@ -5,6 +5,7 @@ import com.example.shopenest.network.RemoteSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
+import retrofit2.Response
 
 class Repository(remoteSource: RemoteSource, localSource: LocalSource) :RepositoryInterface {
 
@@ -42,13 +43,29 @@ class Repository(remoteSource: RemoteSource, localSource: LocalSource) :Reposito
         return remoteSource.getProductsForSectionMenCategory()
     }
 
-    override suspend fun getProductsForBrands(id: Long): ShoppingProducts {
+    override suspend fun getProductsForBrands(vendor: String): ShoppingProducts {
 
-        return remoteSource.getProductsForBrands(id)
+        return remoteSource.getProductsForBrands(vendor)
     }
 
     override suspend fun getProductsDetails(id: Long): ProductResponse {
         return remoteSource.getProductsDetails(id)
+    }
+
+    override suspend fun createCustomer(customer:ResponseCustomer): Response<ResponseCustomer> {
+        return remoteSource.createCustomer(customer)
+    }
+
+    override suspend fun getCustomerByEmail(email: String): Response<Customers> {
+        return remoteSource.getCustomerByEmail(email)
+    }
+
+    override suspend fun getCountCustomer(): CountCustomer {
+        return remoteSource.getCountCustomer()
+    }
+
+    override suspend fun deleteCustomer(customerId: Long): Response<Unit> {
+        return remoteSource.deleteCustomer(customerId)
     }
 
     companion object{

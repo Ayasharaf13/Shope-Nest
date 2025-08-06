@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
    android:background="@drawable/radius_corner"
 
-    tools:context=".registration.view.WelcomeFragment">
+    tools:context=".auth.view.WelcomeFragment">
 
     <TextView
         android:id="@+id/textWelcome"

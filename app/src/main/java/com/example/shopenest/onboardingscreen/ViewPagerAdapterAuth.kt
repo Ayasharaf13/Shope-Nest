@@ -6,7 +6,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.shopenest.onboardingscreen.view.OnboardingFragmentOne
 import com.example.shopenest.onboardingscreen.view.OnboardingFragmentThree
 import com.example.shopenest.onboardingscreen.view.OnboardingFragmentTwo
-import com.example.shopenest.registration.view.WelcomeFragment
 
 
 class ViewPagerAdapterAuth(fm: FragmentActivity): FragmentStateAdapter(fm) {

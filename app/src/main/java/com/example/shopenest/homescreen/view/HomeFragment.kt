@@ -2,17 +2,13 @@ package com.example.shopenest.homescreen.view
 
 
 import android.annotation.SuppressLint
-import android.content.ClipData
-import android.content.ClipDescription
-import android.content.ClipboardManager
+import android.content.*
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -24,19 +20,24 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavDirections
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.example.shopenest.AuthActivity
+import com.example.shopenest.MainActivity
 import com.example.shopenest.R
+import com.example.shopenest.auth.view.WelcomeFragmentDirections
 import com.example.shopenest.db.ConcreteLocalSource
 import com.example.shopenest.homescreen.GenericAdapterSliderImage
-
 import com.example.shopenest.homescreen.viewmodel.HomeViewModel
 import com.example.shopenest.homescreen.viewmodel.HomeViewModelFactory
 import com.example.shopenest.model.Repository
 import com.example.shopenest.network.ShoppingClient
+import com.example.shopenest.utilities.GoogleAuthHelper
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
 
 
@@ -49,10 +50,14 @@ class HomeFragment : Fragment() {
     lateinit var tabsAdapter: ViewPagerAdapterTabs
     lateinit var tablLayout: TabLayout
     private val tabTextList = arrayOf( "Women", "Man","Kid")
-    private lateinit var search:EditText
     private lateinit var viewPagertabs:ViewPager2
     private lateinit var viewPagerAds: ViewPager2
     private lateinit var txtSeeAllProducts:TextView
+    private lateinit var buttonLogout:Button
+    private lateinit var googleAuthHelper: GoogleAuthHelper
+
+    private lateinit var pref: SharedPreferences
+    lateinit var auth:FirebaseAuth
 
    // private lateinit var tabLayoutIndicator:TabLayout
 
@@ -96,6 +101,62 @@ class HomeFragment : Fragment() {
     @SuppressLint("SuspiciousIndentation")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        auth = FirebaseAuth.getInstance()
+        buttonLogout = view.findViewById(R.id.buttonLogout)
+
+        googleAuthHelper = GoogleAuthHelper(
+            context = requireContext(),
+            lifecycleOwner = requireActivity(),
+
+            onSuccess = { user ->
+                // ✅ User signed in successfully
+                Log.d("GoogleAuth", "Welcome: ${user?.email}")
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
+                // findNavController().navigate(R.id.action_to_homeFragment)
+            },
+
+            onError = { errorMessage ->
+                // ❌ Sign-in failed
+                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+            }
+
+
+        )
+
+            buttonLogout.setOnClickListener {
+ // don not forget write nav to log in
+                val user = auth.currentUser
+
+                // Check the provider used
+                val isGoogleSignIn =
+                    user?.providerData?.any { it.providerId == "google.com" } == true
+
+                // Sign out from Firebase
+                auth.signOut()
+                val intent = Intent(requireContext(), AuthActivity::class.java)
+                startActivity(intent)
+
+             //   if (isGoogleSignIn) {
+                    googleAuthHelper.googleSignInClient.signOut().addOnCompleteListener {
+                        Log.d("Logout", "Signed out from Google")
+                  //  }
+
+
+                } //else {
+                   // Log.d("Logout", "Signed out from Firebase (email)")
+
+               // }
+
+
+                val editor = pref.edit()
+                editor.clear()
+                editor.apply()
+
+            }
+
 // Start the automatic slideshow when the activity or view is created
 
       //   tabLayoutIndicator = view.findViewById(R.id.tabLayoutIndicator)
@@ -111,16 +172,12 @@ class HomeFragment : Fragment() {
      */
 
 
+      viewPagerAds =view. findViewById (R.id.viewpagerAds)
 
 
-
-
-     viewPagerAds =view. findViewById (R.id.viewpagerAds)
-       search = view.findViewById(R.id.searchText)
 
         txtSeeAllProducts = view.findViewById(R.id.txtSeeMoreProduct)
-      tablLayout = view.findViewById(R.id.tabLayout03)
-
+        tablLayout = view.findViewById(R.id.tabLayout03)
         viewPagertabs = view.findViewById(R.id.viewPagerCategory)
 
 
@@ -141,6 +198,8 @@ class HomeFragment : Fragment() {
                 false
             )
         )
+
+
 
 
 
@@ -297,15 +356,19 @@ class HomeFragment : Fragment() {
 
         tablLayout.tabRippleColor = ColorStateList.valueOf(Color.parseColor("#FF03DAC5"))
 
+
+
+
         // implement the TextWatcher callback listener
-        search.addTextChangedListener(object : TextWatcher {
+      /*  search.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }
 
             override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
                 // Trigger filtering here
-                homeViewModel.filterBrands(s.toString())
+             //   homeViewModel.filterBrands(s.toString())
                 Log.i("filtterbrands",s.toString())
 
             }
@@ -315,6 +378,8 @@ class HomeFragment : Fragment() {
             }
 
         })
+
+       */
 
 
     }

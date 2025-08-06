@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.shopenest.R
 import com.example.shopenest.model.Product
+import com.example.shopenest.search.view.SeeAllFragmentDirections
 
 
 class GenericHomeAdapter (val context:View, val navFrom :String): ListAdapter<Product, GenericHomeAdapter.ViewHolder>(CategoryDiffUtil()) {
@@ -25,9 +26,10 @@ class GenericHomeAdapter (val context:View, val navFrom :String): ListAdapter<Pr
 
         var nameProduct :TextView = itemview.findViewById(R.id.txtNameProduct)
 
+        var priceProduct :TextView = itemview.findViewById(R.id.txtPriceProduct)
+
 
         var addFav :ImageView = itemview.findViewById(R.id.imageFav)
-
 
 
 
@@ -48,12 +50,22 @@ class GenericHomeAdapter (val context:View, val navFrom :String): ListAdapter<Pr
                 .load(imageUrl)
                 .placeholder(R.drawable.ic_launcher_background) // Optional placeholder
                 .into(holder.imageProduct)
+
         }else{
+
 
         }
 
       var proId =  product.id
+
         holder.nameProduct.text = product.title
+
+        val variant = product.variants.firstOrNull()
+        holder.priceProduct.text = variant?.price?: "N/A"
+
+       // val product = apiResponse.products.firstOrNull()
+        Log.d("Product", "Variants: ${product?.variants}")  // Check if it’s null or populated
+
       //  Log.i("product id:::  " , product.id.toString())
 
         holder.itemView.setOnClickListener {
@@ -61,11 +73,14 @@ class GenericHomeAdapter (val context:View, val navFrom :String): ListAdapter<Pr
                 val  action : NavDirections = HomeFragmentDirections.actionHomeFragmentToDetailsProductFragment(proId)//actionSeeAllFragmentToDetailsProductFragment(proId) // HomeFragmentDirections.actionHomeFragmentToSeeAllFragment(id =idBrand , isItFromTheBrand = true)
                 Navigation.findNavController(context).navigate(action);
 
+            }else if (navFrom == "noNav"){
+
+
             }else{
-                val action: NavDirections =
-                    SeeAllFragmentDirections.actionSeeAllFragmentToDetailsProductFragment(proId) // HomeFragmentDirections.actionHomeFragmentToSeeAllFragment(id =idBrand , isItFromTheBrand = true)
-                Navigation.findNavController(context).navigate(action);
-            }
+            val action: NavDirections =
+                SeeAllFragmentDirections.actionSeeAllFragmentToDetailsProductFragment(proId) // HomeFragmentDirections.actionHomeFragmentToSeeAllFragment(id =idBrand , isItFromTheBrand = true)
+            Navigation.findNavController(context).navigate(action);
+        }
         }
 
     }

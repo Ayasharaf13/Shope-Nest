@@ -21,6 +21,19 @@ class HomeViewModel (private val repo: RepositoryInterface) :ViewModel(){
     val product: StateFlow<List<Product>> get() = _product
 
 
+
+    private val _filterProducts: MutableStateFlow<List<Product>> = MutableStateFlow(emptyList())
+
+
+    val filterProducts: StateFlow<List<Product>> get() = _filterProducts
+
+
+    private val _allProducts: MutableStateFlow<List<Product>> = MutableStateFlow(emptyList())
+
+
+    val allProducts: StateFlow<List<Product>> get() = _allProducts
+
+
     // Replace MutableLiveData with MutableStateFlow
     private val _productDetails: MutableStateFlow<ProductResponse> = MutableStateFlow(ProductResponse(Product()))
 
@@ -40,6 +53,7 @@ class HomeViewModel (private val repo: RepositoryInterface) :ViewModel(){
 init {
     Log.i("HomeViewModel", "Init called")
     getBrands()
+
 }
     fun getAllFavProduct(){
 
@@ -119,21 +133,45 @@ init {
         Log.i("filtterbrandsQuerrry",query)
     }
 
-    fun getProductKids () {
+
+    fun searchAllProducts(query: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+          //  _filterProducts.value = (emptyList()) // ✅ Clear previous result
+
+            val women = repo.getProductsForSectionWomenCategory().products
+            val kids = repo.getProductsForSectionKidsCategory().products
+            val men = repo.getProductsForSectionMenCategory().products
+
+            val all = women + kids + men
+
+            val filtered = all.filter {
+                it.title.trim().contains(query, ignoreCase = true)
+            }
+
+
+                _allProducts.value = all
+                _filterProducts.value = filtered
+
+        }
+    }
+
+
+
+    fun getProductKids ( ) {
 
         viewModelScope.launch(Dispatchers.IO) {
 
 
             _product.value = repo.getProductsForSectionKidsCategory().products
+
         }
     }
 
         fun getProductWomen() {
 
             viewModelScope.launch(Dispatchers.IO) {
-
-
                 _product.value = repo.getProductsForSectionWomenCategory().products
+
             }
 
 
@@ -145,24 +183,24 @@ init {
 
         viewModelScope.launch(Dispatchers.IO) {
 
-
             _product.value = repo.getProductsForSectionMenCategory().products
+
         }
 
 
     }
 
 
-        fun getProductsBrand(id:Long) {
+        fun getProductsBrand(vendor:String) {
 
             viewModelScope.launch(Dispatchers.IO) {
 
-
-                _product.value = repo.getProductsForBrands(id).products
+                _product.value = repo.getProductsForBrands(vendor).products
             }
 
-
     }
+
+
 
     fun getProductDetails(id:Long) {
 

@@ -7,11 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import androidx.navigation.fragment.findNavController
 import com.example.shopenest.AuthActivity
 import com.example.shopenest.R
-import com.example.shopenest.onboardingscreen.ViewPagerAdapterAuth
-import com.example.shopenest.registration.view.WelcomeFragment
 
 
 class OnboardingFragmentThree : Fragment() {
