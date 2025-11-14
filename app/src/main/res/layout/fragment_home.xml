@@ -9,9 +9,6 @@
 
 
 
-
-
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpagerAds"
         android:layout_width="0dp"
@@ -101,7 +98,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.761"

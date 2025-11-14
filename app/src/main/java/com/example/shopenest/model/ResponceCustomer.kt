@@ -1,14 +1,14 @@
 package com.example.shopenest.model
 
 
+/*
+data class ResponseCustomerForBody(
 
-data class ResponseCustomer(
-
-   val  customer:Customer
-
-
+   val  customer:CustomerBody
 
 )
+
+ */
 
 
 

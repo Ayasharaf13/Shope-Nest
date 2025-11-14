@@ -1,7 +1,10 @@
 package com.example.shopenest
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.Network
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
@@ -83,6 +86,10 @@ class MainActivity : AppCompatActivity() {
 
         // Enhance user experience by clearing the back stack
         bottomNavItemChangeListener(navView)
+
+
+
+
 
         /*  val homeViewModelFactory = HomeViewModelFactory(
               Repository.getInstance(

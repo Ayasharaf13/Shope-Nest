@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ShopeNest</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -5,3 +6,4 @@
     <string name="tabs">tabs</string>
     <string name="HomeToolbar">HomeToolbar</string>
 </resources>
+

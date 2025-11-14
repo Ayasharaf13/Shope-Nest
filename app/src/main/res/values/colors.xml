@@ -13,8 +13,11 @@
     <color name="background_pageTwo"> #F79E1B</color>
     <color name="background_pageThree">#D23535</color>
     <color name="background_WelcomePage">#172B85</color>
+    <color name="background_EditText">#F3F8FF</color>
+    <color name="background_buttonSave">#263577</color>
 
-    background: ;
+
+
 
 
 

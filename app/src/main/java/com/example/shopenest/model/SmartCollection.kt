@@ -24,6 +24,8 @@ data class SmartCollection (
 
     val admin_graphql_api_id: String = "",
     val image: ImageBrand,
+
+
         )
 
 

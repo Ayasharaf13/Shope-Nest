@@ -1,5 +1,6 @@
 package com.example.shopenest.auth.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -37,44 +38,29 @@ class LoginFragment : Fragment() {
 
     lateinit var userName: EditText
     lateinit var userPassword: EditText
-    lateinit var forgotPasswordText:TextView
+    lateinit var forgotPasswordText: TextView
     lateinit var mAuth: FirebaseAuth
 
     lateinit var buttonLogIn: Button
-    lateinit var   loginViewModelFactory:CreateUserViewModelFactory
-    lateinit var loginViewModel:CreateUserViewModel
+    lateinit var loginViewModelFactory: CreateUserViewModelFactory
+    lateinit var loginViewModel: CreateUserViewModel
     lateinit var buttonGoogle: ImageButton
-    lateinit var pref :SharedPreferences
+    lateinit var pref: SharedPreferences
     private lateinit var googleAuthHelper: GoogleAuthHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
 
-        pref = requireContext().
-        getSharedPreferences("MyPref", Context.MODE_PRIVATE) // 0 - for private mode
+        pref = requireContext().getSharedPreferences(
+            "MyPref",
+            Context.MODE_PRIVATE
+        ) // 0 - for private mode
+        val savedEmail = pref.getString("email", null)
+        val savedCustomerId = pref.getString("customer_id", null)
 
-
-        googleAuthHelper = GoogleAuthHelper(
-            context = requireContext(),
-            lifecycleOwner = requireActivity(),
-
-            onSuccess = { user ->
-                // ✅ User signed in successfully
-                Log.d("GoogleAuth", "Welcome: ${user?.email}")
-                val intent = Intent(requireContext(), MainActivity::class.java)
-                startActivity(intent)
-                requireActivity().finish()
-                // findNavController().navigate(R.id.action_to_homeFragment)
-            },
-
-            onError = { errorMessage ->
-                // ❌ Sign-in failed
-                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
-            }
-
-
-        )
+        Log.d("Email_LogIn: ", "$savedEmail");
+        Log.d("Id_LogIn: ", "$savedCustomerId");
 
         var firbaseapp = FirebaseApp.getApps(requireContext())
         if (firbaseapp.isEmpty()) {
@@ -96,6 +82,7 @@ class LoginFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -109,72 +96,87 @@ class LoginFragment : Fragment() {
             Repository.getInstance(
                 ShoppingClient.getInstance(),
                 ConcreteLocalSource.getInstance(requireContext())
-            ))
+            )
+        )
 
 
         loginViewModel =
             ViewModelProvider(this, loginViewModelFactory).get(CreateUserViewModel::class.java)
 
 
+//current ID : 9367766303010
+     suspend   fun searchCustomerByEmail(email: String) {
 
-          fun searchCustomerByEmail (email:String){
+            loginViewModel.searchCustomerByEmail(email)
 
-              loginViewModel.searchCustomerByEmail(email)
+            lifecycleScope.launchWhenStarted {
 
-              lifecycleScope.launchWhenStarted {
+                loginViewModel.searchCustomer.collect { response ->
 
-                  loginViewModel.searchCustomer.collect{ response->
+                    if (response != null) {
+                        // ✅ User was created successfully
+                        val customer = response.body()?.customers?.find { it.email == email }
 
-                      if (response != null) {
-                          // ✅ User was created successfully
-                          val customer = response.body()?.customers?.find{it.email == email}
+                        Log.d("SearchId ", "Search By Email: ${customer?.id}")
 
-                          Log.d("Search ", "Search By Email: ${customer?.id}")
+                        Log.d("CreateCustomer", "Customer created: ${customer?.email}")
 
-                          Log.d("CreateCustomer", "Customer created: ${customer?.email}")
+                        val customerId = customer?.id
+                        val customerEmail = customer?.email
 
-                          val customerId = customer?.id
-                          val customerEmail = customer?.email
+                        // pref.edit().clear().apply()
 
-                          if (customerId != null && customerEmail != null) {
-                              // Save only after successful creation
-                              pref.edit()
-                                  .putString("customer_id", customerId.toString())
-                                  .putString("email", customerEmail)
-                                  .apply()
+                        if (customerId != null && customerEmail != null) {
+                            // Save only after successful creation
+                            pref.edit()
+                                .putString("customer_id", customerId.toString())
+                                .putString("email", customerEmail)
+                                .apply()
 
-                              Toast.makeText(requireContext(), "found and saved!", Toast.LENGTH_SHORT).show()
-                          }
-
-                          //   Log.i ("customer_id", response.body().customer.email.toString())
-                          // Save to SharedPreferences or navigate
-                      } else {
-                          // ❌ Creation failed or still loading
-                          Toast.makeText(requireContext(), " search failed", Toast.LENGTH_SHORT)
-                              .show()
-                      }
-                      }
-              }
+                            Toast.makeText(requireContext(), "found and saved!", Toast.LENGTH_SHORT)
+                                .show()
+                        }
 
 
-          }
 
-       //  loginViewModel.deleteCustomer(  9143269097762)
+                        //   Log.i ("customer_id", response.body().customer.email.toString())
+                        // Save to SharedPreferences or navigate
+                    } else {
+                        // ❌ Creation failed or still loading
+                        Toast.makeText(requireContext(), " search failed", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            }
 
-        lifecycleScope.launchWhenStarted {
+
+        }
+// 9225789833506
+         /* loginViewModel.deleteCustomer(    9367725605154 )
+
+       lifecycleScope.launchWhenStarted {
             loginViewModel.deleteCustomer.collect {res->
 
-                Log.d("SdeleyeEmailllllll ", "delete By Email: ${res.toString()}")
+                Log.d("SdeleyeEmailllllll:  ", "delete By Email: ${res.toString()}")
 
 
 
 
             }
-        }
+
+                 }
+
+          */
+
+
+
+
+
 
 //email:samshop@333.yahoo.com
-        searchCustomerByEmail("email:ayasharaf444@yahoo.com")
-        lifecycleScope.launchWhenStarted {
+
+        /*  lifecycleScope.launchWhenStarted {
+              searchCustomerByEmail("email:ayasharaf444@yahoo.com")
             loginViewModel.searchCustomer.collect {res->
 
               //  Log.d("SearchByEmailllllll ", "Search By Email: ${res?.body()?.customers?.get(0)?.id}")
@@ -188,37 +190,54 @@ class LoginFragment : Fragment() {
                         Log.d("Search:NN", "No customer found with that email")
                     }
                 } else {
-                    Log.d("Search:NN", "Request failed: ${res?.code()}")
+                    Log.d("Srchearch:NN", "Request failed: ${res?.code()}")
                 }
 
 
             }
         }
 
+         */
 
-        fun checkFondCustomer(email: String) {
+
+
+
+
+
+        @SuppressLint("SuspiciousIndentation")
+          fun checkFondCustomer(email: String) {
 
             val editor = pref.edit()
             val savedEmail = pref.getString("email", null)
-
+          //  editor.clear().apply()
+            lifecycleScope.launch {
 
                 searchCustomerByEmail(email)
 
-             if (savedEmail != email ) {
-                 Toast.makeText(requireContext(), "you can sign up ", Toast.LENGTH_SHORT)
-                     .show()
+                Log.i("signupFirst_", "you can sign upfirst")
 
-            } else {
-                Toast.makeText(requireContext(), "Log in is correct ", Toast.LENGTH_SHORT)
-                    .show()
+                if (savedEmail != email) {
+                    Toast.makeText(requireContext(), "you can sign up ", Toast.LENGTH_SHORT)
+                        .show()
+                    Log.i("signup_", "you can sign up")
 
+                } else {
+                    Log.i("signup_", "Log in is correct")
+                    Toast.makeText(requireContext(), "Log in is correct ", Toast.LENGTH_SHORT)
+                        .show()
+
+                }
             }
         }
 
 
+
             buttonGoogle.setOnClickListener {
                 lifecycleScope.launch {
+
                 googleAuthHelper.startGoogleSignIn()
+
+
             }
         }
         forgotPasswordText.setOnClickListener {
@@ -237,11 +256,13 @@ class LoginFragment : Fragment() {
                  mAuth.signInWithEmailAndPassword(email,password)
                     .addOnCompleteListener(requireActivity()) { task ->
                         if (task.isSuccessful) {
-                            val user = mAuth.currentUser
-                            checkFondCustomer(email)
-                            val intent = Intent(requireContext(), MainActivity::class.java)
-                            startActivity(intent)
-                            requireActivity().finish() // This removes AuthActivity from the back stack
+
+
+                                val user = mAuth.currentUser
+                                checkFondCustomer(email)
+                                val intent = Intent(requireContext(), MainActivity::class.java)
+                                startActivity(intent)
+                                requireActivity().finish() // This removes AuthActivity from the back stack
 
                             //  updateUI(user)
                         } else {
@@ -255,6 +276,33 @@ class LoginFragment : Fragment() {
                     }
             }
         }
+        googleAuthHelper = GoogleAuthHelper(
+            context = requireContext(),
+            lifecycleOwner = requireActivity(),
+
+            onSuccess = { user ->
+                // ✅ User signed in successfully
+                Log.d("GoogleAuth", "Welcome: ${user?.email}")
+
+                val user = mAuth.currentUser
+                val email = user?.email
+                Log.d("Firebase", "User email: $email")
+                if (email != null) {
+                  checkFondCustomer(email)
+
+                }
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
+                // findNavController().navigate(R.id.action_to_homeFragment)
+            },
+
+            onError = { errorMessage ->
+                // ❌ Sign-in failed
+                Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+            }
+        )
+
 
         buttonLogIn.setOnClickListener{
             loginAccount()
@@ -286,4 +334,12 @@ class LoginFragment : Fragment() {
                 }
             }
     }
+
+
+
+
+
 }
+
+
+

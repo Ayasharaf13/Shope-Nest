@@ -16,6 +16,7 @@ import com.example.shopenest.homescreen.viewmodel.HomeViewModel
 import com.example.shopenest.homescreen.viewmodel.HomeViewModelFactory
 import com.example.shopenest.model.Repository
 import com.example.shopenest.network.ShoppingClient
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class MenFragment : Fragment() {
@@ -77,19 +78,16 @@ class MenFragment : Fragment() {
 
 
 
-
-
         // Start collecting the StateFlow
         lifecycleScope.launch {
             menViewModel.product.collect { productList ->
 
-                recyclerMen.adapter = menAdapter
-                menAdapter.submitList(productList)
 
+                    recyclerMen.adapter = menAdapter
+
+                    menAdapter.submitList(productList)
             }
-
         }
-
 
     }
     companion object {

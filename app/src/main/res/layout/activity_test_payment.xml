@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:padding="24dp"
+android:gravity="center"
+tools:context=".TestActivityPayment">
+
+
+
+<!-- Success Icon -->
+<ImageView
+    android:id="@+id/successIcon"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/iconsuccess"
+    android:contentDescription="Success Icon" />
+
+<!-- Title -->
+<TextView
+    android:id="@+id/tvTitle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:text="Payment Successful"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    android:textColor="@color/black" />
+
+<!-- Message -->
+<TextView
+    android:id="@+id/tvMessage"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:text="Your order has been placed successfully!"
+    android:textSize="16sp"
+    android:textColor="@color/black"
+    android:gravity="center" />
+
+<!-- Continue Button -->
+<Button
+    android:id="@+id/btnContinue"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:text="Continue"
+    android:textAllCaps="false"
+    android:backgroundTint="@color/background_buttonSave"
+    android:textColor="@color/white" />
+
+
+
+        <com.paypal.checkout.paymentbutton.PaymentButtonContainer
+            android:id="@+id/payment_button_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:paypal_button_color="silver"
+            app:paypal_button_label="pay"
+            app:paypal_button_shape="rectangle"
+            app:paypal_button_size="large"
+            app:paypal_button_enabled="true" />
+
+</LinearLayout>

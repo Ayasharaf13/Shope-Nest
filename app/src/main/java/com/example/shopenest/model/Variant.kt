@@ -5,8 +5,7 @@ data class Variant(
 val id: Long =0L,
 val product_id: Long = 0L,
 val title: String = "",
-val price: String= ""
-/*
+val price: String= "",
 val position: Int,
 val inventory_policy: String,
 //val compare_at_price: Any?, // Use Any? for nullable/unknown type
@@ -29,6 +28,6 @@ val inventory_quantity: Int,
 val old_inventory_quantity: Int,
 val admin_graphql_api_id: String,
 //val image_id: Any?
-*/
+
 
 )

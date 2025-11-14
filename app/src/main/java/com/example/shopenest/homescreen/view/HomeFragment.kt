@@ -6,6 +6,7 @@ import android.content.*
 import android.content.Context.CLIPBOARD_SERVICE
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.icu.util.Currency
 import android.os.Build
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -32,6 +33,7 @@ import com.example.shopenest.db.ConcreteLocalSource
 import com.example.shopenest.homescreen.GenericAdapterSliderImage
 import com.example.shopenest.homescreen.viewmodel.HomeViewModel
 import com.example.shopenest.homescreen.viewmodel.HomeViewModelFactory
+import com.example.shopenest.model.Product
 import com.example.shopenest.model.Repository
 import com.example.shopenest.network.ShoppingClient
 import com.example.shopenest.utilities.GoogleAuthHelper
@@ -39,6 +41,11 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
+import okhttp3.OkHttpClient
+import java.util.*
 
 
 class HomeFragment : Fragment() {
@@ -55,6 +62,7 @@ class HomeFragment : Fragment() {
     private lateinit var txtSeeAllProducts:TextView
     private lateinit var buttonLogout:Button
     private lateinit var googleAuthHelper: GoogleAuthHelper
+    var code:String? = null
 
     private lateinit var pref: SharedPreferences
     lateinit var auth:FirebaseAuth
@@ -84,6 +92,65 @@ class HomeFragment : Fragment() {
         images.add(R.drawable.discount5)
 
         images.addAll(images)
+
+
+
+
+        homeViewModelFactory = HomeViewModelFactory(
+            Repository.getInstance(
+                ShoppingClient.getInstance(),
+                ConcreteLocalSource.getInstance(requireContext())
+            )
+        )
+
+
+        homeViewModel =
+            ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel::class.java)
+
+        suspend fun safeCall(block: suspend () -> Unit) {
+            repeat(3) { attempt ->
+                try {
+                    block()
+                    return // success
+                } catch (e: Exception) {
+                    if (attempt == 2) throw e
+                    delay(500) // backoff
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            safeCall { homeViewModel.getBrands() }
+
+            safeCall { homeViewModel.getDiscount() }
+        }
+
+
+        lifecycleScope.launch {
+
+            homeViewModel.getBrands()
+
+            delay(500)
+
+            homeViewModel.getDiscount()
+
+
+        }
+
+
+
+        lifecycleScope.launch{
+
+            homeViewModel.discount.collect { code ->
+                Log.d("DiscountCode", "Discount = $code")
+
+                this@HomeFragment.code = code
+
+
+            }
+
+        }
+
 
 
     }
@@ -126,44 +193,43 @@ class HomeFragment : Fragment() {
 
         )
 
-            buttonLogout.setOnClickListener {
- // don not forget write nav to log in
-                val user = auth.currentUser
+        buttonLogout.setOnClickListener {
+            // don not forget write nav to log in
+            val user = auth.currentUser
 
-                // Check the provider used
-                val isGoogleSignIn =
-                    user?.providerData?.any { it.providerId == "google.com" } == true
+            // Check the provider used
+            val isGoogleSignIn =
+                user?.providerData?.any { it.providerId == "google.com" } == true
 
-                // Sign out from Firebase
-                auth.signOut()
-                val intent = Intent(requireContext(), AuthActivity::class.java)
-                startActivity(intent)
+            // Sign out from Firebase
+            auth.signOut()
+            val intent = Intent(requireContext(), AuthActivity::class.java)
+            startActivity(intent)
 
-             //   if (isGoogleSignIn) {
-                    googleAuthHelper.googleSignInClient.signOut().addOnCompleteListener {
-                        Log.d("Logout", "Signed out from Google")
-                  //  }
-
-
-                } //else {
-                   // Log.d("Logout", "Signed out from Firebase (email)")
-
-               // }
+            //   if (isGoogleSignIn) {
+            googleAuthHelper.googleSignInClient.signOut().addOnCompleteListener {
+                Log.d("Logout", "Signed out from Google")
+                //  }
 
 
-                val editor = pref.edit()
-                editor.clear()
-                editor.apply()
+            } //else {
+            // Log.d("Logout", "Signed out from Firebase (email)")
 
-            }
+            // }
+
+
+            val editor = pref.edit()
+            editor.clear()
+            editor.apply()
+
+        }
 
 // Start the automatic slideshow when the activity or view is created
 
-      //   tabLayoutIndicator = view.findViewById(R.id.tabLayoutIndicator)
+        //   tabLayoutIndicator = view.findViewById(R.id.tabLayoutIndicator)
 
 
-
-    /*  var  gridView: GridView = view.findViewById(R.id.gridProduct);
+        /*  var  gridView: GridView = view.findViewById(R.id.gridProduct);
 
         // create a object of myBaseAdapter
        var  baseAdapter: GridProductAdapter =  GridProductAdapter( images);
@@ -172,7 +238,7 @@ class HomeFragment : Fragment() {
      */
 
 
-      viewPagerAds =view. findViewById (R.id.viewpagerAds)
+        viewPagerAds = view.findViewById(R.id.viewpagerAds)
 
 
 
@@ -181,15 +247,13 @@ class HomeFragment : Fragment() {
         viewPagertabs = view.findViewById(R.id.viewPagerCategory)
 
 
-
-
         //   var  gridProducts :GridView= view.findViewById(R.id.gridProduct)
 
-        var recyclerBrands :RecyclerView = view.findViewById(R.id.RecyclerViewBrands)
+        var recyclerBrands: RecyclerView = view.findViewById(R.id.RecyclerViewBrands)
 
         adapter = BrandAdapter(requireView())
 
-     //   recyclerBrand.layoutManager = LinearLayoutManager(requireContext(),HorizontalScrollView)
+        //   recyclerBrand.layoutManager = LinearLayoutManager(requireContext(),HorizontalScrollView)
 
         recyclerBrands.setLayoutManager(
             LinearLayoutManager(
@@ -200,24 +264,14 @@ class HomeFragment : Fragment() {
         )
 
 
-
-
-
-      //
+        //
         //  recyclerBrands.visibility =View.INVISIBLE
 
 
-   homeViewModelFactory = HomeViewModelFactory(
-       Repository.getInstance(
-           ShoppingClient.getInstance(),
-           ConcreteLocalSource.getInstance(requireContext())
-       ))
 
 
-   homeViewModel =
-       ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel::class.java)
 
-        homeViewModel.getBrands()
+
         lifecycleScope.launch(Dispatchers.Main) {
 
             homeViewModel.brand.collect { brandList ->
@@ -226,24 +280,39 @@ class HomeFragment : Fragment() {
                 adapter.submitList(brandList)
 
 
-                }
             }
+        }
 
 
-        val adapter = GenericAdapterSliderImage<Int>(images,requireContext(),  bind = { product, view, position ->
+        // Here you can trigger your ViewModel logic
 
-            view.findViewById<ImageView>(R.id.imageView).setImageResource(images[position])
-        })
-        viewPagerAds.adapter = adapter
+        lifecycleScope.launch {
 
-        startSliding()
+       delay(2000)
+           //  homeViewModel.discount.firstOrNull()
+          //    getPromoCode()
 
-       // TabLayoutMediator(tabLayoutIndicator, viewPagerAds) { tab, position->
+            val adapter = GenericAdapterSliderImage<Int>(
+                code,
+                images,
+                requireContext(),
+                bind = { product, view, position ->
+
+                    view.findViewById<ImageView>(R.id.imageView).setImageResource(images[position])
 
 
-       // }.attach()
+                })
+
+            viewPagerAds.adapter = adapter
+
+            startSliding()
+
+            // TabLayoutMediator(tabLayoutIndicator, viewPagerAds) { tab, position->
 
 
+            // }.attach()
+
+       }
 
 
         viewPagerAds.setOnClickListener{
@@ -273,7 +342,6 @@ class HomeFragment : Fragment() {
            Toast.makeText(requireContext(), "Copied to Clipboard", Toast.LENGTH_SHORT).show()
         }
         // viewPager.setPageTransformer(ViewPagerHorizontalFlipTransformer())
-
 
 
        // viewPager.setPageTransformer(SimplePageTransformer(SimplePageTransformer.CUBE_INSIDE));

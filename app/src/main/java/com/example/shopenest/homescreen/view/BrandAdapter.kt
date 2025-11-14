@@ -1,5 +1,6 @@
 package com.example.shopenest.homescreen.view
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -31,6 +32,7 @@ class BrandAdapter (var context:View): ListAdapter<SmartCollection, BrandAdapter
         return ViewHolder(view)
     }
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder:ViewHolder, position: Int) {
 
         val brand = getItem(position)

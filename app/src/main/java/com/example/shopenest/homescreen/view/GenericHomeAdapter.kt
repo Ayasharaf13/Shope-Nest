@@ -26,9 +26,6 @@ class GenericHomeAdapter (val context:View, val navFrom :String): ListAdapter<Pr
 
         var nameProduct :TextView = itemview.findViewById(R.id.txtNameProduct)
 
-        var priceProduct :TextView = itemview.findViewById(R.id.txtPriceProduct)
-
-
         var addFav :ImageView = itemview.findViewById(R.id.imageFav)
 
 
@@ -56,12 +53,13 @@ class GenericHomeAdapter (val context:View, val navFrom :String): ListAdapter<Pr
 
         }
 
+
       var proId =  product.id
 
         holder.nameProduct.text = product.title
 
-        val variant = product.variants.firstOrNull()
-        holder.priceProduct.text = variant?.price?: "N/A"
+      //  val variant = product.variants.firstOrNull()
+      //  holder.priceProduct.text = variant?.price?: "N/A"
 
        // val product = apiResponse.products.firstOrNull()
         Log.d("Product", "Variants: ${product?.variants}")  // Check if it’s null or populated

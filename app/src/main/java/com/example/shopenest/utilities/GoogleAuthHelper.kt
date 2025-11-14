@@ -52,7 +52,6 @@ class GoogleAuthHelper(
 
 
 
-
     suspend fun startGoogleSignIn() {
         credentialManager = CredentialManager.create(context)
 

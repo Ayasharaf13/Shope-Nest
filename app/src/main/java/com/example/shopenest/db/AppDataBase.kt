@@ -5,15 +5,19 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.example.shopenest.model.CustomerAddress
+
 import com.example.shopenest.model.Product
 import com.example.shopenest.utilities.Converter
 
-@Database (entities = [Product::class], version = 3 ,exportSchema = true)
+@Database (entities = [Product::class,/* CustomerAddress::class*/] ,version = 9 ,exportSchema = true)
 
 @TypeConverters(Converter::class)
 abstract class AppDataBase :RoomDatabase() {
 
     abstract fun getProdDao(): ShoppingDao
+
+  // abstract fun getAddressdDao(): AddressDao
 
     companion object {
 

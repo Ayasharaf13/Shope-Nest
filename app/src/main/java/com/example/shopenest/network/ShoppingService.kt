@@ -5,19 +5,11 @@ import com.example.shopenest.utilities.Constants
 import retrofit2.Response
 import retrofit2.http.*
 
-//get products related to brands and category
-//https://itp-sv-and7.myshopify.com/admin/api/2024-10/collections/451595567394/products.json
 
-//get category
-//https://itp-sv-and7.myshopify.com/admin/api/2024-10/custom_collections.json
-
-// https://itp-sv-and7.myshopify.com/admin/api/2024-10/collections/451595567394/products.json // id:smartcollection
-
-//get prodect details
-//https://itp-sv-and7.myshopify.com/admin/api/2024-10/products/8393073230114.json
 
 interface ShoppingService {
 // response return object inside into list brands (smartcollection)
+
   @Headers("X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
       @GET("smart_collections.json")
      suspend fun getBrands():Brands
@@ -65,7 +57,7 @@ interface ShoppingService {
     "X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}"
     ,"Content-Type:application/json")
   @POST("customers.json")
-  suspend fun createCustomer (@Body customer: ResponseCustomer): Response<ResponseCustomer>
+  suspend fun createCustomer (@Body customer: CustomerRequest): Response<CustomerResponse>
 
 
   @Headers("X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
@@ -82,6 +74,84 @@ interface ShoppingService {
   @DELETE("customers/{id}.json")
   suspend fun deleteCustomer ( @Path("id") customerId: Long):Response<Unit>
 
+
+  @Headers("X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
+  @GET("inventory_levels.json")
+  suspend fun getAvailableProducts(@Query("inventory_item_ids") inventoryItemId: Long): ResponseInventory
+
+
+  @Headers("X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
+  @GET("price_rules/1407947047202/discount_codes.json")
+  suspend fun getDiscount(): ResponseDiscount
+
+
+  @Headers(
+    "X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}"
+    ,"Content-Type:application/json")
+  @POST("draft_orders.json")
+  suspend fun createCartOrder(@Body cartOrder: DraftOrderRequest): Response<ResponseDraftOrderForRequestCreate>
+
+
+
+  @Headers("X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
+  @GET("draft_orders.json")
+  suspend fun getDraftOrders():Response<ResponseDraftOrderForRetrieve>
+
+
+
+  @Headers("X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
+  @DELETE("draft_orders/{id}.json")
+  suspend fun deleteDraftOrderById ( @Path("id") draftOrderId: Long):Response<Unit>
+
+
+
+  @Headers( "X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
+  @PUT("draft_orders/{draft_order_id}/complete.json")
+  suspend fun completeDraftOrder(
+    @Path("draft_order_id") draftOrderId: Long,
+    @Query("payment_pending") paymentPending: Boolean = true
+  ): Response<ResponseDraftOrderForRequestCreate>
+
+
+
+  @Headers( "X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
+  @POST("customers/{customer_id}/addresses.json")
+  suspend fun createCustomerAddress(
+    @Path("customer_id") customerId: Long,
+    @Body request: CreateCustomerAddressRequest
+  ): CustomerAddressResponse
+
+
+
+  @Headers( "X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
+  @GET("customers/{customer_id}/addresses.json")
+  suspend fun getCustomerAddresses(
+    @Path("customer_id") customerId: Long
+  ): CustomerAddressesResponse
+
+
+  @Headers( "X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
+  @GET("customers/{customer_id}.json")
+  suspend fun getCustomerById(
+    @Path("customer_id") customerId: Long
+  ): Response<CustomerResponse>
+
+
+
+  @Headers( "X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
+  @PUT("customers/{customer_id}.json")
+  suspend fun updateCustomer(
+    @Path("customer_id") customerId: Long,
+    @Body body: CustomerRequest
+  ):Response<CustomerResponse>
+
+
+
+  @Headers( "X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
+  @PUT("customers/{customer_id}/addresses/{address_id}/default.json")
+  suspend fun setDefaultAddress(
+    @Path("customer_id") customerId: Long,
+    @Path("address_id") addressId: Long):CustomerAddressResponse
 
 
 }

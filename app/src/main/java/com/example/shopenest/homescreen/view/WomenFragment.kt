@@ -15,6 +15,7 @@ import com.example.shopenest.homescreen.viewmodel.HomeViewModel
 import com.example.shopenest.homescreen.viewmodel.HomeViewModelFactory
 import com.example.shopenest.model.Repository
 import com.example.shopenest.network.ShoppingClient
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class WomenFragment : Fragment() {
@@ -69,10 +70,10 @@ class WomenFragment : Fragment() {
 
         womenViewModel =
             ViewModelProvider(this, womenFactory).get(HomeViewModel::class.java)
-
-
-        womenViewModel.getProductWomen()
-
+lifecycleScope.launch {
+delay(500)
+    womenViewModel.getProductWomen()
+}
 
 
         var recyclerWomen : RecyclerView = view.findViewById(R.id.recylerWomen)

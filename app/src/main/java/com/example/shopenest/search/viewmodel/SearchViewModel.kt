@@ -1,5 +1,6 @@
 package com.example.shopenest.search.viewmodel
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -65,6 +66,7 @@ class SearchViewModel   (private val repo: RepositoryInterface) : ViewModel() {
     }
 
 
+    @SuppressLint("SuspiciousIndentation")
     fun getProductsBrand(vendor:String) {
 
         viewModelScope.launch(Dispatchers.IO) {

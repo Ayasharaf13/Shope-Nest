@@ -10,15 +10,70 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import retrofit2.HttpException
+import retrofit2.Response
 
 
 class HomeViewModel (private val repo: RepositoryInterface) :ViewModel(){
+
+
+
+    private val _draftOrder = MutableStateFlow<Response<ResponseDraftOrderForRequestCreate>?>(null)
+
+    // Expose as a read-only StateFlo
+    val draftOrder: StateFlow<Response<ResponseDraftOrderForRequestCreate>?> get() = _draftOrder
+
+
+
+    // var countter =0
+
+    // This map will store inventory values for each product id
+    val inventoryMap = mutableMapOf<Long, Int>()
+
+
+
+    fun saveInventory(productId: Long, count: Int) {
+        inventoryMap[productId] = count
+    }
+
+    fun getInventory(productId: Long?): Int? {
+        return inventoryMap[productId] ?:0
+    }
+
+    fun increaseInventory(productId: Long) {
+        val current = inventoryMap[productId] ?: 0
+        var currentIncrease = current +1
+        inventoryMap[productId] = currentIncrease //current + 1
+        saveInventory(productId,currentIncrease)
+    }
+
+    fun decreaseInventory(productId: Long) {
+        val current = inventoryMap[productId] ?: 0
+   //  if (current > 0)
+            var currentDecrease = current-1
+            inventoryMap[productId] = currentDecrease //current - 1
+            saveInventory(productId,currentDecrease)
+    }
 
     // Replace MutableLiveData with MutableStateFlow
     private val _product: MutableStateFlow<List<Product>> = MutableStateFlow(emptyList())
 
     // Expose as a read-only StateFlow
     val product: StateFlow<List<Product>> get() = _product
+
+
+    // Replace MutableLiveData with MutableStateFlow
+    private val _inventory: MutableStateFlow<Int?> = MutableStateFlow(null)
+
+    // Expose as a read-only StateFlow
+    val inventory: StateFlow<Int?> get() = _inventory
+
+
+    private val _discount: MutableStateFlow<String?> = MutableStateFlow("")
+
+    // Expose as a read-only StateFlow
+    val discount: StateFlow<String?> get() = _discount
+
 
 
 
@@ -55,6 +110,25 @@ init {
     getBrands()
 
 }
+
+
+   fun getDiscount(){
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+
+            try {
+             var code =   repo.getDiscount().discount_codes.get(0)?.code
+                _discount.value = code
+
+
+            }catch (e:Exception){
+                Log.i("ErrorRetrieveDiscountCode",e.message.toString())
+            }
+        }
+    }
+
+
     fun getAllFavProduct(){
 
       viewModelScope.launch(Dispatchers.IO) {
@@ -70,6 +144,8 @@ init {
     }
 
 
+
+
     fun saveProduct (product: Product) {
         try {
             viewModelScope.launch(Dispatchers.IO) {
@@ -80,6 +156,8 @@ init {
 
         }
     }
+
+
 
 
     @SuppressLint("SuspiciousIndentation")
@@ -115,6 +193,8 @@ init {
 
 
     }
+
+
     fun filterBrands(query: String) {
         val filtered = if (query.isBlank()) {
 
@@ -201,6 +281,19 @@ init {
     }
 
 
+    fun getAvailableProducts(inventoryItemId:Long) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+
+            _inventory.value = repo.getAvailableProducts(inventoryItemId).inventory_levels.firstOrNull()?.available
+
+
+
+        }
+
+    }
+
+
 
     fun getProductDetails(id:Long) {
 
@@ -211,6 +304,46 @@ init {
 
 
     }
+
+
+
+
+
+
+    fun createDraftOrder(draftOrderRequest: DraftOrderRequest) {
+
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+
+                val response = repo.createCartOrder(draftOrderRequest)
+                _draftOrder.value = response
+                 Log.i("createDraftOrder::: ",response.body()?.draft_order?.total_price.toString())
+                Log.i("createDraftOrderId::: ",response.body()?.draft_order?.id.toString())
+
+            } catch (e: HttpException) {
+
+                Log.e(
+                    "CreateDraftOrder",
+                    "HTTP ${e.code()} - ${e.response()?.errorBody()?.string()}"
+                )
+            }
+        }
+    }
+
+
+
+    /*
+    <com.paypal.checkout.paymentbutton.PaymentButtonContainer
+    android:id="@+id/payment_button_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:paypal_button_color="silver"
+    app:paypal_button_label="pay"
+    app:paypal_button_shape="rectangle"
+    app:paypal_button_size="large"
+    app:paypal_button_enabled="true" />
+     */
+
 
 
 

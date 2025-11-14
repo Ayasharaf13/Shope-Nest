@@ -14,13 +14,22 @@ import retrofit2.Response
 class CreateUserViewModel  (private val repo: RepositoryInterface) : ViewModel() {
 
 
-    private val _customer = MutableStateFlow<Response<ResponseCustomer>?>(null)
+
+
+    private val _customer = MutableStateFlow<Response<CustomerResponse>?>(null)
 
     // Expose as a read-only StateFlo
-    val customer: StateFlow<Response<ResponseCustomer>?> get() = _customer
+    val customer: StateFlow<Response<CustomerResponse>?> get() = _customer
 
-    private val _searchCustomer = MutableStateFlow<Response<Customers>?>(null)
+
+
+
+
+
+   private val _searchCustomer = MutableStateFlow<Response<Customers>?>(null)
     val searchCustomer: StateFlow<Response<Customers>?> get() = _searchCustomer
+
+
 
     private val _countCustomer = MutableStateFlow<CountCustomer?>(null)
     val countCustomer: StateFlow<CountCustomer?> get() = _countCustomer
@@ -66,7 +75,7 @@ class CreateUserViewModel  (private val repo: RepositoryInterface) : ViewModel()
     }
 
 
-    fun searchCustomerByEmail(email: String) {
+       fun searchCustomerByEmail(email: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = repo.getCustomerByEmail(email)
@@ -79,7 +88,9 @@ class CreateUserViewModel  (private val repo: RepositoryInterface) : ViewModel()
         }
     }
 
-        fun createCustomer(customer: ResponseCustomer) {
+
+
+        fun createCustomer(customer:  CustomerRequest) {
 
             viewModelScope.launch(Dispatchers.IO) {
                 try {
@@ -98,4 +109,7 @@ class CreateUserViewModel  (private val repo: RepositoryInterface) : ViewModel()
         }
 
 
+
+
 }
+

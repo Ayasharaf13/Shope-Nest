@@ -91,9 +91,6 @@ class KidsFragment : Fragment() {
         )
 
 
-
-
-
         // Start collecting the StateFlow
         lifecycleScope.launch {
             kidsViewModel.product.collect { productList ->
@@ -104,6 +101,8 @@ class KidsFragment : Fragment() {
             }
 
         }
+
+
 
 
     }

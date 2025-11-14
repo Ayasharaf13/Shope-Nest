@@ -6,116 +6,81 @@
     android:layout_height="wrap_content"
     android:padding="8dp">
 
-    <!-- Product Image -->
+
     <ImageView
         android:id="@+id/imageProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/ratingSection"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.217"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_launcher_background"
         tools:ignore="ContentDescription" />
 
-    <!-- Product Name -->
     <TextView
         android:id="@+id/txtNameProduct"
-        android:layout_width="0dp"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:maxLines="1"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="22dp"
+        android:maxLines="2"
         android:text="Product Name"
+
         android:textAppearance="?attr/textAppearanceSubtitle1"
         android:textColor="@android:color/black"
         android:textSize="13sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
-        app:layout_constraintEnd_toStartOf="@id/ratingSection"
+
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imageProduct" />
 
-    <!-- Rating Section -->
-    <LinearLayout
-        android:id="@+id/ratingSection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal"
-
-        app:layout_constraintTop_toBottomOf="@id/imageProduct"
-        app:layout_constraintStart_toEndOf="@id/txtNameProduct"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <ImageView
-            android:id="@+id/imageRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-           android:layout_weight="2"
-            android:layout_marginBottom="10dp"
-            android:src="@android:drawable/btn_star"
-
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:id="@+id/txtRating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:layout_weight="2"
-            android:layout_marginTop="10dp"
-            android:text="4.5"
-            android:textAppearance="?attr/textAppearanceBody2"
-            android:textSize="13sp" />
-    </LinearLayout>
 
     <!-- Product Price -->
 
     <!-- Favorite Icon -->
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
 
+
+    <ImageView
+        android:id="@+id/imageRating"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginBottom="50dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
+
+        android:layout_marginTop="22dp"
+
+        android:layout_marginEnd="5dp"
+        android:src="@android:drawable/btn_star"
+        app:layout_constraintEnd_toStartOf="@+id/txtRating"
+        app:layout_constraintTop_toBottomOf="@+id/imageProduct"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/txtRating"
+        android:layout_width="49dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="16dp"
+        android:layout_weight="2"
+        android:text="4.5"
+        android:textAppearance="?attr/textAppearanceBody2"
+        android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/imageRating" />
 
+    <ImageView
+        android:id="@+id/imageFav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
-        <TextView
-            android:id="@+id/txtPriceProduct"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
-            android:text="Price:  "
-            android:textAppearance="?attr/textAppearanceBody1"
-            android:textColor="@android:color/holo_green_dark"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/txtNameProduct"
-            app:layout_constraintTop_toBottomOf="@id/txtNameProduct" />
+        android:layout_marginStart="135dp"
 
-        <ImageView
-            android:id="@+id/imageFav"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
+        android:src="@drawable/ic_baseline_favorite_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtRating"
+        tools:ignore="ContentDescription" />
 
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="10dp"
-            android:src="@drawable/ic_baseline_favorite_24"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/txtPriceProduct"
-            app:layout_constraintTop_toBottomOf="@+id/ratingSection"
-            tools:ignore="ContentDescription" />
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

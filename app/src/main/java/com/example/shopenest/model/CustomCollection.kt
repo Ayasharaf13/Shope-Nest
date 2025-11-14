@@ -14,6 +14,7 @@ data class CustomCollection (
     val sortOrder: String,
   //  val templateSuffix: Any?,
     //val publishedScope: String,
+
     //val adminGraphqlApiId: String,
     val image: ImageBrand?,
 
