@@ -1,21 +1,19 @@
 package com.example.shopenest.cartscreen.viewmodel
 
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.shopenest.model.*
 
-import com.example.shopenest.model.RepositoryInterface
-import com.example.shopenest.model.ResponseDraftOrderForRequestCreate
-import com.example.shopenest.model.ResponseDraftOrderForRetrieve
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
 
-class CartViewModel  (private val repo: RepositoryInterface) : ViewModel()   {
+class CartViewModel(private val repo: RepositoryInterface) : ViewModel() {
 
 
     private val _draftOrder = MutableStateFlow<Response<ResponseDraftOrderForRetrieve>?>(null)
@@ -24,11 +22,17 @@ class CartViewModel  (private val repo: RepositoryInterface) : ViewModel()   {
     val draftOrder: StateFlow<Response<ResponseDraftOrderForRetrieve>?> get() = _draftOrder
 
 
+    private val _lineItems = MutableStateFlow<List<LineItem>>(emptyList())
+
+    // Expose as a read-only StateFlo
+    val lineItems: StateFlow<List<LineItem>> get() = _lineItems
+
+
     private val _deleteDraftOrder = MutableStateFlow<Result<Boolean>?>(null)
     val deleteDraftOrder: StateFlow<Result<Boolean>?> get() = _deleteDraftOrder
 
 
-    fun getDraftOrder ( ) {
+    fun getDraftOrder() {
 
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -38,23 +42,63 @@ class CartViewModel  (private val repo: RepositoryInterface) : ViewModel()   {
         }
     }
 
+    private val _customerId = MutableStateFlow<Long?>(null)
 
-    fun deleteDraftOrder(idDraftOrder: Long) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                val response = repo.deleteDraftOrderById(idDraftOrder)
-                if (response.isSuccessful) {
-                    _deleteDraftOrder.value = Result.success(true)  // ✅ success
-                } else {
-                    _deleteDraftOrder.value = Result.failure(Exception("Delete failed: ${response.code()}"))
-                }
-            } catch (e: Exception) {
-                _deleteDraftOrder.value = Result.failure(e)  // ✅ network or parsing error
+    fun loadDraftOrder(customerId: Long) {
+        _customerId.value = customerId
+    }
+
+    val draftOrderWithItems: StateFlow<Pair<DraftOrderHeaderEntity?, List<LineItem>>> =
+        _customerId
+            .filterNotNull()
+            .flatMapLatest { id ->
+                repo.getDraftOrderWithItems(id)
             }
-        }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5000),
+                null to emptyList()
+            )
+
+    val lineItemsOnly: StateFlow<List<LineItem>> =
+        _customerId
+            .filterNotNull()
+            .flatMapLatest { id ->
+                repo.getLineItems(id)
+            }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5000),
+                emptyList()
+            )
+
+    fun setCustomerId(id: Long) {
+        _customerId.value = id
     }
 
 
+    @SuppressLint("SuspiciousIndentation")
+    fun deleteDraftOrder(idDraftOrder: Long, customerId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = repo.deleteDraftOrderById(idDraftOrder)
+
+                repo.deleteDraftOrder(idDraftOrder, customerId)
+
+                _deleteDraftOrder.value = Result.success(true)  // ✅ success
+
+                Log.i("draftorderSucc::", "success")
+
+                _deleteDraftOrder.value =
+                    Result.failure(Exception("Delete failed: ${response.code()}"))
+                Log.i("draftorderfail_1::", "fail")
+
+            } catch (e: Exception) {
+                _deleteDraftOrder.value = Result.failure(e)  // ✅ network or parsing error
+                Log.i("draftorderfail_2::", "fail")
+            }
+        }
+    }
 
 
 }

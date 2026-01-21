@@ -16,7 +16,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-//admin/api/2024-10/
+
 
 object RetrofitClient {
 
@@ -37,12 +37,9 @@ object RetrofitClient {
         })
 
         .addInterceptor(errorInterceptor)
-        .connectTimeout(30, TimeUnit.SECONDS)
-        .readTimeout(30, TimeUnit.SECONDS)
+        .connectTimeout(50, TimeUnit.SECONDS)
+        .readTimeout(50, TimeUnit.SECONDS)
         .build()
-
-
-
 
 
     private const val BASE_URL = "https://itp-sv-and7.myshopify.com/admin/api/2024-10/"
@@ -50,7 +47,7 @@ object RetrofitClient {
     val retrofitt: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
-           .client(okHttpClient)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
@@ -58,7 +55,7 @@ object RetrofitClient {
 }
 
 
-class ShoppingClient:RemoteSource{
+class ShoppingClient : RemoteSource {
 
 
     companion object {
@@ -79,7 +76,8 @@ class ShoppingClient:RemoteSource{
 
 
     }
-    override suspend fun getBrands(): Brands   {
+
+    override suspend fun getBrands(): Brands {
 
         return apiService.getBrands()
     }
@@ -94,7 +92,7 @@ class ShoppingClient:RemoteSource{
     }
 
     override suspend fun getProductsForSectionWomenCategory(): ShoppingProducts {
-    return  apiService.getProductsForSectionWomenCategory()
+        return apiService.getProductsForSectionWomenCategory()
     }
 
     override suspend fun getProductsForSectionMenCategory(): ShoppingProducts {
@@ -102,7 +100,7 @@ class ShoppingClient:RemoteSource{
         return apiService.getProductsForSectionManCategory()
     }
 
-    override suspend fun getProductsForBrands(vendor:String): ShoppingProducts {
+    override suspend fun getProductsForBrands(vendor: String): ShoppingProducts {
 
         return apiService.getProductsForBrands(vendor)
     }
@@ -119,10 +117,6 @@ class ShoppingClient:RemoteSource{
     override suspend fun getCustomerByEmail(email: String): Response<Customers> {
         return apiService.getCustomerByEmail(email)
     }
-
-
-
-
 
 
     override suspend fun getCountCustomer(): CountCustomer {
@@ -169,7 +163,7 @@ class ShoppingClient:RemoteSource{
         body: CustomerRequest
     ): Response<CustomerResponse> {
 
-        return apiService.updateCustomer(customerId,body)
+        return apiService.updateCustomer(customerId, body)
     }
 
     override suspend fun setDefaultAddress(
@@ -177,7 +171,7 @@ class ShoppingClient:RemoteSource{
         addressId: Long
     ): CustomerAddressResponse {
 
-        return apiService.setDefaultAddress(customerId,addressId)
+        return apiService.setDefaultAddress(customerId, addressId)
     }
 
     override suspend fun createCustomerAddress(
@@ -185,7 +179,7 @@ class ShoppingClient:RemoteSource{
         request: CreateCustomerAddressRequest
     ): CustomerAddressResponse {
 
-        return apiService.createCustomerAddress(customerId,request)
+        return apiService.createCustomerAddress(customerId, request)
     }
 
     override suspend fun getCustomerAddresses(customerId: Long): CustomerAddressesResponse {
@@ -197,9 +191,18 @@ class ShoppingClient:RemoteSource{
     override suspend fun completeDraftOrder(
         draftOrderId: Long,
         paymentPending: Boolean
-    ):Response<ResponseDraftOrderForRequestCreate> {
+    ): Response<ResponseDraftOrderForRequestCreate> {
 
-       return apiService.completeDraftOrder(draftOrderId,paymentPending)
+        return apiService.completeDraftOrder(draftOrderId, paymentPending)
+    }
+
+    override suspend fun updateDraftOrder(
+        draftOrderId: Long,
+        body: DraftOrderUpdateRequest
+    ): Response<ResponseDraftOrderForRequestCreate> {
+
+        return apiService.updateDraftOrder(draftOrderId, body)
+
     }
 
 

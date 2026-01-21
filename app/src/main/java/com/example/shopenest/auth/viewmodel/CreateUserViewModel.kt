@@ -11,9 +11,7 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import retrofit2.Response
 
-class CreateUserViewModel  (private val repo: RepositoryInterface) : ViewModel() {
-
-
+class CreateUserViewModel(private val repo: RepositoryInterface) : ViewModel() {
 
 
     private val _customer = MutableStateFlow<Response<CustomerResponse>?>(null)
@@ -22,13 +20,8 @@ class CreateUserViewModel  (private val repo: RepositoryInterface) : ViewModel()
     val customer: StateFlow<Response<CustomerResponse>?> get() = _customer
 
 
-
-
-
-
-   private val _searchCustomer = MutableStateFlow<Response<Customers>?>(null)
+    private val _searchCustomer = MutableStateFlow<Response<Customers>?>(null)
     val searchCustomer: StateFlow<Response<Customers>?> get() = _searchCustomer
-
 
 
     private val _countCustomer = MutableStateFlow<CountCustomer?>(null)
@@ -38,19 +31,17 @@ class CreateUserViewModel  (private val repo: RepositoryInterface) : ViewModel()
     val deleteCustomer: StateFlow<Unit?> get() = _deleteCustomer
 
 
+    fun getCountCustomer() {
+        viewModelScope.launch(Dispatchers.IO) {
 
-    fun getCountCustomer (){
-        viewModelScope.launch  (Dispatchers.IO){
-
-            try{
+            try {
                 val res = repo.getCountCustomer()
                 _countCustomer.value = res
-            }catch (e:HttpException){
-                Log.i ("countCustmer","HTTP ${e.code()} - ${e.response()?.errorBody()?.string()}")
+            } catch (e: HttpException) {
+                Log.i("countCustmer", "HTTP ${e.code()} - ${e.response()?.errorBody()?.string()}")
             }
         }
     }
-
 
 
     fun deleteCustomer(customerId: Long) {
@@ -75,7 +66,7 @@ class CreateUserViewModel  (private val repo: RepositoryInterface) : ViewModel()
     }
 
 
-       fun searchCustomerByEmail(email: String) {
+    fun searchCustomerByEmail(email: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = repo.getCustomerByEmail(email)
@@ -89,26 +80,23 @@ class CreateUserViewModel  (private val repo: RepositoryInterface) : ViewModel()
     }
 
 
+    fun createCustomer(customer: CustomerRequest) {
 
-        fun createCustomer(customer:  CustomerRequest) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
 
-            viewModelScope.launch(Dispatchers.IO) {
-                try {
+                val response = repo.createCustomer(customer)
+                _customer.value = response
 
-                    val response = repo.createCustomer(customer)
-                    _customer.value = response
-
-                } catch (e: HttpException) {//catch (e:Exception){
-                    // Log.i("ErrorCreateCustomer",e.message.toString())
-                    Log.e(
-                        "CreateCustomer",
-                        "HTTP ${e.code()} - ${e.response()?.errorBody()?.string()}"
-                    )
-                }
+            } catch (e: HttpException) {//catch (e:Exception){
+                // Log.i("ErrorCreateCustomer",e.message.toString())
+                Log.e(
+                    "CreateCustomer",
+                    "HTTP ${e.code()} - ${e.response()?.errorBody()?.string()}"
+                )
             }
         }
-
-
+    }
 
 
 }

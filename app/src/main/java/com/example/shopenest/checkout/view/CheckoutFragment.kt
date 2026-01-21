@@ -68,10 +68,9 @@ class CheckoutFragment : Fragment() {
     lateinit var checkoutViewModel: CheckoutViewModel
     lateinit var checkoutFactory: CheckoutFactory
     private var isCashSelected = false
-   var customer : CustomerData?  = null
+    var customer: CustomerData? = null
     lateinit var pref: SharedPreferences
-    lateinit var  paymentButtonContainer:PaymentButtonContainer
-   // private val sharedViewModel: CheckoutViewModel by activityViewModels()
+    lateinit var paymentButtonContainer: PaymentButtonContainer
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -91,20 +90,23 @@ class CheckoutFragment : Fragment() {
             ViewModelProvider(this, addressFactory).get(AddressViewModel::class.java)
 
 
-          checkoutFactory = CheckoutFactory(
-              Repository.getInstance(
-                  ShoppingClient.getInstance(),
-                  ConcreteLocalSource.getInstance(requireContext())
-              )
-          )
+        checkoutFactory = CheckoutFactory(
+            Repository.getInstance(
+                ShoppingClient.getInstance(),
+                ConcreteLocalSource.getInstance(requireContext())
+            )
+        )
 
 
-        checkoutViewModel = ViewModelProvider(requireActivity(), checkoutFactory).get(CheckoutViewModel::class.java)
+        checkoutViewModel =
+            ViewModelProvider(requireActivity(), checkoutFactory).get(CheckoutViewModel::class.java)
 
 
 
-        pref = requireContext().
-        getSharedPreferences("MyPref", Context.MODE_PRIVATE) // 0 - for private mode
+        pref = requireContext().getSharedPreferences(
+            "MyPref",
+            Context.MODE_PRIVATE
+        ) // 0 - for private mode
 
 
         val customerId = pref.getString("customer_id", null)
@@ -117,9 +119,6 @@ class CheckoutFragment : Fragment() {
         } ?: run {
             Log.e("CustomerCgeckout", "customer_id is null or invalid")
         }
-
-
-
 
 
     }
@@ -143,23 +142,10 @@ class CheckoutFragment : Fragment() {
         addressCheckout = view.findViewById(R.id.addressCheckout)
         changeAddress = view.findViewById(R.id.changeAddress)
 
-       // addressViewModel.getDefaultAddress()
-     //   val args: CheckoutFragmentArgs by navArgs()
-      //  val addressID = args.idAddress
+        val toolbar =
+            view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.myCustomToolbarCheckoutPayment)
 
 
-
-        /*lifecycleScope.launchWhenStarted {
-            addressViewModel.defaultAddress.collect { default ->
-                if (default != null) {
-                    addressCheckout.text = "${default.address1}\n${default.phone}"
-                } else {
-                    addressCheckout.text = "No default address selected"
-                }
-            }
-        }
-
-         */
 
 
 
@@ -184,30 +170,16 @@ class CheckoutFragment : Fragment() {
 
 
 
-        // addressCheckout.text = addressID
 
-        /* if (addressID != null) {
-
-
-         // var fulladdress =  "${addressSetDefault.street}, ${addressSetDefault.city}," +
-                //  " ${addressSetDefault.zip} ,${addressSetDefault.country} \n\n${addressSetDefault.phone} "
-
-            addressCheckout.text = fulladdress
-
-        }
-
-        */
-        ////////////////////
-       viewLifecycleOwner.lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 addressViewModel.addressID.collect { address ->
                     // This block is called every time the data changes
-                    if (address != null ) {
+                    if (address != null) {
 
-                         var fulladdress =  "${address.address1}, ${address.city}," +
-                          " ${address.zip} ,${address.country} \n\n${address.phone} "
+                        var fulladdress = "${address.address1}, ${address.city}," +
+                                " ${address.zip} ,${address.country} \n\n${address.phone} "
                         addressCheckout.text = fulladdress
-
 
 
                     } else {
@@ -222,34 +194,22 @@ class CheckoutFragment : Fragment() {
 
 
 
-         changeAddress.setOnClickListener {
+        changeAddress.setOnClickListener {
 
-             val action = CheckoutFragmentDirections.
-             actionCheckoutFragmentToDisplaySavedAddressFragment("checkout")
-             findNavController().navigate(action)
-
-         }
-
-
-
-
-  /*  if(paypalContainer.isPressed){
-
-        Toast.makeText(requireContext(),"payByale",Toast.LENGTH_SHORT).show()
-
-    }
-
-        paypalContainer.setOnClickListener {
-            Toast.makeText(requireContext(),"payByale",Toast.LENGTH_SHORT).show()
+            val action =
+                CheckoutFragmentDirections.actionCheckoutFragmentToDisplaySavedAddressFragment("checkout")
+            findNavController().navigate(action)
 
         }
 
-       */
+
+
+
 
 
 
         fun showAddAddressSnackbar() {
-           // checkoutViewModel.needUpdateCustomer.value = true
+            // checkoutViewModel.needUpdateCustomer.value = true
             checkoutViewModel.setUpdate(true)
 
             Snackbar.make(view, "You need a shipping address", Snackbar.LENGTH_LONG)
@@ -261,8 +221,7 @@ class CheckoutFragment : Fragment() {
         }
 
 
-
-        fun checkProfileComplete (cashSelect:Boolean) {
+        fun checkProfileComplete(cashSelect: Boolean) {
             lifecycleScope.launchWhenStarted {
                 checkoutViewModel.customerResponse.collect { response ->
                     if (response != null && response.isSuccessful) {
@@ -289,12 +248,6 @@ class CheckoutFragment : Fragment() {
                         Log.i("CustomerInfo", "Email: ${customer?.email}")
                         Log.i("CustomerInfo", "Phone: ${customer?.phone}")
 
-                        // ✅ You can show data in UI:
-                        /* tvName.text = customer?.first_name
-                    tvEmail.text = customer?.email
-                    tvPhone.text = customer?.phone
-
-                    */
 
                     } else {
                         Log.e("CustomerInfo", "Failed: ${response?.code()}")
@@ -323,38 +276,35 @@ class CheckoutFragment : Fragment() {
 
         placeOrderButton.setOnClickListener {
 
-            if(isCashSelected && customer?.first_name.isNullOrBlank()  ){
+            if (isCashSelected && customer?.first_name.isNullOrBlank()) {
 
                 // snack to add & update
                 checkProfileComplete(isCashSelected)
 
 
-
-            }else {
+            } else {
                 showPaymentSuccessDialog()
             }
         }
 
 
-
-
         // When Cash is selected
-             payCash.setOnCheckedChangeListener { _, isChecked ->
-                 if (isChecked) {
-                    isCashSelected = isChecked
-                     placeOrderButton.visibility = View.VISIBLE
-                     paypalContainer.visibility = View.GONE
-                        checkProfileComplete(isCashSelected)
-                 }
-             }
+        payCash.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                isCashSelected = isChecked
+                placeOrderButton.visibility = View.VISIBLE
+                paypalContainer.visibility = View.GONE
+                checkProfileComplete(isCashSelected)
+            }
+        }
 
-        Log.i("isselect",isCashSelected.toString())
+        Log.i("isselect", isCashSelected.toString())
 
 // When PayPal is selected
         payPaypal.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 placeOrderButton.visibility = View.GONE
-               paypalContainer.visibility = View.VISIBLE
+                paypalContainer.visibility = View.VISIBLE
             }
         }
 
@@ -381,29 +331,30 @@ class CheckoutFragment : Fragment() {
             },
             onApprove =
             OnApprove { approval ->
-                Toast.makeText(requireContext(),"paymentApproval",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "paymentApproval", Toast.LENGTH_SHORT).show()
                 Log.i("My TAg", "OrderId: ${approval.data.orderId}")
-                checkoutViewModel.completeDraftOrder( 1214597595426)
+                checkoutViewModel.completeDraftOrder(1214597595426)
                 showPaymentSuccessDialog()
             }, onCancel =
             OnCancel {
                 Log.i("My TAg", "Byer Cancel order")
-                Toast.makeText(requireContext(),"paymentCancel",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "paymentCancel", Toast.LENGTH_SHORT).show()
 
             }, onError =
-            OnError {errorInfo ->
-                Toast.makeText(requireContext(),"paymentError",Toast.LENGTH_SHORT).show()
+            OnError { errorInfo ->
+                Toast.makeText(requireContext(), "paymentError", Toast.LENGTH_SHORT).show()
                 Log.i("My TAg", "Error : $errorInfo")
 
             }
-
 
 
         )
 
 
 
-
+        toolbar.setNavigationOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     companion object {

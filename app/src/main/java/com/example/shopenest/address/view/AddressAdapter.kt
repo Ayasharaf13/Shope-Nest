@@ -1,7 +1,6 @@
 package com.example.shopenest.address.view
 
 
-
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
@@ -15,16 +14,16 @@ import com.example.shopenest.R
 import com.example.shopenest.model.CustomerAddress
 
 
-
-class AddressAdapter (var context: View ,   private var onSetDefault: (Long) -> Unit  ): ListAdapter<CustomerAddress, AddressAdapter.ViewHolder>(AddressDiffUtil()) {
+class AddressAdapter(var context: View, private var onSetDefault: (Long) -> Unit) :
+    ListAdapter<CustomerAddress, AddressAdapter.ViewHolder>(AddressDiffUtil()) {
 
 
     inner class ViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
 
         var textAddress: TextView = itemview.findViewById(R.id.address_details)
-        var textAddressName:TextView = itemview.findViewById(R.id.address_name)
-        var textAddressPhone:TextView = itemview.findViewById(R.id.address_phone)
-        var textSetDefault:TextView = itemview.findViewById(R.id.textSetDefault)
+        var textAddressName: TextView = itemview.findViewById(R.id.address_name)
+        var textAddressPhone: TextView = itemview.findViewById(R.id.address_phone)
+        var textSetDefault: TextView = itemview.findViewById(R.id.textSetDefault)
 
 
     }
@@ -46,12 +45,12 @@ class AddressAdapter (var context: View ,   private var onSetDefault: (Long) -> 
 
         holder.textSetDefault.setOnClickListener {
 
-            if (address !=null) {
+            if (address != null) {
 
                 onSetDefault(address.id)  // 👈 pass ID to fragment
                 val action =
                     DisplaySavedAddressFragmentDirections.actionDisplaySavedAddressFragmentToCheckoutFragment()
-                   Navigation.findNavController(context).navigate(action);
+                Navigation.findNavController(context).navigate(action);
 
             }
         }
@@ -64,7 +63,10 @@ class AddressAdapter (var context: View ,   private var onSetDefault: (Long) -> 
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: CustomerAddress, newItem: CustomerAddress): Boolean {
+        override fun areContentsTheSame(
+            oldItem: CustomerAddress,
+            newItem: CustomerAddress
+        ): Boolean {
             return oldItem == newItem
         }
 

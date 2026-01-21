@@ -18,7 +18,8 @@ import com.example.shopenest.model.Brands
 import com.example.shopenest.model.SmartCollection
 
 
-class BrandAdapter (var context:View): ListAdapter<SmartCollection, BrandAdapter.ViewHolder>(BrandDiffUtil()) {
+class BrandAdapter(var context: View) :
+    ListAdapter<SmartCollection, BrandAdapter.ViewHolder>(BrandDiffUtil()) {
 
 
     inner class ViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
@@ -33,23 +34,26 @@ class BrandAdapter (var context:View): ListAdapter<SmartCollection, BrandAdapter
     }
 
     @SuppressLint("SuspiciousIndentation")
-    override fun onBindViewHolder(holder:ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val brand = getItem(position)
         Glide.with(holder.imageBrand.context)
             .load(brand.image.src)
             .placeholder(R.drawable.ic_launcher_background) // Optional placeholder
             .into(holder.imageBrand)
-         var titleBrand =    brand.title
+        var titleBrand = brand.title
 
 
-           holder.imageBrand.setOnClickListener {
-               Log.i("brandId: ",titleBrand.toString())
-               val  action : NavDirections =  HomeFragmentDirections.actionHomeFragmentToSeeAllFragment(title = titleBrand , isItFromTheBrand = true)
-               Navigation.findNavController(context).navigate(action);
+        holder.imageBrand.setOnClickListener {
+            Log.i("brandId: ", titleBrand.toString())
+            val action: NavDirections = HomeFragmentDirections.actionHomeFragmentToSeeAllFragment(
+                title = titleBrand,
+                isItFromTheBrand = true
+            )
+            Navigation.findNavController(context).navigate(action);
 
 
-           }
+        }
 
 
     }
@@ -59,7 +63,10 @@ class BrandAdapter (var context:View): ListAdapter<SmartCollection, BrandAdapter
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: SmartCollection, newItem: SmartCollection): Boolean {
+        override fun areContentsTheSame(
+            oldItem: SmartCollection,
+            newItem: SmartCollection
+        ): Boolean {
             return oldItem == newItem
         }
 

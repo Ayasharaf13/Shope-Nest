@@ -15,33 +15,34 @@ import com.example.shopenest.R
 
 
 class GenericAdapterSliderImage<T>(
-    private val onClick : String?,
+    private val onClick: String?,
     private val items: List<T>,
     private val context: Context,
 
     private val bind: (item: T, itemView: View, position: Int) -> Unit,
 
-) : RecyclerView.Adapter<GenericAdapterSliderImage<T>.GenericViewHolder>() {
+    ) : RecyclerView.Adapter<GenericAdapterSliderImage<T>.GenericViewHolder>() {
 
 
     inner class GenericViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindItem(item: T, position: Int) {
             bind(item, itemView, position)
         }
-      //  val imageView: ImageView = itemView.findViewById(R.id.imageView)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GenericViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.imageslideritem,parent,false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.imageslideritem, parent, false)
         return GenericViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: GenericViewHolder, position: Int) {
         holder.bindItem(items[position], position)
-      //  holder.imageView.setImageResource(items[position])
+
         holder.itemView.setOnClickListener {
-          //  onClick.invoke()
-            Log.i ("discoundclickImge", onClick.toString())
+            //  onClick.invoke()
+            Log.i("discoundclickImge", onClick.toString())
 
 
             // initializing clip board manager on below line.
@@ -52,23 +53,22 @@ class GenericAdapterSliderImage<T>(
             val clipData = ClipData.newPlainText(
                 "Copy discount code ",
                 onClick
-            ) .apply {
+            ).apply {
                 // on below line adding description
                 description.extras = PersistableBundle().apply {
                     // only available for Android13 or higher
                     putBoolean(ClipDescription.MIMETYPE_TEXT_PLAIN, true)
-                    // use raw string for older versions
-                    // android.content.extra.IS_SENSITIVE
+
                 }
             }
 
             // on below line setting primary clip for clip board manager.
             clipboardManager.setPrimaryClip(clipData)
 
-            // displaying toast message as text copied to clip board.
+
             Toast.makeText(context, "Copied promo code", Toast.LENGTH_SHORT).show()
         }
-       // }
+
     }
 
 

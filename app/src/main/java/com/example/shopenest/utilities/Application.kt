@@ -1,6 +1,7 @@
 package com.example.shopenest.utilities
 
 import android.app.Application
+import com.example.shopenest.model.Repository
 import com.paypal.checkout.PayPalCheckout
 import com.paypal.checkout.config.CheckoutConfig
 import com.paypal.checkout.config.Environment
@@ -17,6 +18,8 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
+
+
         val config = CheckoutConfig(
             application = this,
             clientId = cliendID,
@@ -30,6 +33,7 @@ class App : Application() {
             )
         )
         PayPalCheckout.setConfig(config)
+
     }
 
 

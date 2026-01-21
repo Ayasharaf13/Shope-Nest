@@ -1,28 +1,28 @@
 package com.example.shopenest.model
 
+import android.content.Context
 import com.example.shopenest.db.LocalSource
 import com.example.shopenest.network.RemoteSource
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emitAll
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.*
 import retrofit2.Response
 
-class Repository(remoteSource: RemoteSource, localSource: LocalSource) :RepositoryInterface {
+class Repository(remoteSource: RemoteSource, localSource: LocalSource) : RepositoryInterface {
 
-    val remoteSource:RemoteSource = remoteSource
-    val localSource:LocalSource =localSource
+    val remoteSource: RemoteSource = remoteSource
+    val localSource: LocalSource = localSource
+
 
     override suspend fun getBrands(): Brands {
-      return  remoteSource.getBrands()
+        return remoteSource.getBrands()
     }
 
-    override suspend fun getAllFavProducts(): Flow<List<Product>> = flow {
+    override suspend fun getAllFavProducts(customerId: Long): Flow<List<Product>> = flow {
 
-        emitAll(localSource.getAllFavProducts())
+        emitAll(localSource.getAllFavProducts(customerId))
     }
 
     override suspend fun saveProduct(product: Product) {
-           localSource.saveProduct(product)
+        localSource.saveProduct(product)
     }
 
     override suspend fun getCategory(): Categories {
@@ -35,7 +35,7 @@ class Repository(remoteSource: RemoteSource, localSource: LocalSource) :Reposito
     }
 
     override suspend fun getProductsForSectionWomenCategory(): ShoppingProducts {
-       return remoteSource.getProductsForSectionWomenCategory()
+        return remoteSource.getProductsForSectionWomenCategory()
     }
 
     override suspend fun getProductsForSectionMenCategory(): ShoppingProducts {
@@ -68,11 +68,11 @@ class Repository(remoteSource: RemoteSource, localSource: LocalSource) :Reposito
      */
 
 
-  /*  override suspend fun getCustomerByEmail(email: String): Response<Customers> {
-        return remoteSource.getCustomerByEmail(email)
-    }
+    /*  override suspend fun getCustomerByEmail(email: String): Response<Customers> {
+          return remoteSource.getCustomerByEmail(email)
+      }
 
-   */
+     */
 
     override suspend fun getCountCustomer(): CountCustomer {
         return remoteSource.getCountCustomer()
@@ -89,7 +89,6 @@ class Repository(remoteSource: RemoteSource, localSource: LocalSource) :Reposito
     }
 
 
-
     override suspend fun getDiscount(): ResponseDiscount {
         return remoteSource.getDiscount()
     }
@@ -100,7 +99,6 @@ class Repository(remoteSource: RemoteSource, localSource: LocalSource) :Reposito
     }
 
 
-
     override suspend fun getDraftOrders(): Response<ResponseDraftOrderForRetrieve> {
 
         return remoteSource.getDraftOrders()
@@ -108,7 +106,7 @@ class Repository(remoteSource: RemoteSource, localSource: LocalSource) :Reposito
 
 
     override suspend fun deleteDraftOrderById(draftOrderId: Long): Response<Unit> {
-         return remoteSource.deleteDraftOrderById(draftOrderId)
+        return remoteSource.deleteDraftOrderById(draftOrderId)
     }
 
 
@@ -122,7 +120,7 @@ class Repository(remoteSource: RemoteSource, localSource: LocalSource) :Reposito
         body: CustomerRequest
     ): Response<CustomerResponse> {
 
-        return remoteSource.updateCustomer(customerId,body)
+        return remoteSource.updateCustomer(customerId, body)
     }
 
     override suspend fun createCustomerAddress(
@@ -130,79 +128,99 @@ class Repository(remoteSource: RemoteSource, localSource: LocalSource) :Reposito
         request: CreateCustomerAddressRequest
     ): CustomerAddressResponse {
 
-        return remoteSource.createCustomerAddress(customerId,request)
+        return remoteSource.createCustomerAddress(customerId, request)
     }
+
+    override suspend fun deleteById(productId: Long, customerId: Long) {
+
+        localSource.deleteById(productId, customerId)
+    }
+
+    override suspend fun saveDraftOrderHeader(header: DraftOrderHeaderEntity) {
+        localSource.saveDraftOrderHeader(header)
+    }
+
+    override suspend fun saveLineItems(items: List<LineItem>) {
+        localSource.saveLineItems(items)
+    }
+
+    override fun getLineItems(customerId: Long): Flow<List<LineItem>> = flow {
+        emitAll(localSource.getLineItems(customerId))
+    }
+
+    override suspend fun deleteDraftOrder(draftOrderId: Long, customerId: Long) {
+        localSource.deleteDraftOrder(draftOrderId, customerId)
+    }
+
+
+    override fun getDraftOrderHeader(
+        customerId: Long
+    ): Flow<DraftOrderHeaderEntity?> = flow {
+        emitAll(localSource.getDraftOrderHeader(customerId))
+    }
+
 
     override suspend fun setDefaultAddress(
         customerId: Long,
         addressId: Long
     ): CustomerAddressResponse {
 
-        return remoteSource.setDefaultAddress(customerId,addressId)
+        return remoteSource.setDefaultAddress(customerId, addressId)
     }
 
     override suspend fun getCustomerAddresses(customerId: Long): CustomerAddressesResponse {
 
-       return remoteSource.getCustomerAddresses(customerId)
+        return remoteSource.getCustomerAddresses(customerId)
     }
 
-    /*   override suspend fun setDefaultAddress(
-           customerId: Long,
-           addressId: Long
-       ): CustomerAddressResponse {
-
-           return remoteSource.setDefaultAddress(customerId,addressId)
-       }
-
-
-       override suspend fun saveAddress(address: CustomerAddress) {
-
-           localSource.saveAddress(address)
-       }
-
-       override suspend fun getAllAddresses(): Flow<List<CustomerAddress>> {
-
-           return localSource.getAllAddresses()
-       }
-
-       override suspend fun deleteAddress(address: CustomerAddress) {
-          localSource.deleteAddress(address)
-
-       }
-
-       override suspend fun getAddressByIdOnce(addressId: Int): CustomerAddress? {
-
-          return localSource.getAddressByIdOnce(addressId)
-       }
-
-       override suspend fun clearDefault() {
-          localSource.clearDefault()
-       }
-
-       override suspend fun setDefault(addressId: Long) {
-         localSource.setDefault(addressId)
-       }
-
-       override suspend fun getDefaultAddress(): CustomerAddress? {
-
-           return localSource.getDefaultAddress()
-       }*/
 
     override suspend fun completeDraftOrder(
         draftOrderId: Long,
         paymentPending: Boolean
     ): Response<ResponseDraftOrderForRequestCreate> {
-        return remoteSource.completeDraftOrder(draftOrderId,paymentPending)
+        return remoteSource.completeDraftOrder(draftOrderId, paymentPending)
+    }
+
+    override suspend fun updateDraftOrder(
+        draftOrderId: Long,
+        body: DraftOrderUpdateRequest
+    ): Response<ResponseDraftOrderForRequestCreate> {
+        return remoteSource.updateDraftOrder(draftOrderId, body)
+    }
+
+    override fun getDraftOrderWithItems(customerId: Long): Flow<Pair<DraftOrderHeaderEntity?, List<LineItem>>> {
+
+        return localSource.getDraftOrderWithItems(customerId)
+
     }
 
 
-    companion object{
-        private var instance :Repository? = null
-        fun getInstance(remoteSource: RemoteSource,localSource: LocalSource):Repository{
-            return  instance?: synchronized(this){
+    override suspend fun saveDraftOrderWithItems(
+        header: DraftOrderHeaderEntity,
+        items: List<LineItem>
+    ) {
+        localSource.saveDraftOrderWithItems(header, items)
+    }
+
+    override suspend fun increaseQuantity(lineItemId: Long, customerId: Long) {
+
+        localSource.increaseQuantity(lineItemId, customerId)
+
+    }
+
+    override suspend fun decreaseQuantity(lineItemId: Long, customerId: Long) {
+
+        localSource.decreaseQuantity(lineItemId, customerId)
+    }
+
+
+    companion object {
+        private var instance: Repository? = null
+        fun getInstance(remoteSource: RemoteSource, localSource: LocalSource): Repository {
+            return instance ?: synchronized(this) {
 
                 val temp = Repository(remoteSource, localSource)
-                instance =temp
+                instance = temp
                 temp
             }
 

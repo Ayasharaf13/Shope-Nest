@@ -37,9 +37,8 @@ import kotlinx.coroutines.launch
 
 class SeeAllFragment : Fragment() {
 
-    private  var savedTitleBrand: String = ""
+    private var savedTitleBrand: String = ""
     lateinit var seeAllViewModel: SearchViewModel
-   // lateinit var seeAllAdapter: GenericHomeAdapter
     lateinit var seeAllFactory: SearchViewModelFactory
 
     lateinit var editTextSearch: EditText
@@ -83,11 +82,8 @@ class SeeAllFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 
-        var recyclerSeeAll : RecyclerView = view.findViewById(R.id.recyclerViewSearchResult)
+        var recyclerSeeAll: RecyclerView = view.findViewById(R.id.recyclerViewSearchResult)
 
-    //    seeAllAdapter = GenericHomeAdapter(requireView(),"seeAll")
-
-        //   recyclerBrand.layoutManager = LinearLayoutManager(requireContext(),HorizontalScrollView)
 
         val layoutManager = GridLayoutManager(requireContext(), 2)
         recyclerSeeAll.layoutManager = layoutManager
@@ -95,30 +91,35 @@ class SeeAllFragment : Fragment() {
 
 
 
-      seeAllFactory = SearchViewModelFactory(
+        seeAllFactory = SearchViewModelFactory(
             Repository.getInstance(
                 ShoppingClient.getInstance(),
                 ConcreteLocalSource.getInstance(requireContext())
-            ))
+            )
+        )
 
 
-     seeAllViewModel =
+        seeAllViewModel =
             ViewModelProvider(requireActivity(), seeAllFactory).get(SearchViewModel::class.java)
 
 
-   /*    seeAllViewModel.getProductKids()
-        seeAllViewModel.getProductMen()
-        seeAllViewModel.getProductWomen()
-
-    */
 
 
 
 
         editTextSearch = view.findViewById(R.id.searchTextSearchResult)
-      //  var  recyclerViewSearchResult: RecyclerView = view.findViewById(R.id.recyclerViewSearchResult)
 
-        val adapter = GenericHomeAdapter(requireView() , "noNav")
+
+        // إذا كانت الدالة (onItemClick) هي آخر معامل في الـ Constructor
+        val adapter = GenericHomeAdapter(requireView()) { proId ->
+            val action =
+                SeeAllFragmentDirections.actionSeeAllFragmentToDetailsProductFragment(proId)
+
+            // فحص إضافي للأمان: التأكد من أننا في الوجهة الصحيحة قبل الانتقال
+            if (findNavController().currentDestination?.id == R.id.seeAllFragment) {
+                findNavController().navigate(action)
+            }
+        }
 
         searchIconFilter = view.findViewById(R.id.searchIconSearchResultFilter)
 
@@ -127,7 +128,6 @@ class SeeAllFragment : Fragment() {
             val action = SeeAllFragmentDirections
                 .actionSeeAllFragmentToBottomFilterDialogFragment()
             findNavController().navigate(action)
-
 
 
         }
@@ -147,7 +147,7 @@ class SeeAllFragment : Fragment() {
 
 
 
-        editTextSearch.addTextChangedListener(object: TextWatcher {
+        editTextSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }
@@ -165,76 +165,67 @@ class SeeAllFragment : Fragment() {
         })
 
 
-
-
         val argsSeeAll: SeeAllFragmentArgs by navArgs()
         var price1 = argsSeeAll.rangePrice1
         var price2 = argsSeeAll.rangePrice2
         var isApply = argsSeeAll.isApply
 
 
-          val args: SeeAllFragmentArgs by navArgs()
-          val tabPosition = args.position
+        val args: SeeAllFragmentArgs by navArgs()
+        val tabPosition = args.position
         //  var titleBrand= ""
 
 
         if (args.isItFromTheBrand) {
             seeAllViewModel.titleBrand = args.title
 
-            Log.i("range_TitleaaaaBrandddd_1:    ",  args.title  )
+            Log.i("range_TitleaaaaBrandddd_1:    ", args.title)
         }
 
         val titleBrand = seeAllViewModel.titleBrand ?: args.title
 
-        Log.i("range_TitleaaaaBrandddd_2:    ",  args.title  )
+        Log.i("range_TitleaaaaBrandddd_2:    ", args.title)
 
 
 
-        Log.i("range_Titleaaaa:    ",  titleBrand )
-            Log.i("range_TitleBBB:    ", args.isItFromTheBrand.toString())
-        seeAllViewModel.getProductsBrand( titleBrand )
+        Log.i("range_Titleaaaa:    ", titleBrand)
+        Log.i("range_TitleBBB:    ", args.isItFromTheBrand.toString())
+        seeAllViewModel.getProductsBrand(titleBrand)
 
         if (isApply) {
 
-            seeAllViewModel.filterProductsBasedPrice(price1, price2,  titleBrand )
+            seeAllViewModel.filterProductsBasedPrice(price1, price2, titleBrand)
 
             Log.i("range1:    ", price1.toString())
             Log.i("range2:    ", price2.toString())
-            Log.i("range_Title:    ",  titleBrand)
+            Log.i("range_Title:    ", titleBrand)
         }
-            lifecycleScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch(Dispatchers.Main) {
 
-          seeAllViewModel.filterProducts.collect { filterList ->
+            seeAllViewModel.filterProducts.collect { filterList ->
 
-              recyclerSeeAll.adapter = adapter
-              adapter.submitList(filterList)
-
-
-          }
-
-      }
+                recyclerSeeAll.adapter = adapter
+                adapter.submitList(filterList)
 
 
-         lifecycleScope.launch(Dispatchers.Main) {
+            }
 
-              seeAllViewModel.product.collect { products ->
-
-                  recyclerSeeAll.adapter = adapter
-                  adapter.submitList(products)
+        }
 
 
-              }
-          }
+        lifecycleScope.launch(Dispatchers.Main) {
+
+            seeAllViewModel.product.collect { products ->
+
+                recyclerSeeAll.adapter = adapter
+                adapter.submitList(products)
 
 
-
-
+            }
+        }
 
 
     }
-
-
-
 
 
 }

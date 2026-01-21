@@ -19,21 +19,15 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavDirections
-import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.example.shopenest.AuthActivity
 import com.example.shopenest.MainActivity
 import com.example.shopenest.R
-import com.example.shopenest.auth.view.WelcomeFragmentDirections
 import com.example.shopenest.db.ConcreteLocalSource
 import com.example.shopenest.homescreen.GenericAdapterSliderImage
 import com.example.shopenest.homescreen.viewmodel.HomeViewModel
 import com.example.shopenest.homescreen.viewmodel.HomeViewModelFactory
-import com.example.shopenest.model.Product
 import com.example.shopenest.model.Repository
 import com.example.shopenest.network.ShoppingClient
 import com.example.shopenest.utilities.GoogleAuthHelper
@@ -41,10 +35,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.firstOrNull
-import okhttp3.OkHttpClient
 import java.util.*
 
 
@@ -56,18 +46,18 @@ class HomeFragment : Fragment() {
     lateinit var adapter: BrandAdapter
     lateinit var tabsAdapter: ViewPagerAdapterTabs
     lateinit var tablLayout: TabLayout
-    private val tabTextList = arrayOf( "Women", "Man","Kid")
-    private lateinit var viewPagertabs:ViewPager2
+    private val tabTextList = arrayOf("Women", "Man", "Kid")
+    private lateinit var viewPagertabs: ViewPager2
     private lateinit var viewPagerAds: ViewPager2
-    private lateinit var txtSeeAllProducts:TextView
-    private lateinit var buttonLogout:Button
+    private lateinit var txtSeeAllProducts: TextView
+    private lateinit var buttonLogout: Button
     private lateinit var googleAuthHelper: GoogleAuthHelper
-    var code:String? = null
+    var code: String? = null
 
     private lateinit var pref: SharedPreferences
-    lateinit var auth:FirebaseAuth
+    lateinit var auth: FirebaseAuth
 
-   // private lateinit var tabLayoutIndicator:TabLayout
+    // private lateinit var tabLayoutIndicator:TabLayout
 
     var selectedTabPosition = 0
 
@@ -80,7 +70,7 @@ class HomeFragment : Fragment() {
 
         }
         tabsAdapter = ViewPagerAdapterTabs(requireActivity())
-// Direct initialization at the point of declaration
+
         images = mutableListOf()
 
         //  Handler(Looper.getMainLooper())
@@ -103,9 +93,10 @@ class HomeFragment : Fragment() {
             )
         )
 
-
         homeViewModel =
             ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel::class.java)
+
+
 
         suspend fun safeCall(block: suspend () -> Unit) {
             repeat(3) { attempt ->
@@ -139,7 +130,7 @@ class HomeFragment : Fragment() {
 
 
 
-        lifecycleScope.launch{
+        lifecycleScope.launch {
 
             homeViewModel.discount.collect { code ->
                 Log.d("DiscountCode", "Discount = $code")
@@ -150,7 +141,6 @@ class HomeFragment : Fragment() {
             }
 
         }
-
 
 
     }
@@ -170,7 +160,7 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         auth = FirebaseAuth.getInstance()
-        buttonLogout = view.findViewById(R.id.buttonLogout)
+        //  buttonLogout = view.findViewById(R.id.buttonLogout)
 
         googleAuthHelper = GoogleAuthHelper(
             context = requireContext(),
@@ -182,7 +172,7 @@ class HomeFragment : Fragment() {
                 val intent = Intent(requireContext(), MainActivity::class.java)
                 startActivity(intent)
                 requireActivity().finish()
-                // findNavController().navigate(R.id.action_to_homeFragment)
+
             },
 
             onError = { errorMessage ->
@@ -193,67 +183,19 @@ class HomeFragment : Fragment() {
 
         )
 
-        buttonLogout.setOnClickListener {
-            // don not forget write nav to log in
-            val user = auth.currentUser
 
-            // Check the provider used
-            val isGoogleSignIn =
-                user?.providerData?.any { it.providerId == "google.com" } == true
-
-            // Sign out from Firebase
-            auth.signOut()
-            val intent = Intent(requireContext(), AuthActivity::class.java)
-            startActivity(intent)
-
-            //   if (isGoogleSignIn) {
-            googleAuthHelper.googleSignInClient.signOut().addOnCompleteListener {
-                Log.d("Logout", "Signed out from Google")
-                //  }
-
-
-            } //else {
-            // Log.d("Logout", "Signed out from Firebase (email)")
-
-            // }
-
-
-            val editor = pref.edit()
-            editor.clear()
-            editor.apply()
-
-        }
-
-// Start the automatic slideshow when the activity or view is created
-
-        //   tabLayoutIndicator = view.findViewById(R.id.tabLayoutIndicator)
-
-
-        /*  var  gridView: GridView = view.findViewById(R.id.gridProduct);
-
-        // create a object of myBaseAdapter
-       var  baseAdapter: GridProductAdapter =  GridProductAdapter( images);
-        gridView.setAdapter(baseAdapter);
-
-     */
 
 
         viewPagerAds = view.findViewById(R.id.viewpagerAds)
-
-
-
-        txtSeeAllProducts = view.findViewById(R.id.txtSeeMoreProduct)
         tablLayout = view.findViewById(R.id.tabLayout03)
         viewPagertabs = view.findViewById(R.id.viewPagerCategory)
 
-
-        //   var  gridProducts :GridView= view.findViewById(R.id.gridProduct)
 
         var recyclerBrands: RecyclerView = view.findViewById(R.id.RecyclerViewBrands)
 
         adapter = BrandAdapter(requireView())
 
-        //   recyclerBrand.layoutManager = LinearLayoutManager(requireContext(),HorizontalScrollView)
+
 
         recyclerBrands.setLayoutManager(
             LinearLayoutManager(
@@ -262,13 +204,6 @@ class HomeFragment : Fragment() {
                 false
             )
         )
-
-
-        //
-        //  recyclerBrands.visibility =View.INVISIBLE
-
-
-
 
 
 
@@ -286,11 +221,9 @@ class HomeFragment : Fragment() {
 
         // Here you can trigger your ViewModel logic
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
 
-       delay(2000)
-           //  homeViewModel.discount.firstOrNull()
-          //    getPromoCode()
+            delay(2000)
 
             val adapter = GenericAdapterSliderImage<Int>(
                 code,
@@ -307,15 +240,11 @@ class HomeFragment : Fragment() {
 
             startSliding()
 
-            // TabLayoutMediator(tabLayoutIndicator, viewPagerAds) { tab, position->
+
+        }
 
 
-            // }.attach()
-
-       }
-
-
-        viewPagerAds.setOnClickListener{
+        viewPagerAds.setOnClickListener {
 
             // initializing clip board manager on below line.
             val clipboardManager =
@@ -325,13 +254,12 @@ class HomeFragment : Fragment() {
             val clipData = ClipData.newPlainText(
                 "Copy if you want",
                 "Clip Data"
-            ) .apply {
+            ).apply {
                 // on below line adding description
                 description.extras = PersistableBundle().apply {
                     // only available for Android13 or higher
                     putBoolean(ClipDescription.MIMETYPE_TEXT_PLAIN, true)
-                    // use raw string for older versions
-                    // android.content.extra.IS_SENSITIVE
+
                 }
             }
 
@@ -339,115 +267,74 @@ class HomeFragment : Fragment() {
             clipboardManager.setPrimaryClip(clipData)
 
             // displaying toast message as text copied to clip board.
-           Toast.makeText(requireContext(), "Copied to Clipboard", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Copied to Clipboard", Toast.LENGTH_SHORT).show()
         }
-        // viewPager.setPageTransformer(ViewPagerHorizontalFlipTransformer())
 
 
-       // viewPager.setPageTransformer(SimplePageTransformer(SimplePageTransformer.CUBE_INSIDE));
 
+        viewPagertabs.adapter = tabsAdapter
 
-      viewPagertabs.adapter = tabsAdapter
-
-       // tableLayout.setup//(viewPagertabs);
+        // tableLayout.setup//(viewPagertabs);
         TabLayoutMediator(tablLayout, viewPagertabs) { tab, pos ->
-            tab.text= tabTextList[pos]
-
+            tab.text = tabTextList[pos]
 
 
         }.attach()
 
         setTabItemMargin(tablLayout, 30)
 
-
-        txtSeeAllProducts.setOnClickListener{
-
-         val  action : NavDirections =  HomeFragmentDirections.actionHomeFragmentToSeeAllFragment(position = selectedTabPosition , `isItFromTheBrand` = false )//SettingFragmentDirections.actionSettingFragment2ToSplashFragment();
-            Navigation.findNavController(view).navigate(action);
-
-
-        }
         tablLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
 
-             override fun onTabSelected(tab: TabLayout.Tab?) {
-                   viewPagertabs.isUserInputEnabled = false
-                 val position = tab?.position ?: return
-                 selectedTabPosition = tab?.position ?: 0
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                viewPagertabs.isUserInputEnabled = false
+                val position = tab?.position ?: return
+                selectedTabPosition = tab?.position ?: 0
 
-                 Log.i("TabClickTest", "Tab $position clicked!")
+                Log.i("TabClickTest", "Tab $position clicked!")
 
-                 tab.view.setBackgroundResource(R.drawable.selecttab)
-                 tab.view.setBackgroundResource(R.drawable.tabstyle)
+                tab.view.setBackgroundResource(R.drawable.selecttab)
+                tab.view.setBackgroundResource(R.drawable.tabstyle)
 
                 // viewPagertabs.currentItem = position // Update ViewPager2 to the clicked tab
-             }
+            }
 
-             override fun onTabUnselected(tab: TabLayout.Tab?) {
-                 tab?.let {
-                     Log.i("TabClick", "Tab UNat position ${it.position} reselected")
-                     // Handle tab reselection if needed
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+                tab?.let {
+                    Log.i("TabClick", "Tab UNat position ${it.position} reselected")
+                    // Handle tab reselection if needed
 
-                     tab.view.setBackgroundResource(R.drawable.selecttab)
-                     tab.view.setBackgroundResource(R.drawable.tabstyle)
-                 }
-             }
+                    tab.view.setBackgroundResource(R.drawable.selecttab)
+                    tab.view.setBackgroundResource(R.drawable.tabstyle)
+                }
+            }
 
-             override fun onTabReselected(tab: TabLayout.Tab?) {
-                 tab?.let {
-                     Log.i("TabClick", "Tab at position ${it.position} reselected")
-                     // Handle tab reselection if needed
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                tab?.let {
+                    Log.i("TabClick", "Tab at position ${it.position} reselected")
+                    // Handle tab reselection if needed
 
-                 }
+                }
 
-             }
-
-
-         })
+            }
 
 
+        })
 
-// Disable swiping in ViewPager2
+
+        // Disable swiping in ViewPager2
         // Handle page change callbacks (for swipe)
         viewPagertabs.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                      //  viewPagertabs.isUserInputEnabled = true
-                    Log.i("PageChange", "Page $position selected via swipe")
-                    // Ensure the correct tab is selected when swiping
 
-                     tablLayout.getTabAt(position)?.select()
+                    tablLayout.getTabAt(position)?.select()
                 }
             })
 
 
 
         tablLayout.tabRippleColor = ColorStateList.valueOf(Color.parseColor("#FF03DAC5"))
-
-
-
-
-        // implement the TextWatcher callback listener
-      /*  search.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-                // Trigger filtering here
-             //   homeViewModel.filterBrands(s.toString())
-                Log.i("filtterbrands",s.toString())
-
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-
-        })
-
-       */
 
 
     }
@@ -471,14 +358,6 @@ class HomeFragment : Fragment() {
     }
 
 
-
-    override fun onDestroy() {
-        super.onDestroy()
-        slidingJob?.cancel()
-
-
-    }
-
     private var currentIndex = 0
 
 
@@ -487,7 +366,7 @@ class HomeFragment : Fragment() {
         slidingJob?.cancel()
 
         // Launch a coroutine in the viewLifecycleOwner's lifecycle scope
-        slidingJob = lifecycleScope.launch {
+        slidingJob = viewLifecycleOwner.lifecycleScope.launch {
             while (isActive) { // Ensure the coroutine stops if the lifecycle is destroyed
 
                 if (currentIndex >= images.size) {
@@ -510,22 +389,37 @@ class HomeFragment : Fragment() {
 
             }
         }
-        }
 
 
-companion object {
+    }
 
- @JvmStatic
- fun newInstance(param1: String, param2: String) =
-     HomeFragment().apply {
-         arguments = Bundle().apply {
+    override fun onDestroy() {
+        super.onDestroy()
 
-         }
-
-     }
-}
+        slidingJob?.cancel()
+        // viewPagertabs.adapter=null
 
 
+    }
+
+
+    override fun onDestroyView() {
+        // اجعل الأداپتر فارغاً قبل تدمير الواجهة
+        viewPagertabs.adapter = null
+        super.onDestroyView()
+    }
+
+    companion object {
+
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            HomeFragment().apply {
+                arguments = Bundle().apply {
+
+                }
+
+            }
+    }
 
 
 }

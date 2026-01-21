@@ -13,7 +13,7 @@ import com.example.shopenest.R
 
 class OnboardingFragmentTwo : Fragment() {
 
-  lateinit var buttonSkip:Button
+    lateinit var buttonSkip: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -32,7 +32,7 @@ class OnboardingFragmentTwo : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         buttonSkip = view.findViewById(R.id.buttonPage2)
-        buttonSkip.setOnClickListener{
+        buttonSkip.setOnClickListener {
             (activity as? OnboardingActivity)?.goToNextPage(1)
         }
 

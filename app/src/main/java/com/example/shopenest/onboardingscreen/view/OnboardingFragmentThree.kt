@@ -40,9 +40,6 @@ lateinit var buttonSkip: Button
             startActivity(intent)
             requireActivity().finish() // optional: prevent going back to onboarding
 
-
-
-            // (activity as? AuthActivity)?.goToNextPage(2)
         }
 
     }

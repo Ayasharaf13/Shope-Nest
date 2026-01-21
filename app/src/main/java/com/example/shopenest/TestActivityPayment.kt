@@ -20,7 +20,7 @@ import com.paypal.checkout.paymentbutton.PaymentButtonContainer
 
 class TestActivityPayment : AppCompatActivity() {
 
-    lateinit var   paymentButtonContainer:PaymentButtonContainer
+    lateinit var paymentButtonContainer: PaymentButtonContainer
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test_payment)
@@ -47,20 +47,19 @@ class TestActivityPayment : AppCompatActivity() {
             },
             onApprove =
             OnApprove { approval ->
-                Toast.makeText(this,"paymentApproval",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "paymentApproval", Toast.LENGTH_SHORT).show()
                 Log.i("My TAg", "OrderId: ${approval.data.orderId}")
             }, onCancel =
-                OnCancel {
-                    Log.i("My TAg", "Byer Cancel order")
-                    Toast.makeText(this,"paymentCancel",Toast.LENGTH_SHORT).show()
+            OnCancel {
+                Log.i("My TAg", "Byer Cancel order")
+                Toast.makeText(this, "paymentCancel", Toast.LENGTH_SHORT).show()
 
-                }, onError =
-                OnError {errorInfo ->
-                    Toast.makeText(this,"paymentError",Toast.LENGTH_SHORT).show()
-                    Log.i("My TAg", "Error : $errorInfo")
+            }, onError =
+            OnError { errorInfo ->
+                Toast.makeText(this, "paymentError", Toast.LENGTH_SHORT).show()
+                Log.i("My TAg", "Error : $errorInfo")
 
-                }
-
+            }
 
 
         )

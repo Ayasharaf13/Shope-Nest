@@ -41,30 +41,19 @@ class BottomFilterDialogFragment : BottomSheetDialogFragment() {
     lateinit var buttonApply: MaterialButton
     lateinit var buttonReset: MaterialButton
 
-  //  lateinit var searchViewModel:SearchViewModel
- //   lateinit var searchFactory:SearchViewModelFactory
-
-
- //   override fun getTheme(): Int = R.style.BottomSheetDialogTheme
 
     override fun onStart() {
         super.onStart()
 
         val dialog = dialog
-        val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
+        val bottomSheet =
+            dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
         bottomSheet?.layoutParams?.height = getScreenHeight() //- dpToPx() // leave 50dp at top
     }
 
     private fun getScreenHeight(): Int {
         return Resources.getSystem().displayMetrics.heightPixels
     }
-
-  /*  private fun dpToPx(dp: Int): Int {
-        val density = Resources.getSystem().displayMetrics.density
-        return (dp * density).toInt()
-    }
-
-   */
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,8 +76,6 @@ class BottomFilterDialogFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-    //    var  recyclerViewSearchResult: RecyclerView = view.findViewById(R.id.recyclerViewSearchResult)
-    //    val adapter = GenericHomeAdapter(requireView() , "noNav")
 
         priceOptionButton1 = view.findViewById(R.id.price1)
         priceOptionButton2 = view.findViewById(R.id.price2)
@@ -97,36 +84,25 @@ class BottomFilterDialogFragment : BottomSheetDialogFragment() {
         buttonApply = view.findViewById(R.id.applyButton)
 
 
-       /* searchViewModel =
-            ViewModelProvider(this, searchFactory).get(SearchViewModel::class.java)
-
-        searchFactory = SearchViewModelFactory(
-            Repository.getInstance(
-                ShoppingClient.getInstance(),
-                ConcreteLocalSource.getInstance(requireContext())
-            ))
-
-        */
-
-       /* recyclerViewSearchResult.setLayoutManager(
-            GridLayoutManager(
-                requireContext(),
-                2 // Number of columns you want in the grid
-
-            )
-        )
-
-        */
-
-       fun setupPriceToggle(button: MaterialButton) {
+        fun setupPriceToggle(button: MaterialButton) {
             button.setOnClickListener {
                 if (button.isChecked) {
-                    button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.purple_500))
+                    button.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.purple_500
+                        )
+                    )
                     val selectedPriceRange = button.text.toString()
                     Log.d("Toggle", "Selected price range: $selectedPriceRange")
                     button.setTextColor(Color.BLACK)
                 } else {
-                    button.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
+                    button.setBackgroundColor(
+                        ContextCompat.getColor(
+                            requireContext(),
+                            R.color.white
+                        )
+                    )
                 }
             }
         }
@@ -134,32 +110,6 @@ class BottomFilterDialogFragment : BottomSheetDialogFragment() {
         setupPriceToggle(priceOptionButton1)
         setupPriceToggle(priceOptionButton2)
         setupPriceToggle(priceOptionButton3)
-
-
-    /*    priceOptionButton1.setOnClickListener {
-            if (priceOptionButton1.isChecked ) {
-                // ✅ Change color to selected state
-                priceOptionButton1.setBackgroundColor(
-                    ContextCompat.getColor(
-                        requireContext(),
-                        R.color.purple_500
-                    )
-                )
-
-                // ✅ Get the price range
-                val selectedPriceRange = priceOptionButton1.text.toString()
-               // searchViewModel.searchAllProducts(0,100)
-                Log.d("Toggle", "Selected price range: $selectedPriceRange")
-                priceOptionButton1.setTextColor(Color.BLACK)
-
-
-            } else {
-                // 🔄 Reset to default appearance
-                priceOptionButton1.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.white))
-
-            }
-
-        }*/
 
 
         buttonApply.setOnClickListener {
@@ -179,7 +129,7 @@ class BottomFilterDialogFragment : BottomSheetDialogFragment() {
                 dismiss()
 
 
-            }else if(priceOptionButton2.isChecked){
+            } else if (priceOptionButton2.isChecked) {
 
                 val action =
                     BottomFilterDialogFragmentDirections.actionBottomFilterDialogFragmentToSeeAllFragment(
@@ -189,9 +139,9 @@ class BottomFilterDialogFragment : BottomSheetDialogFragment() {
                         isItFromTheBrand = false
                     )
                 findNavController().navigate(action)
-                   dismiss()
+                dismiss()
 
-            }else if (priceOptionButton3.isChecked){
+            } else if (priceOptionButton3.isChecked) {
 
                 val action =
                     BottomFilterDialogFragmentDirections.actionBottomFilterDialogFragmentToSeeAllFragment(
@@ -205,10 +155,6 @@ class BottomFilterDialogFragment : BottomSheetDialogFragment() {
                 dismiss()
 
             }
-
-
-
-
 
 
         }

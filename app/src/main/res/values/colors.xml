@@ -15,6 +15,9 @@
     <color name="background_WelcomePage">#172B85</color>
     <color name="background_EditText">#F3F8FF</color>
     <color name="background_buttonSave">#263577</color>
+    <color name="heart_filled_red">#E32517</color>
+    <color name="heart_outline">#FFFFFF</color>
+
 
 
 

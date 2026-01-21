@@ -1,108 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+
+<androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+
+    app:cardElevation="4dp"
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-    <androidx.cardview.widget.CardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cardView"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-        android:layout_height="wrap_content"
-
-        android:layout_marginTop="20dp"
-        app:cardElevation="4dp"
-
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/myCustomToolbarAddress"
             android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:title=""  app:layout_constraintTop_toTopOf="parent">
 
-            android:layout_height="wrap_content">
+        </androidx.appcompat.widget.Toolbar>
 
-            <ImageView
-                android:id="@+id/imgeCartItem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_launcher_background"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/imgeCartItem"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="16dp"
+            android:paddingLeft="10dp"
+            android:src="@drawable/ic_launcher_background"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tvCartItemProductName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="30dp"
-                android:text=" "
-                app:layout_constraintStart_toEndOf="@+id/imgeCartItem"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvCartItemProductPrice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginBottom="16dp"
-                android:text=" "
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imgeCartItem" />
+        <TextView
+            android:id="@+id/tvCartItemProductName"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="24dp"
+            android:maxLines="1"
+            android:text=" "
+            app:layout_constraintStart_toEndOf="@+id/imgeCartItem"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
-            <ImageButton
-                android:id="@+id/increaseButtonCartItem"
-                android:layout_width="23dp"
-                android:layout_height="26dp"
-                android:layout_marginEnd="5dp"
-                android:layout_marginBottom="44dp"
-                android:background="@null"
-                android:scaleType="centerInside"
-                android:src="@drawable/plus"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/textDisplaycountDetailsCardItem" />
+        <TextView
+            android:id="@+id/tvCartItemProductPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginBottom="30dp"
+            android:text=" "
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imgeCartItem" />
 
-            <TextView
-                android:id="@+id/textDisplaycountDetailsCardItem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="32dp"
-                android:background="@color/background_pageOne"
-                android:padding="5dp"
-                android:text=" "
-                android:textColor="@color/white"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/decreaseButtonCarttItem" />
+        <TextView
+            android:id="@+id/textDisplaycountDetailsCardItem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/bg_counter_number"
+            android:padding="5dp"
+            android:text=" "
+
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
 
-            <ImageButton
-                android:id="@+id/decreaseButtonCarttItem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="3dp"
-                android:background="@null"
-                android:padding="8dp"
-                android:scaleType="centerInside"
-                android:src="@drawable/minsicon"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.465" />
-
-            <ImageView
-                android:id="@+id/imageDeleteCart"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="80dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:srcCompat="@drawable/deleteicon"
-                tools:layout_editor_absoluteX="313dp"
-                tools:ignore="MissingConstraints" />
+        <ImageView
+            android:id="@+id/imageDeleteCart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="80dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@drawable/deleteicon"
+            tools:ignore="MissingConstraints" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -110,4 +93,4 @@
     </androidx.cardview.widget.CardView>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+

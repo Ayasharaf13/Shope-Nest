@@ -17,17 +17,18 @@ import com.example.shopenest.model.Product
 import com.example.shopenest.search.view.SeeAllFragmentDirections
 
 
-class GenericHomeAdapter (val context:View, val navFrom :String): ListAdapter<Product, GenericHomeAdapter.ViewHolder>(CategoryDiffUtil()) {
+class GenericHomeAdapter(
+    val context: View, private val listener: OnFavClickListener? = null,
+    val onItemClick: (Long) -> Unit
+) : ListAdapter<Product, GenericHomeAdapter.ViewHolder>(CategoryDiffUtil()) {
 
+    var isFavorite = false
 
     inner class ViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
 
         var imageProduct: ImageView = itemview.findViewById(R.id.imageProduct)
-
-        var nameProduct :TextView = itemview.findViewById(R.id.txtNameProduct)
-
-        var addFav :ImageView = itemview.findViewById(R.id.imageFav)
-
+        var nameProduct: TextView = itemview.findViewById(R.id.txtNameProduct)
+        var addFav: ImageView = itemview.findViewById(R.id.imageFav)
 
 
     }
@@ -37,52 +38,55 @@ class GenericHomeAdapter (val context:View, val navFrom :String): ListAdapter<Pr
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder:ViewHolder, position: Int) {
-        //https://www.imgonline.com.ua/examples/rays-of-light-in-the-sky.jpg
-//https://cdn.shopify.com/s/files/1/0792/3626/8322/products/7883dc186e15bf29dad696e1e989e914.jpg?v=1689453539
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+
         var product = getItem(position)
         val imageUrl = product.image?.src
-        if (imageUrl != null ) {
+        if (imageUrl != null) {
             Glide.with(holder.imageProduct.context)
                 .load(imageUrl)
                 .placeholder(R.drawable.ic_launcher_background) // Optional placeholder
                 .into(holder.imageProduct)
 
-        }else{
+        } else {
 
 
         }
 
 
-      var proId =  product.id
+        var proId = product.id
 
         holder.nameProduct.text = product.title
 
-      //  val variant = product.variants.firstOrNull()
-      //  holder.priceProduct.text = variant?.price?: "N/A"
 
-       // val product = apiResponse.products.firstOrNull()
+
+
         Log.d("Product", "Variants: ${product?.variants}")  // Check if it’s null or populated
 
-      //  Log.i("product id:::  " , product.id.toString())
+
+        holder.addFav.setOnClickListener {
+
+            isFavorite = !isFavorite
+
+            if (isFavorite) {
+
+                holder.addFav.setImageResource(R.drawable.filledheartred) // أيقونة القلب الأحمر
+                listener?.onFavClick(product)
+            } else {
+
+                holder.addFav.setImageResource(R.drawable.ic_baseline_favorite_border_24) // أيقونة القلب الفارغ
+            }
+
+        }
 
         holder.itemView.setOnClickListener {
-            if (navFrom == "Home") {
-                val  action : NavDirections = HomeFragmentDirections.actionHomeFragmentToDetailsProductFragment(proId)//actionSeeAllFragmentToDetailsProductFragment(proId) // HomeFragmentDirections.actionHomeFragmentToSeeAllFragment(id =idBrand , isItFromTheBrand = true)
-                Navigation.findNavController(context).navigate(action);
 
-            }else if (navFrom == "noNav"){
+            onItemClick(proId) // نرسل الـ id للفراجمنت فقط
 
 
-            }else{
-            val action: NavDirections =
-                SeeAllFragmentDirections.actionSeeAllFragmentToDetailsProductFragment(proId) // HomeFragmentDirections.actionHomeFragmentToSeeAllFragment(id =idBrand , isItFromTheBrand = true)
-            Navigation.findNavController(context).navigate(action);
-        }
         }
 
     }
-
 
 
     class CategoryDiffUtil() : DiffUtil.ItemCallback<Product>() {

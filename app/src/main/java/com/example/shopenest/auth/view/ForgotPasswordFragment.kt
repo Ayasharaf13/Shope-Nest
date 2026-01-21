@@ -19,9 +19,9 @@ import com.google.firebase.auth.FirebaseAuth
 
 class ForgotPasswordFragment : Fragment() {
 
-    lateinit var editEmail:EditText
+    lateinit var editEmail: EditText
     lateinit var firebaseAuth: FirebaseAuth
-    lateinit var buttonResetPassword:Button
+    lateinit var buttonResetPassword: Button
     lateinit var buttonBackToLogin: Button
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,8 +39,10 @@ class ForgotPasswordFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_forgot_password, container, false)
     }
@@ -104,13 +106,14 @@ class ForgotPasswordFragment : Fragment() {
          * @return A new instance of fragment ForgotPasswordFragment.
          */
         // TODO: Rename and change types and number of parameters
-        @JvmStatic fun newInstance(param1: String, param2: String) =
-                ForgotPasswordFragment().apply {
-                    arguments = Bundle().apply {
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            ForgotPasswordFragment().apply {
+                arguments = Bundle().apply {
 
 
-                    }
                 }
+            }
     }
 }
 

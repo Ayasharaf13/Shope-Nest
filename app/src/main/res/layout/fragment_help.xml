@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+   >
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarSupport"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:title=""
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:layout_constraintTop_toTopOf="parent" />
+
+<androidx.cardview.widget.CardView
+    android:id="@+id/btnWhatsapp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
+
+    android:layout_marginTop="20dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+   >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:id="@+id/layoutWhatsapp"
+        android:padding="16dp">
+        <ImageView android:layout_width="30dp" android:layout_height="30dp" android:src="@drawable/iconwhats"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Chat on WhatsApp" android:layout_marginStart="16dp" android:textStyle="bold"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+
+<androidx.cardview.widget.CardView
+    android:id="@+id/btnCall"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="15dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    app:cardCornerRadius="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:id="@+id/layoutPhone"
+        android:padding="16dp">
+        <ImageView android:layout_width="30dp" android:layout_height="30dp" android:src="@drawable/iconphone"/>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Call Support" android:layout_marginStart="16dp" android:textStyle="bold"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+
+</LinearLayout>

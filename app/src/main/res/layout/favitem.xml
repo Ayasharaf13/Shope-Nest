@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="190dp"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="25dp"
+
+    app:cardUseCompatPadding="true"
+    app:cardElevation="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:padding="16dp"
+        android:layout_height="match_parent">
+
+        <!-- Product Image -->
+        <ImageView
+            android:id="@+id/productImage"
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <!-- Close (X) Icon -->
+        <ImageView
+            android:id="@+id/btnRemove"
+            android:layout_width="28dp"
+            android:layout_height="20dp"
+            android:padding="4dp"
+            android:src="@drawable/ic_close"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toTopOf="@id/productImage"
+            app:layout_constraintStart_toStartOf="@id/productImage"
+            android:layout_margin="8dp"/>
+
+        <!-- Heart Icon -->
+        <ImageView
+            android:id="@+id/btnFavorite"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:padding="4dp"
+            android:src="@drawable/ic_baseline_favorite_24"
+            android:tint="#E91E63"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toTopOf="@id/productImage"
+            app:layout_constraintEnd_toEndOf="@id/productImage"
+            android:layout_margin="8dp"/>
+
+        <!-- Product Title -->
+        <TextView
+            android:id="@+id/productTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:maxLines="1"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="Hoody Jacket"
+            android:textColor="#000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/productImage" />
+
+        <!-- Product Price -->
+        <TextView
+            android:id="@+id/productPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:paddingStart="10dp"
+            android:text="EGP 500"
+            android:textColor="#444"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/productTitle" />
+
+        <!-- Star Icon -->
+        <ImageView
+            android:id="@+id/starIcon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@android:drawable/btn_star_big_on"
+            app:layout_constraintTop_toBottomOf="@id/productTitle"
+            app:layout_constraintEnd_toStartOf="@id/productRating"
+            android:layout_marginEnd="4dp"
+            android:layout_marginTop="6dp"/>
+
+        <!-- Rating -->
+        <TextView
+            android:id="@+id/productRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4.8"
+            android:textSize="14sp"
+            android:textColor="#000"
+            android:paddingEnd="10dp"
+            app:layout_constraintTop_toBottomOf="@id/productTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="6dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

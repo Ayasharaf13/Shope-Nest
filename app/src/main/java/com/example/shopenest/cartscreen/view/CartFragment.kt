@@ -1,5 +1,6 @@
 package com.example.shopenest.cartscreen.view
 
+
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -8,47 +9,39 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+
+import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
+
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopenest.R
 import com.example.shopenest.address.viewmodel.AddressViewModel
 import com.example.shopenest.address.viewmodel.AddressViewModelFactory
-import com.example.shopenest.auth.view.WelcomeFragmentDirections
+
 import com.example.shopenest.cartscreen.viewmodel.CartViewModel
 import com.example.shopenest.cartscreen.viewmodel.CartViewModelFactory
 import com.example.shopenest.db.ConcreteLocalSource
-import com.example.shopenest.homescreen.view.BrandAdapter
-import com.example.shopenest.homescreen.view.DetailsProductFragmentArgs
+
 import com.example.shopenest.homescreen.viewmodel.HomeViewModel
 import com.example.shopenest.homescreen.viewmodel.HomeViewModelFactory
 import com.example.shopenest.model.*
 import com.example.shopenest.network.ShoppingClient
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.last
-import kotlinx.coroutines.flow.lastOrNull
-import kotlinx.coroutines.launch
+import com.example.shopenest.utilities.CustomerPref
+import kotlinx.coroutines.*
 
 
 class CartFragment : Fragment() {
 
-// to get info product details that user choose
 
     lateinit var detailsProductViewModel: HomeViewModel
     lateinit var detailsProductFactory: HomeViewModelFactory
-    lateinit var cartViewModel:CartViewModel
+    lateinit var cartViewModel: CartViewModel
     lateinit var cartFactory: CartViewModelFactory
-    var totalPriceAfterDiscount :String? = null
-    lateinit var cardAdapter:CartAdapter
-    lateinit var recyclerCart:RecyclerView
-    lateinit var imageEmptyCart:ImageView
+    var totalPriceAfterDiscount: String? = null
+    lateinit var recyclerCart: RecyclerView
+    lateinit var imageEmptyCart: ImageView
     lateinit var buttonCheckout: Button
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,8 +51,10 @@ class CartFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_cart, container, false)
     }
@@ -72,7 +67,7 @@ class CartFragment : Fragment() {
         detailsProductFactory = HomeViewModelFactory(
             Repository.getInstance(
                 ShoppingClient.getInstance(),
-                ConcreteLocalSource.getInstance(requireActivity())
+                ConcreteLocalSource.getInstance(requireContext())
             )
         )
 
@@ -100,117 +95,152 @@ class CartFragment : Fragment() {
             ).get(CartViewModel::class.java)
 
 
+        //  var customerId = CustomerPref(requireContext() ).getCustomerId()
+
+
+        // To load data
+        val customerId = CustomerPref(requireContext()).getCustomerId()?.toLong()
+
+        customerId?.let { cartViewModel.loadDraftOrder(it) }
+
         imageEmptyCart = view.findViewById(R.id.emptyCard)
         buttonCheckout = view.findViewById(R.id.btnCheckout)
-        cartViewModel.getDraftOrder()
+        recyclerCart = view.findViewById(R.id.recyclerCart)
+        // cartViewModel.getDraftOrder()
 
 
-
-      var  addressFactory = AddressViewModelFactory(
+        var addressFactory = AddressViewModelFactory(
             Repository.getInstance(
                 ShoppingClient.getInstance(),
                 ConcreteLocalSource.getInstance(requireContext())
             )
         )
 
-       var addressViewModel =
+
+        var addressViewModel =
             ViewModelProvider(this, addressFactory).get(AddressViewModel::class.java)
 
 
 
         buttonCheckout.setOnClickListener {
 
-                val action = CartFragmentDirections
-                    .actionCartFragmentToCheckoutFragment()
-                findNavController().navigate(action)
+            val action = CartFragmentDirections
+                .actionCartFragmentToCheckoutFragment()
+            findNavController().navigate(action)
 
 
         }
 
-        recyclerCart = view.findViewById(R.id.recyclerCart)
+
+        //DetailsProduct
+        // Try to read Safe Args (only works if launched with Safe Args)
+        val safeArgs = try {
+            CartFragmentArgs.fromBundle(requireArguments())
+        } catch (e: Exception) {
+            null
+        }
+        //  var  = CustomerPref(requireContext()).getCustomerId()?.toLong()
+
+        val idDraftOrder = safeArgs?.draftId
+
+        val productQuantity = safeArgs?.productQuantity
+        val fromScreen = arguments?.getString("fromscreen")
+
+        //if (productQuantity !=-1){
 
 
-        val args: CartFragmentArgs by navArgs()
-        val productQuantity = args.productQuantity
+        Log.i("testQCartDraft: ", idDraftOrder.toString())
+        Log.i("testQCartCustomer: ", customerId.toString())
 
- //if (productQuantity !=-1){
+        // var cardAdapter: CartAdapter? = productQuantity?.let { CartAdapter(it, "", requireView()) }
+        // 1️⃣ Set adapter once in onViewCreated
 
-    Log.i("testQCart","frombuttonAddToCart")
+        var cardAdapter = CartAdapter(requireContext(), requireView()) { draftOrderId ->
+            customerId?.let { cartViewModel.deleteDraftOrder(draftOrderId, it) }
+        }
 
-            var adapter = CartAdapter(productQuantity, null)
 
-            //   recyclerBrand.layoutManager = LinearLayoutManager(requireContext(),HorizontalScrollView)
-            recyclerCart.setLayoutManager(
-                LinearLayoutManager(
-                    requireContext(),
-                    LinearLayoutManager.VERTICAL,
-                    false
-                )
+        // \\  recyclerBrand.layoutManager = LinearLayoutManager(requireContext(),HorizontalScrollView)
+        recyclerCart.setLayoutManager(
+            LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.VERTICAL,
+                false
             )
+        )
+        recyclerCart.adapter = cardAdapter
 
 
-// 1214597595426 ordreId
-            lifecycleScope.launch(Dispatchers.Main) {
-                detailsProductViewModel.draftOrder.collect { draftOrderResponse ->
 
-                    if (draftOrderResponse != null) {
-                        if (draftOrderResponse.isSuccessful) {
-                            val draftOrder = draftOrderResponse.body()
-                            //  if (draftOrder != null && draftOrder.draft_order != "") {
-                            //  val totalPrice_id = draftOrder.draft_order.get(7)?.id//?.total_price
-                            // val totalPrice = draftOrder?.draft_order?.total_price
-                            val totalPrice = draftOrderResponse.body()?.draft_order?.total_price
-                            val orderId = draftOrderResponse.body()?.draft_order?.order_id
-                            //  val latestDraftOrder = draftOrder.draft_orders.maxByOrNull { it.created_at.toString() } // newest by ID
-                            //  val totalPrice = latestDraftOrder?.total_price
-                            Log.i("draftOrderID", "✅ Retrieved total price: $orderId")
 
-                            totalPriceAfterDiscount = totalPrice
-                            adapter.updateTotalPrice(totalPriceAfterDiscount)
-                            //} else {
-                            //  Log.w("draftOrdercart", "⚠️ No draft orders found in response")
-                            //  }
-                        } else {
-                            Log.e(
-                                "draftOrdercart",
-                                "❌ API failed: code=${draftOrderResponse.code()} message=${draftOrderResponse.message()}"
-                            )
-                        }
-                    } else {
-                        Log.w("draftOrdercart", "⚠️ No response yet (flow is still null)")
+        suspend fun loadDraftOrderItems(
+            lineItems: List<LineItem> //Response<ResponseDraftOrderForRequestCreate>
+        ): List<DraftOrderItemUI> = coroutineScope {
+
+
+            val deferredList = lineItems.map { item ->
+                async(Dispatchers.IO) {
+
+                    val productId = item.product_id ?: return@async null
+
+                    val productResponse = detailsProductViewModel.getProductDetails(productId)
+                    val product = productResponse?.product ?: return@async null
+
+                    DraftOrderItemUI(
+                        title = product.title ?: "",
+                        image = product.image?.src ?: "",
+                        quantity = item.quantity,
+                        lineItemId = item.idLineItem,
+                        draftOrderId = item.draftOrderId,
+                        //draftId
+                        productId = item.product_id,
+                        price = item.price?.toDouble() ?: 0.0
+                    )
+
+
+                }
+            }
+
+            deferredList.awaitAll().filterNotNull()
+        }
+
+
+
+
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+
+                cartViewModel.draftOrderWithItems.collect { (header, items) ->
+
+                    if (header == null || items.isEmpty()) {
+                        Log.i("CartFragment", "Waiting for DB data...")
+                        return@collect
+
                     }
+
+                    // 1️⃣ Heavy work → IO
+                    val uiList = withContext(Dispatchers.IO) {
+                        loadDraftOrderItems(items)
+
+                    }
+
+                    // 2️⃣ UI update → Main
+                    totalPriceAfterDiscount = header.subtotal_price
+                    // cardAdapter?.updateTotalPrice(totalPriceAfterDiscount)
+                    Log.i("CartFragment_Hed", "$header")
+                    Log.i("CartFragment_Item", "$items")
+
+                    // VERY IMPORTANT → new list instance
+                    cardAdapter?.submitList(uiList.toList())
+
                 }
+
             }
 
 
-            lifecycleScope.launch(Dispatchers.Main) {
-
-                detailsProductViewModel.productDetails.collect { productResponse ->
-
-                    val productList = mutableListOf<Product>(productResponse.product)// wrap in list
-                    // productList.add(productResponse.product)
-                    recyclerCart.adapter = adapter
-                    adapter.submitList(productList)
-
-                }
-            }
-       // }else{
-
-    //  Log.i("testQCart","fromNavBottom")
-
-// }
-
-
- }
-
-           // Log.i("testQCart","fromNavBottom")
-          //  recyclerCart.visibility = View.GONE
-
-         //   imageEmptyCart.visibility = View.VISIBLE
-
-
-
-  //  }
+        }
+    }
 
 
     companion object {
@@ -223,13 +253,13 @@ class CartFragment : Fragment() {
          * @return A new instance of fragment CartFragment.
          */
         // TODO: Rename and change types and number of parameters
-        @JvmStatic fun newInstance(param1: String, param2: String) =
-                CartFragment().apply {
-                    arguments = Bundle().apply {
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            CartFragment().apply {
+                arguments = Bundle().apply {
 
 
-
-                    }
                 }
+            }
     }
 }

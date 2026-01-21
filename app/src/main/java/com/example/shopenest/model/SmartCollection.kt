@@ -1,24 +1,20 @@
 package com.example.shopenest.model
 
 
-//you should write all properties as same in write api call .name class is not necessary
-data class SmartCollection (
+data class SmartCollection(
 
-   val id: Long,
-    val handle: String ="",
-    val title: String ="",
+    val id: Long,
+    val handle: String = "",
+    val title: String = "",
 
-    val updated_at: String ="",
+    val updated_at: String = "",
 
     val body_html: String = "",
 
-    val published_at: String="",
+    val published_at: String = "",
 
-    val sort_order: String =  "",
+    val sort_order: String = "",
 
-  //  val templateSuffix: Any?,
-    //val disjunctive: Boolean,
-   // val rules: List<Rule>,
 
     val published_scope: String = "",
 
@@ -26,7 +22,7 @@ data class SmartCollection (
     val image: ImageBrand,
 
 
-        )
+    )
 
 
 

@@ -9,14 +9,25 @@
     android:padding="16dp">
 
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/myCustomToolbarSavedAddress"
+        android:layout_width="match_parent"
+
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:title=""  app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.appcompat.widget.Toolbar>
     <!-- Title -->
     <TextView
         android:id="@+id/title_shipping"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="45dp"
         android:text="Shipping Address"
+
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,7 +37,7 @@
         android:id="@+id/recyclerAddress"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

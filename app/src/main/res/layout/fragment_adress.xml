@@ -7,6 +7,16 @@
     android:padding="16dp"
     tools:context=".address.view.AddressFragment">
 
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/myCustomToolbarAddress"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:title=""  app:layout_constraintTop_toTopOf="parent">
+
+    </androidx.appcompat.widget.Toolbar>
     <!-- Title -->
     <TextView
         android:id="@+id/textAddress"

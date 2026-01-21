@@ -2,7 +2,7 @@ package com.example.shopenest.model
 
 
 
- class ResponseDraftOrderForRequestCreate(
+ data class ResponseDraftOrderForRequestCreate(
 
 
     var draft_order: DraftOrder

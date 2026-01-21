@@ -5,26 +5,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_gravity="center_horizontal"
-
-
     android:layout_height="wrap_content">
 
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/address_card"
         android:layout_width="0dp"
+        android:layout_margin="8dp"
+
         android:layout_height="wrap_content"
-
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginVertical="24dp"
-        app:cardElevation="8dp"
         app:cardCornerRadius="24dp"
-
+        app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:strokeWidth="1dp">
+       >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -67,11 +63,11 @@
             <TextView
                 android:id="@+id/textSetDefault"
                 android:layout_width="wrap_content"
-                android:layout_marginLeft="160dp"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                 android:textColor="@color/background_buttonSave"
-                android:text="Set Default" />
+                android:layout_marginLeft="160dp"
+                android:text="Set Default"
+                android:textColor="@color/background_buttonSave"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>

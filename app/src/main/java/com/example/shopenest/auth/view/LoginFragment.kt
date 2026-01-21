@@ -104,8 +104,8 @@ class LoginFragment : Fragment() {
             ViewModelProvider(this, loginViewModelFactory).get(CreateUserViewModel::class.java)
 
 
-//current ID : 9367766303010
-     suspend   fun searchCustomerByEmail(email: String) {
+        //current ID : 9367766303010
+        suspend fun searchCustomerByEmail(email: String) {
 
             loginViewModel.searchCustomerByEmail(email)
 
@@ -138,7 +138,6 @@ class LoginFragment : Fragment() {
                         }
 
 
-
                         //   Log.i ("customer_id", response.body().customer.email.toString())
                         // Save to SharedPreferences or navigate
                     } else {
@@ -151,65 +150,14 @@ class LoginFragment : Fragment() {
 
 
         }
-// 9225789833506
-         /* loginViewModel.deleteCustomer(    9367725605154 )
-
-       lifecycleScope.launchWhenStarted {
-            loginViewModel.deleteCustomer.collect {res->
-
-                Log.d("SdeleyeEmailllllll:  ", "delete By Email: ${res.toString()}")
-
-
-
-
-            }
-
-                 }
-
-          */
-
-
-
-
-
-
-//email:samshop@333.yahoo.com
-
-        /*  lifecycleScope.launchWhenStarted {
-              searchCustomerByEmail("email:ayasharaf444@yahoo.com")
-            loginViewModel.searchCustomer.collect {res->
-
-              //  Log.d("SearchByEmailllllll ", "Search By Email: ${res?.body()?.customers?.get(0)?.id}")
-
-                if (res?.isSuccessful == true) {
-                    val customers = res.body()?.customers
-                    if (!customers.isNullOrEmpty()) {
-                        Log.d("Search:NN", "Customer found: ${customers[0].email}")
-                        Log.d("Search:NN", "Customer found: ${customers[0].id}")
-                    } else {
-                        Log.d("Search:NN", "No customer found with that email")
-                    }
-                } else {
-                    Log.d("Srchearch:NN", "Request failed: ${res?.code()}")
-                }
-
-
-            }
-        }
-
-         */
-
-
-
-
 
 
         @SuppressLint("SuspiciousIndentation")
-          fun checkFondCustomer(email: String) {
+        fun checkFondCustomer(email: String) {
 
             val editor = pref.edit()
             val savedEmail = pref.getString("email", null)
-          //  editor.clear().apply()
+            //  editor.clear().apply()
             lifecycleScope.launch {
 
                 searchCustomerByEmail(email)
@@ -232,8 +180,8 @@ class LoginFragment : Fragment() {
 
 
 
-            buttonGoogle.setOnClickListener {
-                lifecycleScope.launch {
+        buttonGoogle.setOnClickListener {
+            lifecycleScope.launch {
 
                 googleAuthHelper.startGoogleSignIn()
 
@@ -247,22 +195,28 @@ class LoginFragment : Fragment() {
 
         }
 
-        fun loginAccount () {
+        fun loginAccount() {
             val email = userName.text.toString()
             val password = userPassword.text.toString()
 
-            if (ValidationUtils.validateUserInput(requireContext(),email, password, isSignUp = false)) {
+            if (ValidationUtils.validateUserInput(
+                    requireContext(),
+                    email,
+                    password,
+                    isSignUp = false
+                )
+            ) {
 
-                 mAuth.signInWithEmailAndPassword(email,password)
+                mAuth.signInWithEmailAndPassword(email, password)
                     .addOnCompleteListener(requireActivity()) { task ->
                         if (task.isSuccessful) {
 
 
-                                val user = mAuth.currentUser
-                                checkFondCustomer(email)
-                                val intent = Intent(requireContext(), MainActivity::class.java)
-                                startActivity(intent)
-                                requireActivity().finish() // This removes AuthActivity from the back stack
+                            val user = mAuth.currentUser
+                            checkFondCustomer(email)
+                            val intent = Intent(requireContext(), MainActivity::class.java)
+                            startActivity(intent)
+                            requireActivity().finish() // This removes AuthActivity from the back stack
 
                             //  updateUI(user)
                         } else {
@@ -288,7 +242,7 @@ class LoginFragment : Fragment() {
                 val email = user?.email
                 Log.d("Firebase", "User email: $email")
                 if (email != null) {
-                  checkFondCustomer(email)
+                    checkFondCustomer(email)
 
                 }
                 val intent = Intent(requireContext(), MainActivity::class.java)
@@ -304,16 +258,12 @@ class LoginFragment : Fragment() {
         )
 
 
-        buttonLogIn.setOnClickListener{
+        buttonLogIn.setOnClickListener {
             loginAccount()
         }
 
 
     }
-
-
-
-
 
 
     companion object {
@@ -334,9 +284,6 @@ class LoginFragment : Fragment() {
                 }
             }
     }
-
-
-
 
 
 }

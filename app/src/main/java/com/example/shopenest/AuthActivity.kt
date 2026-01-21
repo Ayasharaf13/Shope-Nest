@@ -15,12 +15,10 @@ class AuthActivity : AppCompatActivity() {
     lateinit var navController: NavController
 
 
-
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
-
 
 
         // Find the NavController
@@ -40,12 +38,6 @@ class AuthActivity : AppCompatActivity() {
 
 
     }
-
-
-
-
-
-
 
 
 }

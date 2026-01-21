@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class SearchViewModel   (private val repo: RepositoryInterface) : ViewModel() {
+class SearchViewModel(private val repo: RepositoryInterface) : ViewModel() {
 
 
     var titleBrand: String? = null
@@ -35,11 +35,11 @@ class SearchViewModel   (private val repo: RepositoryInterface) : ViewModel() {
     val allProducts: StateFlow<List<Product>> get() = _allProducts
 
 
-    fun filterProductsBasedPrice(rangePrice1: Float ,rangePrice2: Float,title:String ) {
+    fun filterProductsBasedPrice(rangePrice1: Float, rangePrice2: Float, title: String) {
         viewModelScope.launch(Dispatchers.IO) {
 
 
-         var pro2=   repo.getProductsForBrands(title).products
+            var pro2 = repo.getProductsForBrands(title).products
 
 
             val all = pro2
@@ -48,17 +48,15 @@ class SearchViewModel   (private val repo: RepositoryInterface) : ViewModel() {
 
             val filtered = all.filter {
 
-              //  it.variants.get(0).price.toIntOrNull() in rangePrice1..rangePrice2
-           //   it.variants.firstOrNull()?.price?.toIntOrNull() in rangePrice1 downTo rangePrice2 //rangePrice1..rangePrice2
-                it.variants.firstOrNull()?.price?.toFloatOrNull()?.let { price->
-               price in rangePrice1 ..rangePrice2
+                it.variants.firstOrNull()?.price?.toFloatOrNull()?.let { price ->
+                    price in rangePrice1..rangePrice2
 
-                }?:false
+                } ?: false
 
 
             }
 
-             Log.i("prouctfffilter:  ", filtered.toString())
+            Log.i("prouctfffilter:  ", filtered.toString())
             _allProducts.value = all
             _filterProducts.value = filtered
 
@@ -67,11 +65,11 @@ class SearchViewModel   (private val repo: RepositoryInterface) : ViewModel() {
 
 
     @SuppressLint("SuspiciousIndentation")
-    fun getProductsBrand(vendor:String) {
+    fun getProductsBrand(vendor: String) {
 
         viewModelScope.launch(Dispatchers.IO) {
 
-          val res = repo.getProductsForBrands(vendor).products
+            val res = repo.getProductsForBrands(vendor).products
             Log.d("DEBUG", "Fetched products: $res")
             _product.value = res
 
@@ -101,8 +99,7 @@ class SearchViewModel   (private val repo: RepositoryInterface) : ViewModel() {
     }
 
 
-
-    fun getProductKids ( ) {
+    fun getProductKids() {
 
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -121,7 +118,6 @@ class SearchViewModel   (private val repo: RepositoryInterface) : ViewModel() {
 
 
     }
-
 
 
     fun getProductMen() {

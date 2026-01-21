@@ -1,32 +1,39 @@
 package com.example.shopenest.homescreen.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridView
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shopenest.R
 import com.example.shopenest.db.ConcreteLocalSource
 import com.example.shopenest.homescreen.viewmodel.HomeViewModel
 import com.example.shopenest.homescreen.viewmodel.HomeViewModelFactory
+import com.example.shopenest.homescreen.viewmodel.SharedFavViewModel
+import com.example.shopenest.model.Product
 import com.example.shopenest.model.Repository
 import com.example.shopenest.network.ShoppingClient
 import kotlinx.coroutines.launch
 
 
-class KidsFragment : Fragment() {
+class KidsFragment : Fragment(),OnFavClickListener {
 
 
     lateinit var kidsViewModel:HomeViewModel
     lateinit var kidsAdapter: GenericHomeAdapter
     lateinit var kidsFactory: HomeViewModelFactory
     lateinit var images: MutableList<Int>
+    private val sharedViewModel: SharedFavViewModel by activityViewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -53,13 +60,6 @@ class KidsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-         // var  gridView: GridView = view.findViewById(R.id.gridProductKid);
-
-
-      // create a object of myBaseAdapter
-  //   var  baseAdapter: GridProductAdapter =  GridProductAdapter( images);
-    //  gridView.setAdapter(baseAdapter);
-
 
         //   homeViewModel.getBrands()
         kidsFactory = HomeViewModelFactory(
@@ -78,8 +78,15 @@ class KidsFragment : Fragment() {
 
         var recyclerKids : RecyclerView = view.findViewById(R.id.recyclerKids)
 
-        kidsAdapter = GenericHomeAdapter(requireView(),"Home")
 
+        kidsAdapter = GenericHomeAdapter(requireView(), this) { proId ->
+            val action = HomeFragmentDirections.actionHomeFragmentToDetailsProductFragment(proId)
+
+            // فحص إضافي للأمان: التأكد من أننا في الوجهة الصحيحة قبل الانتقال
+            if (findNavController().currentDestination?.id == R.id.homeFragment) {
+                findNavController().navigate(action)
+            }
+        }
         //   recyclerBrand.layoutManager = LinearLayoutManager(requireContext(),HorizontalScrollView)
 
         recyclerKids.setLayoutManager(
@@ -105,6 +112,15 @@ class KidsFragment : Fragment() {
 
 
 
+    }
+
+    override fun onFavClick(product: Product) {
+        // نمرر المنتج للـ ViewModel فقط
+        Log.i("prodadded",product.title)
+        sharedViewModel.passProductToFav(product)
+
+        // تغيير شكل القلب في الـ UI
+        Toast.makeText(context, "Add To Favrouit ", Toast.LENGTH_SHORT).show()
     }
     companion object {
 

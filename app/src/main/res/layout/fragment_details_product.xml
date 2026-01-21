@@ -4,62 +4,89 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".homescreen.view.DetailsProductFragment">
+    android:layout_margin="10dp"
+    android:padding="8dp">
 
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/productSlider"
-        android:layout_width="414dp"
-        android:layout_height="163dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.538"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textNameProduct" />
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/myCustomToolbarProductDetails"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+
+        app:navigationIcon="?attr/homeAsUpIndicator"
+        app:title=""  app:layout_constraintTop_toTopOf="parent">
+    </androidx.appcompat.widget.Toolbar>
+
 
     <TextView
         android:id="@+id/textNameProduct"
-        android:layout_width="221dp"
-        android:layout_height="57dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="5dp"
-        android:text="TextView"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+
+        android:maxLines="1"
+        android:text="Product Name"
+        android:textColor="@android:color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/productSlider"
+        android:layout_width="0dp"
+        android:layout_height="160dp"
+        android:layout_margin="15dp"
+        android:background="#F5F5F5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textNameProduct" />
 
     <TextView
         android:id="@+id/textPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp"
-        android:text=" "
+        android:layout_marginTop="16dp"
+        android:text="$120.00"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productSlider" />
+
+    <RatingBar
+        android:id="@+id/ratingBarProduct"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="1"
+        android:rating="1"
+        android:progressTint="#FFC107"
+        app:layout_constraintBottom_toBottomOf="@+id/textPrice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textPrice" />
 
     <TextView
         android:id="@+id/textRating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="225dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
         android:text="4.3"
-
-        app:layout_constraintStart_toEndOf="@+id/textPrice"
-        app:layout_constraintTop_toBottomOf="@+id/productSlider" />
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/ratingBarProduct"
+        app:layout_constraintEnd_toStartOf="@+id/ratingBarProduct"
+        app:layout_constraintTop_toTopOf="@+id/ratingBarProduct" />
 
     <TextView
         android:id="@+id/textDetails"
-        android:layout_width="300dp"
-        android:layout_height="120dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="10dp"
-        android:text="TextView"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="5dp"
+        android:lineSpacingExtra="4dp"
+        android:text="Highlight the most important features of the shoe. Focus on comfort, durability, and style."
+        android:textColor="#666666"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textPrice" />
@@ -68,134 +95,147 @@
         android:id="@+id/textReviews"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
-        android:text="Rating"
+        android:layout_marginTop="24dp"
+        android:text="Reviews"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textDetails" />
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imgePerson"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="12dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/avatarpersongirl"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textReviews"
-        tools:src="@tools:sample/avatars" />
+        app:shapeAppearanceOverlay="@style/CircleImage" />
 
     <TextView
         android:id="@+id/txtNamePerson"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="50dp"
-        android:text="Jone"
+        android:layout_marginStart="12dp"
+        android:text="Isabela"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/imgePerson"
-        app:layout_constraintTop_toBottomOf="@+id/textDetails" />
+        app:layout_constraintTop_toTopOf="@+id/imgePerson" />
 
     <TextView
         android:id="@+id/textReviewPerson"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:text="Amazing"
-        app:layout_constraintBottom_toBottomOf="@+id/imgePerson"
-        app:layout_constraintStart_toEndOf="@+id/imgePerson"
+        android:text="Amazing quality!"
+        android:textColor="#757575"
+        app:layout_constraintStart_toStartOf="@+id/txtNamePerson"
         app:layout_constraintTop_toBottomOf="@+id/txtNamePerson" />
 
     <RatingBar
         android:id="@+id/ratingBarPerson"
+        style="?android:attr/ratingBarStyleSmall"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginStart="30dp"
-        android:numStars="4"
-        app:layout_constraintBottom_toBottomOf="@+id/textReviewPerson"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:rating="5"
+        android:progressTint="#FFC107"
+        app:layout_constraintBottom_toBottomOf="@+id/imgePerson"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textReviewPerson"
-        app:layout_constraintTop_toBottomOf="@+id/txtNamePerson" />
+        app:layout_constraintTop_toTopOf="@+id/imgePerson" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/counterCard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="25dp"
+        app:cardElevation="2dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnAddToCard"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="8dp">
+
+
+            <Button
+
+                android:id="@+id/buttonMinus"
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                android:background="@android:color/transparent"
+
+
+
+                android:text="-"
+
+                android:textColor="@color/black"
+
+                android:textSize="20sp" />
+
+
+
+            <TextView
+
+                android:id="@+id/textCounter"
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                android:layout_marginHorizontal="16dp"
+
+                android:text="0"
+
+                android:textColor="@color/black"
+
+                android:textSize="18sp" />
+
+
+
+            <Button
+
+                android:id="@+id/buttonPlus"
+
+                android:layout_width="wrap_content"
+
+                android:layout_height="wrap_content"
+
+                android:background="@android:color/transparent"
+
+
+
+                android:text="+"
+
+                android:textColor="@color/black"
+
+                android:textSize="20sp" />
+
+
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <Button
         android:id="@+id/btnAddToCard"
-        android:layout_width="228dp"
-        android:layout_height="44dp"
-
-        android:layout_marginStart="70dp"
-        android:layout_marginEnd="80dp"
-        android:layout_marginBottom="30dp"
+        android:layout_width="0dp"
+        android:layout_height="56dp"
+        android:text="Add to Cart"
         android:backgroundTint="@color/black"
-        android:text="Add card"
-        android:textAllCaps="false"
-        android:theme="@style/AppTheme.Button"
+        android:textColor="@android:color/white"
+        app:cornerRadius="28dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <RatingBar
-        android:id="@+id/ratingBarProduct"
-        android:layout_width="wrap_content"
-
-        android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="10dp"
-        android:numStars="1"
-        android:theme="@style/RatingBar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productSlider" />
-
-
-    <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_marginStart="56dp"
-        android:layout_marginBottom="22dp"
-
-        app:cardCornerRadius="50dp"
-        app:cardElevation="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnAddToCard"
-        app:layout_constraintStart_toStartOf="parent">
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@android:color/white"
-            android:orientation="horizontal"
-
-            app:layout_constraintBottom_toTopOf="@+id/btnAddToCard"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <Button
-                android:id="@+id/buttonMinus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-
-                android:text="-"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/textCounter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:text="0"
-                android:textColor="@color/black"
-                android:textSize="18sp" />
-
-            <Button
-                android:id="@+id/buttonPlus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-
-                android:text="+"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
+

@@ -33,12 +33,12 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.libraries.places.api.Places
 import java.util.*
 
-class MapFragment : Fragment() , OnMapReadyCallback {
+class MapFragment : Fragment(), OnMapReadyCallback {
 
     private val pERMISSION_ID = 42
     lateinit var mFusedLocationClient: FusedLocationProviderClient
     lateinit var mMap: GoogleMap
-    lateinit var mapView:MapView
+    lateinit var mapView: MapView
 
     // Current location is set to India, this will be of no use
     var currentLocation: LatLng = LatLng(20.5, 78.9)
@@ -50,8 +50,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
 
 
         }
-
-        // Fetching API_KEY which we wrapped
 
 
     }
@@ -72,34 +70,15 @@ class MapFragment : Fragment() , OnMapReadyCallback {
 
 
         // Initializing Map
-       // val mapFragment = requireActivity().supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-       // mapFragment.getMapAsync(this)
 
-       val mapFragment = childFragmentManager
+        val mapFragment = childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
 
-
-       /* val fm = childFragmentManager
-
-        var mapFragment = fm.findFragmentByTag("mapFragment") as? SupportMapFragment
-
-        if (mapFragment == null) {
-            mapFragment = SupportMapFragment.newInstance()
-            val ft = fm.beginTransaction()
-            ft.replace(R.id.map, mapFragment, "mapFragment")
-            ft.commit()
-            // fm.executePendingTransactions()
-        }
-        mapFragment.getMapAsync(this)
-
-        */
-
-
         // Initializing fused location client
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
-       // getLastLocation()
+        // getLastLocation()
 
     }
 
@@ -131,7 +110,6 @@ class MapFragment : Fragment() , OnMapReadyCallback {
     }
 
 
-
     // Get current location, if shifted
     // from previous location
     @SuppressLint("MissingPermission")
@@ -161,11 +139,10 @@ class MapFragment : Fragment() , OnMapReadyCallback {
     }
 
 
-
-
     // function to check if GPS is on
     private fun isLocationEnabled(): Boolean {
-        val locationManager: LocationManager = requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager: LocationManager =
+            requireActivity().getSystemService(Context.LOCATION_SERVICE) as LocationManager
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(
             LocationManager.NETWORK_PROVIDER
         )
@@ -175,8 +152,14 @@ class MapFragment : Fragment() , OnMapReadyCallback {
     // Check if location permissions are
     // granted to the application
     private fun checkPermissions(): Boolean {
-        if (ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-            ActivityCompat.checkSelfPermission(requireActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        if (ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED &&
+            ActivityCompat.checkSelfPermission(
+                requireActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED
         ) {
             return true
         }
@@ -187,24 +170,27 @@ class MapFragment : Fragment() , OnMapReadyCallback {
     private fun requestPermissions() {
         ActivityCompat.requestPermissions(
             requireActivity(),
-            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
+            arrayOf(
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ),
             pERMISSION_ID
         )
     }
 
 
-
     // What must happen when permission is granted
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         if (requestCode == pERMISSION_ID) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 getLastLocation()
             }
         }
     }
-
-
-
 
 
     override fun onCreateView(
@@ -236,43 +222,43 @@ class MapFragment : Fragment() , OnMapReadyCallback {
     }
 
 
-fun naveToAddressScreen (address:String){
+    fun naveToAddressScreen(address: String) {
 
-    val action = MapFragmentDirections
-        .actionMapFragmentToAdressFragment(address)
-    findNavController().navigate(action)
+        val action = MapFragmentDirections
+            .actionMapFragmentToAdressFragment(address)
+        findNavController().navigate(action)
 
 
+    }
 
-}
     override fun onMapReady(googleMap: GoogleMap) {
 
         mMap = googleMap
         getLastLocation()
 
-        mMap.setOnMapClickListener { latLng->
+        mMap.setOnMapClickListener { latLng ->
 
-           mMap.addMarker(MarkerOptions().position(latLng))
+            mMap.addMarker(MarkerOptions().position(latLng))
 
             // Convert to address
             val address = getAddressFromLatLng(requireContext(), latLng.latitude, latLng.longitude)
 
             Toast.makeText(requireContext(), "Picked: $address", Toast.LENGTH_SHORT).show()
-             naveToAddressScreen(address)
+            naveToAddressScreen(address)
 
         }
 
         // Listen for clicks on markers (like your current location marker)
         mMap.setOnMarkerClickListener { marker ->
             val position = marker.position
-            val address = getAddressFromLatLng(requireContext(), position.latitude, position.longitude)
+            val address =
+                getAddressFromLatLng(requireContext(), position.latitude, position.longitude)
             Toast.makeText(requireContext(), "Marker: $address", Toast.LENGTH_SHORT).show()
             naveToAddressScreen(address)
             false // return false so default behavior (show info window) still works
 
 
         }
-
 
 
     }

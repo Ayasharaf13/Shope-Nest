@@ -37,4 +37,24 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+
+    <!-- AlertDialog theme for MaterialComponents (not Material3) -->
+
+
+    <style name="MyAppAlertDialogTheme" parent="ThemeOverlay.AppCompat.Dialog.Alert">
+        <!-- OK / Cancel buttons -->
+        <item name="android:textColor">@color/black</item>
+
+        <!-- Title, message, list items -->
+        <item name="android:textColorPrimary">@color/black</item>
+    </style>
+
+
+    <style name="CircleImage">
+        <item name="cornerSize">50%</item>
+    </style>
+
+
+
+
 </resources>

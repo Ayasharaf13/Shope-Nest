@@ -1,11 +1,10 @@
 package com.example.shopenest.model
 
+import com.google.gson.annotations.SerializedName
 
 
-
-
-class  DraftOrderRequest (
-
-    val draft_order: DraftOrderRequestBody
+data class  DraftOrderRequest (
+    @SerializedName("draft_order")
+    var draft_order: DraftOrderRequestBody
 
 )

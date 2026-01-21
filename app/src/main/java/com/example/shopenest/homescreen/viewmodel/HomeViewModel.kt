@@ -2,6 +2,8 @@ package com.example.shopenest.homescreen.viewmodel
 
 import android.annotation.SuppressLint
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.shopenest.model.*
@@ -14,8 +16,7 @@ import retrofit2.HttpException
 import retrofit2.Response
 
 
-class HomeViewModel (private val repo: RepositoryInterface) :ViewModel(){
-
+class HomeViewModel(private val repo: RepositoryInterface) : ViewModel() {
 
 
     private val _draftOrder = MutableStateFlow<Response<ResponseDraftOrderForRequestCreate>?>(null)
@@ -24,36 +25,120 @@ class HomeViewModel (private val repo: RepositoryInterface) :ViewModel(){
     val draftOrder: StateFlow<Response<ResponseDraftOrderForRequestCreate>?> get() = _draftOrder
 
 
-
-    // var countter =0
-
-    // This map will store inventory values for each product id
-    val inventoryMap = mutableMapOf<Long, Int>()
+    private val _updateDiscount = MutableStateFlow<AppliedDiscount?>(null)
+    val appliedDiscount = _updateDiscount
 
 
-
-    fun saveInventory(productId: Long, count: Int) {
-        inventoryMap[productId] = count
+    suspend fun saveDraftOrder(header: DraftOrderHeaderEntity, items: List<LineItem>) {
+        repo.saveDraftOrderWithItems(header, items)
     }
 
-    fun getInventory(productId: Long?): Int? {
-        return inventoryMap[productId] ?:0
+
+    fun saveDraftOrder(draft: DraftOrderHeaderEntity) {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                repo.saveDraftOrderHeader(draft)
+            }
+        } catch (e: Exception) {
+            Log.i("ErrorSavingDrafOrder", e.message.toString())
+
+        }
     }
 
-    fun increaseInventory(productId: Long) {
-        val current = inventoryMap[productId] ?: 0
-        var currentIncrease = current +1
-        inventoryMap[productId] = currentIncrease //current + 1
-        saveInventory(productId,currentIncrease)
+
+    fun saveLineItem(itemsDraftOrder: List<LineItem>) {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                repo.saveLineItems(itemsDraftOrder)
+            }
+        } catch (e: Exception) {
+            Log.i("ErrorSavingLineItems", e.message.toString())
+
+        }
     }
 
-    fun decreaseInventory(productId: Long) {
-        val current = inventoryMap[productId] ?: 0
-   //  if (current > 0)
-            var currentDecrease = current-1
-            inventoryMap[productId] = currentDecrease //current - 1
-            saveInventory(productId,currentDecrease)
+
+    fun deleteDraft(draftId: Long, customerId: Long) {
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+                repo.deleteDraftOrder(draftId, customerId)
+            }
+        } catch (e: Exception) {
+            Log.i("ErrorSavingLineItems", e.message.toString())
+
+        }
     }
+
+
+    fun mapToDraftOrderHeaderEntity(api: DraftOrder, customerId: Long): DraftOrderHeaderEntity {
+        return DraftOrderHeaderEntity(
+            draftOrderId = api.idDraftOrder,
+
+            email = api.email,
+            taxes_included = api.taxes_included,
+            currency = api.currency,
+
+            created_at = api.created_at,
+            updated_at = api.updated_at,
+            tax_exempt = api.tax_exempt,
+            completed_at = api.completed_at,
+            name = api.name,
+            allow_discount_codes_in_checkout = api.allow_discount_codes_in_checkout,
+            status = api.status,
+
+            customerId = customerId, // (from SharedPreferences)
+            totalPrice = api.total_price,
+            subtotalPrice = api.subtotal_price,
+
+            createdAt = api.created_at,     // duplicated fields?
+            updatedAt = api.updated_at,
+
+            shipping_address = api.shipping_address,
+            billing_address = api.billing_address,
+            invoice_url = api.invoice_url,
+            applied_discount = api.applied_discount ?: AppliedDiscount(
+                title = "",
+                value = "0",
+                value_type = "percentage",
+                amount = "0"
+            ),
+
+            //applied_discount = api.applied_discount,
+            order_id = api.order_id,
+
+            tags = api.tags,
+            total_price = api.total_price,
+            subtotal_price = api.subtotal_price,
+            total_tax = api.total_tax,
+
+            default_address = api.default_address,
+
+            api_client_id = api.admin_graphql_api_id,
+
+
+            )
+
+
+    }
+
+
+    fun updateDiscount(draftOrderId: Long, body: DraftOrderUpdateRequest) {
+
+        viewModelScope.launch {
+            val response = repo.updateDraftOrder(draftOrderId, body)
+
+            if (response.isSuccessful) {
+                _updateDiscount.value = response.body()?.draft_order?.applied_discount
+                Log.i("SHOPIFY", "Discount applied successfully")
+            } else {
+                Log.e("SHOPIFY", "Failed: ${response.errorBody()?.string()}")
+            }
+
+        }
+    }
+
+
+    private var cou = 0
 
     // Replace MutableLiveData with MutableStateFlow
     private val _product: MutableStateFlow<List<Product>> = MutableStateFlow(emptyList())
@@ -69,12 +154,71 @@ class HomeViewModel (private val repo: RepositoryInterface) :ViewModel(){
     val inventory: StateFlow<Int?> get() = _inventory
 
 
+    private val inventoryMap = mutableMapOf<Long, Int>()
+
+    private val _inventoryFlow = MutableLiveData<MutableMap<Long, Int>>()
+    val inventoryFlow: LiveData<MutableMap<Long, Int>> = _inventoryFlow
+
+    private val _inventoryFlowDB = MutableLiveData<Int>()
+    val inventoryFlowDB: LiveData<Int> = _inventoryFlowDB
+
+
+
+
+    fun getInventory(productId: Long): Int {
+
+        Log.i("newIncreasegetttt", inventoryMap[productId].toString())
+        return inventoryMap[productId] ?: 0
+    }
+
+    fun saveInventory(productId: Long, count: Int) {
+
+        inventoryMap[productId] = count
+        // emit update
+        Log.i("newIncreaseSave", inventoryMap[productId].toString())
+    }
+
+
+    fun increaseInventory(productId: Long) {
+        //  val newValue = getInventory(productId) + 1
+
+        val newValue = (inventoryMap[productId] ?: 0) + 1  //getInventory(productId) + 1
+        inventoryMap[productId] = newValue
+        _inventoryFlow.value = inventoryMap
+        Log.i("newIncrease", newValue.toString())
+        Log.i("newIncreaseInve", inventoryMap[productId].toString())
+        Log.i("newIncreaseIdddd", productId.toString())
+
+        saveInventory(productId, newValue)
+
+    }
+
+    fun decreaseInventory(productId: Long) {
+        val newValue = ((inventoryMap[productId]
+            ?: 0) - 1).coerceAtLeast(0)//(getInventory(productId) - 1).coerceAtLeast(0)
+
+        saveInventory(productId, newValue)
+    }
+
+
+    fun increaseItem(lineItemId: Long, customerId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.increaseQuantity(lineItemId, customerId)
+
+        }
+    }
+
+    fun decreaseItem(lineItemId: Long, customerId: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.decreaseQuantity(lineItemId, customerId)
+        }
+    }
+
+
     private val _discount: MutableStateFlow<String?> = MutableStateFlow("")
 
     // Expose as a read-only StateFlow
     val discount: StateFlow<String?> get() = _discount
-
-
 
 
     private val _filterProducts: MutableStateFlow<List<Product>> = MutableStateFlow(emptyList())
@@ -90,12 +234,11 @@ class HomeViewModel (private val repo: RepositoryInterface) :ViewModel(){
 
 
     // Replace MutableLiveData with MutableStateFlow
-    private val _productDetails: MutableStateFlow<ProductResponse> = MutableStateFlow(ProductResponse(Product()))
+    private val _productDetails: MutableStateFlow<ProductResponse> =
+        MutableStateFlow(ProductResponse(Product()))
 
     // Expose as a read-only StateFlow
     val productDetails: StateFlow<ProductResponse> get() = _productDetails
-
-
 
 
     // Replace MutableLiveData with MutableStateFlow
@@ -105,77 +248,46 @@ class HomeViewModel (private val repo: RepositoryInterface) :ViewModel(){
     val brand: StateFlow<List<SmartCollection>> get() = _brand
 
 
-init {
-    Log.i("HomeViewModel", "Init called")
-    getBrands()
+    init {
+        Log.i("HomeViewModel", "Init called")
+        getBrands()
 
-}
+    }
 
 
-   fun getDiscount(){
+    fun getDiscount() {
 
         viewModelScope.launch(Dispatchers.IO) {
 
 
             try {
-             var code =   repo.getDiscount().discount_codes.get(0)?.code
+                var code = repo.getDiscount().discount_codes.get(0)?.code
                 _discount.value = code
 
 
-            }catch (e:Exception){
-                Log.i("ErrorRetrieveDiscountCode",e.message.toString())
+            } catch (e: Exception) {
+                Log.i("ErrorRetrieveDiscountCode", e.message.toString())
             }
         }
     }
-
-
-    fun getAllFavProduct(){
-
-      viewModelScope.launch(Dispatchers.IO) {
-          try {
-
-              repo.getAllFavProducts().collect {
-                  _product.value = it
-              }
-          }catch (e:Exception){
-              Log.i("ErrorRetrieveProd",e.message.toString())
-          }
-      }
-    }
-
-
-
-
-    fun saveProduct (product: Product) {
-        try {
-            viewModelScope.launch(Dispatchers.IO) {
-                repo.saveProduct(product)
-            }
-        } catch (e: Exception) {
-            Log.i("ErrorSaving",e.message.toString())
-
-        }
-    }
-
-
 
 
     @SuppressLint("SuspiciousIndentation")
     fun getBrands() {
 
-        var brands:List<SmartCollection>
+        var brands: List<SmartCollection>
         viewModelScope.launch(Dispatchers.IO) {
             Log.i("getBrands first", "Updated StateFlow with")
 
 
             brands = repo.getBrands().smart_collections
             Log.i("getBrands sec", "Updated StateFlow with Beforeeee ${brands.size}")
-          //  withContext(Dispatchers.Main) {
-                _brand.value = brands
+            //  withContext(Dispatchers.Main) {
+            _brand.value = brands
 
 
-                Log.i("getBrands th", "Updated StateFlow with ${brands.size} items")
-         //   }
+            Log.i("getBrands th", "Updated StateFlow with ${brands.size} items")
+            //   }
 
 
             // Log all brands in the list
@@ -186,7 +298,6 @@ init {
                 }
 
             }
-
 
 
         }
@@ -210,13 +321,13 @@ init {
         _brand.value = filtered
 
 
-        Log.i("filtterbrandsQuerrry",query)
+        Log.i("filtterbrandsQuerrry", query)
     }
 
 
     fun searchAllProducts(query: String) {
         viewModelScope.launch(Dispatchers.IO) {
-          //  _filterProducts.value = (emptyList()) // ✅ Clear previous result
+            //  _filterProducts.value = (emptyList()) // ✅ Clear previous result
 
             val women = repo.getProductsForSectionWomenCategory().products
             val kids = repo.getProductsForSectionKidsCategory().products
@@ -229,15 +340,14 @@ init {
             }
 
 
-                _allProducts.value = all
-                _filterProducts.value = filtered
+            _allProducts.value = all
+            _filterProducts.value = filtered
 
         }
     }
 
 
-
-    fun getProductKids ( ) {
+    fun getProductKids() {
 
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -247,16 +357,15 @@ init {
         }
     }
 
-        fun getProductWomen() {
+    fun getProductWomen() {
 
-            viewModelScope.launch(Dispatchers.IO) {
-                _product.value = repo.getProductsForSectionWomenCategory().products
-
-            }
-
+        viewModelScope.launch(Dispatchers.IO) {
+            _product.value = repo.getProductsForSectionWomenCategory().products
 
         }
 
+
+    }
 
 
     fun getProductMen() {
@@ -271,22 +380,22 @@ init {
     }
 
 
-        fun getProductsBrand(vendor:String) {
+    fun getProductsBrand(vendor: String) {
 
-            viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(Dispatchers.IO) {
 
-                _product.value = repo.getProductsForBrands(vendor).products
-            }
+            _product.value = repo.getProductsForBrands(vendor).products
+        }
 
     }
 
 
-    fun getAvailableProducts(inventoryItemId:Long) {
+    fun getAvailableProducts(inventoryItemId: Long) {
 
         viewModelScope.launch(Dispatchers.IO) {
 
-            _inventory.value = repo.getAvailableProducts(inventoryItemId).inventory_levels.firstOrNull()?.available
-
+            _inventory.value =
+                repo.getAvailableProducts(inventoryItemId).inventory_levels.firstOrNull()?.available
 
 
         }
@@ -294,57 +403,22 @@ init {
     }
 
 
-
-    fun getProductDetails(id:Long) {
+    suspend fun getProductDetails(id: Long): ProductResponse {
 
         viewModelScope.launch(Dispatchers.IO) {
 
-           _productDetails.value = repo.getProductsDetails(id)
-        }
+            _productDetails.value = repo.getProductsDetails(id)
 
+        }
+        return repo.getProductsDetails(id)
 
     }
 
 
-
-
-
-
-    fun createDraftOrder(draftOrderRequest: DraftOrderRequest) {
-
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-
-                val response = repo.createCartOrder(draftOrderRequest)
-                _draftOrder.value = response
-                 Log.i("createDraftOrder::: ",response.body()?.draft_order?.total_price.toString())
-                Log.i("createDraftOrderId::: ",response.body()?.draft_order?.id.toString())
-
-            } catch (e: HttpException) {
-
-                Log.e(
-                    "CreateDraftOrder",
-                    "HTTP ${e.code()} - ${e.response()?.errorBody()?.string()}"
-                )
-            }
-        }
+    suspend fun createDraftOrder(request: DraftOrderRequest)
+            : Response<ResponseDraftOrderForRequestCreate> {
+        return repo.createCartOrder(request)
     }
-
-
-
-    /*
-    <com.paypal.checkout.paymentbutton.PaymentButtonContainer
-    android:id="@+id/payment_button_container"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:paypal_button_color="silver"
-    app:paypal_button_label="pay"
-    app:paypal_button_shape="rectangle"
-    app:paypal_button_size="large"
-    app:paypal_button_enabled="true" />
-     */
-
-
 
 
 }

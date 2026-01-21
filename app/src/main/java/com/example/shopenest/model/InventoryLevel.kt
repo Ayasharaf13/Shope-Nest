@@ -1,7 +1,6 @@
 package com.example.shopenest.model
 
 
-
 data class InventoryLevel(
 
     val inventory_item_id: Long,

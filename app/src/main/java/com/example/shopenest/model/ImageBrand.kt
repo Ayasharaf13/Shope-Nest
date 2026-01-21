@@ -4,8 +4,7 @@ package com.example.shopenest.model
 data class ImageBrand(
 
     val createdAt: String = "",
-  //  val alt: Any?,
-    val width: Long ,
+    val width: Long,
     val height: Long,
-    val src: String ="",
+    val src: String = "",
 )

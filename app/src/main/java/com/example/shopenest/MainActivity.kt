@@ -23,7 +23,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var    homeViewModel:HomeViewModel
+    lateinit var homeViewModel: HomeViewModel
     lateinit var navController: NavController
     lateinit var toolbar: Toolbar
 
@@ -35,7 +35,9 @@ class MainActivity : AppCompatActivity() {
 
 
         val navView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-         toolbar = findViewById(R.id.toolbar_main)
+        toolbar = findViewById(R.id.toolbar_main)
+
+
 
         navView.setOnItemSelectedListener { item ->
             if (item.itemId == androidx.coordinatorlayout.R.id.accessibility_action_clickable_span) {
@@ -45,7 +47,7 @@ class MainActivity : AppCompatActivity() {
             false
         }
 
-        // Find the NavController
+
 
         // Find the NavController
         val navHostFragment =
@@ -56,77 +58,22 @@ class MainActivity : AppCompatActivity() {
 
 
         // Set up the ActionBar with NavController
-
-
-        // Set up the ActionBar with NavController
-        val appBarConfiguration: AppBarConfiguration =  AppBarConfiguration.Builder(
+        val appBarConfiguration: AppBarConfiguration = AppBarConfiguration.Builder(
             R.id.homeFragment, R.id.favFragment, R.id.cartFragment, R.id.profileFragment
         ).build()
-       //  setupActionBarWithNavController(this, navController, appBarConfiguration)
-
-        toolbar.title = "Home"
-        toolbar.titleMarginBottom = 800
-
-        // getSupportActionBar()?.setTitle("Stringllll"); //string is custom name you want
 
 
         setSupportActionBar(findViewById(R.id.toolbar_main))
         // Connect Toolbar with NavController
-        toolbar.setupWithNavController(navController,appBarConfiguration)
+        toolbar.setupWithNavController(navController, appBarConfiguration)
 
-
-
-
-        // Set up Bottom Navigation Bar with NavController
-
-        // Set up Bottom Navigation Bar with NavController
         setupWithNavController(navView, navController)
 
-        // Enhance user experience by clearing the back stack
-
-        // Enhance user experience by clearing the back stack
         bottomNavItemChangeListener(navView)
 
+        //  supportActionBar?.hide()
 
 
-
-
-        /*  val homeViewModelFactory = HomeViewModelFactory(
-              Repository.getInstance(
-                  ShoppingClient.getInstance(),
-                  ConcreteLocalSource.getInstance(this)
-              )
-          )
-
-          homeViewModel =
-              ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel::class.java)
-          homeViewModel.getBrands()
-          Log.i("successBrandsLJ/J", "Brand: ?? ")
-
-
-          Log.i("successBrandsLJ/Jkkkkkkkkk", "Brand: ??")
-
-         */
-
-
-
-
-        ///////////////////
-
-        //  var brand =   homeViewModel.getBrands()
-        /* var brand = homeViewModel.brand.value
-
-
-        for (bra in brand) {
-            Log.i("successBrands", "Brand: ${bra.smart_collections}")
-        }
-
-
-
-            }
-
-        */
-        // Log.i("successBrands", "Brand: $brand")
     }
 
     private fun bottomNavItemChangeListener(navView: BottomNavigationView) {
@@ -138,21 +85,5 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
-   /* override fun onResume() {
-        super.onResume()
-
-
-        lifecycleScope.launch(Dispatchers.Main) {
-
-            homeViewModel.brand.collect { brandList ->
-                for (bra in brandList) {
-                    Log.i("successBrands", "Brand: ${bra.title}")
-                }
-            }
-        }
-
-    }
-
-    */
 
 }

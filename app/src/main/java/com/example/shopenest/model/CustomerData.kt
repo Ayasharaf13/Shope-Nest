@@ -1,8 +1,7 @@
 package com.example.shopenest.model
 
 
-
-data class CustomerData (
+data class CustomerData(
 
     val id: Long,
     val email: String,
@@ -23,12 +22,11 @@ data class CustomerData (
     val last_order_name: String?,
     val currency: String?,
     val addresses: List<CustomerAddress>,
-    val  default_address:DefaultAddress,
+    val default_address: DefaultAddress,
     val accepts_marketing_updated_at: String?,
     val marketing_opt_in_level: String?,
     val tax_exemptions: List<String>,
     val admin_graphql_api_id: String
 
 
-
-    )
+)

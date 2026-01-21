@@ -123,6 +123,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/myOrder"
                 android:orientation="horizontal"
                 android:padding="16dp">
 
@@ -145,6 +146,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/myFav"
                 android:orientation="horizontal"
                 android:padding="16dp">
 
@@ -168,6 +170,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:id="@+id/settingProfile"
                 android:padding="16dp">
 
                 <ImageView
@@ -204,6 +207,7 @@
             <!-- Help & Support -->
             <LinearLayout
                 android:layout_width="match_parent"
+                android:id="@+id/helpSupport"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:padding="16dp">
@@ -227,6 +231,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/privacyPolicyLayout"
                 android:orientation="horizontal"
                 android:padding="16dp">
 
