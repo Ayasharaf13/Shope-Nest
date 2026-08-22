@@ -34,13 +34,10 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
-
-
     lateinit var userName: EditText
     lateinit var userPassword: EditText
     lateinit var forgotPasswordText: TextView
     lateinit var mAuth: FirebaseAuth
-
     lateinit var buttonLogIn: Button
     lateinit var loginViewModelFactory: CreateUserViewModelFactory
     lateinit var loginViewModel: CreateUserViewModel

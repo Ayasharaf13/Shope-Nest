@@ -18,11 +18,8 @@ class CreateUserViewModel(private val repo: RepositoryInterface) : ViewModel() {
 
     // Expose as a read-only StateFlo
     val customer: StateFlow<Response<CustomerResponse>?> get() = _customer
-
-
     private val _searchCustomer = MutableStateFlow<Response<Customers>?>(null)
     val searchCustomer: StateFlow<Response<Customers>?> get() = _searchCustomer
-
 
     private val _countCustomer = MutableStateFlow<CountCustomer?>(null)
     val countCustomer: StateFlow<CountCustomer?> get() = _countCustomer

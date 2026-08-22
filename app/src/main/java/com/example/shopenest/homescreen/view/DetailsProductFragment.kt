@@ -42,12 +42,10 @@ import java.util.*
 
 class DetailsProductFragment : Fragment() {
 
-
     lateinit var pref: SharedPreferences
     lateinit var detailsProductViewModel: HomeViewModel
 
     var idDraft: Long = 0L
-
     lateinit var detailsProductFactory: HomeViewModelFactory
     lateinit var textDetails: TextView
     lateinit var textTitle: TextView
@@ -158,9 +156,6 @@ class DetailsProductFragment : Fragment() {
 
         val args: DetailsProductFragmentArgs by navArgs()
         var idProduct = args.idProductDetails
-
-
-
 
 
 

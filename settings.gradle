@@ -4,7 +4,6 @@ pluginManagement {
         google()
         mavenCentral()
         maven { url 'https://jitpack.io' }
-        jcenter()
     }
 
 
@@ -28,7 +27,6 @@ dependencyResolutionManagement {
                 password     System.getenv("JFROG_API_KEY")
             }
         }
-        jcenter()
     }
 }
 

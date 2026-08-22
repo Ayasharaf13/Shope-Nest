@@ -23,9 +23,7 @@ abstract class AppDataBase : RoomDatabase() {
 
     abstract fun getProdDao(): ShoppingDao
 
-
     companion object {
-
         @Volatile
         private var INSTANCE: AppDataBase? = null
 

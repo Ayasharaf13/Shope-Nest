@@ -24,7 +24,6 @@ class CheckoutViewModel  (private val repo: RepositoryInterface) : ViewModel()  
         needUpdateCustomer.value = update
     }
 
-
     private val _draftOrder = MutableStateFlow<Response<ResponseDraftOrderForRequestCreate>?>(null)
 
     // Expose as a read-only StateFlo

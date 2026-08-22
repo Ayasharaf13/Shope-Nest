@@ -16,13 +16,9 @@ import kotlinx.coroutines.launch
 
 
 class FavViewModel(private val repo: RepositoryInterface) : ViewModel() {
-
-
     private val _products = MutableStateFlow<List<Product>>(emptyList())
-
     // Expose as a read-only StateFlo
     val products: StateFlow<List<Product>>? get() = _products
-
 
     fun getAllProducts(customerId: Long) {
         viewModelScope.launch(Dispatchers.IO) {

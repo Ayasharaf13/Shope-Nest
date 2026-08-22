@@ -35,7 +35,6 @@ import kotlinx.coroutines.launch
 
 class DetailsCartFragment : Fragment() {
 
-
     lateinit var detailsProductViewModel: HomeViewModel
     lateinit var detailsProductFactory: HomeViewModelFactory
     lateinit var cartViewModel: CartViewModel

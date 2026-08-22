@@ -8,7 +8,6 @@ import com.example.shopenest.model.RepositoryInterface
 
 class FavViewModelFactory  (private val repo: RepositoryInterface): ViewModelProvider.Factory  {
 
-
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return if (modelClass.isAssignableFrom(FavViewModel::class.java)) {
                 FavViewModel(repo) as T

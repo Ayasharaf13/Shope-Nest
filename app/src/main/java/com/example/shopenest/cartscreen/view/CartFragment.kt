@@ -33,7 +33,6 @@ import kotlinx.coroutines.*
 
 class CartFragment : Fragment() {
 
-
     lateinit var detailsProductViewModel: HomeViewModel
     lateinit var detailsProductFactory: HomeViewModelFactory
     lateinit var cartViewModel: CartViewModel
@@ -61,8 +60,6 @@ class CartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
 
         detailsProductFactory = HomeViewModelFactory(
             Repository.getInstance(
@@ -93,9 +90,6 @@ class CartFragment : Fragment() {
                 requireActivity(),
                 cartFactory
             ).get(CartViewModel::class.java)
-
-
-        //  var customerId = CustomerPref(requireContext() ).getCustomerId()
 
 
         // To load data
@@ -146,8 +140,6 @@ class CartFragment : Fragment() {
         val productQuantity = safeArgs?.productQuantity
         val fromScreen = arguments?.getString("fromscreen")
 
-        //if (productQuantity !=-1){
-
 
         Log.i("testQCartDraft: ", idDraftOrder.toString())
         Log.i("testQCartCustomer: ", customerId.toString())
@@ -159,8 +151,6 @@ class CartFragment : Fragment() {
             customerId?.let { cartViewModel.deleteDraftOrder(draftOrderId, it) }
         }
 
-
-        // \\  recyclerBrand.layoutManager = LinearLayoutManager(requireContext(),HorizontalScrollView)
         recyclerCart.setLayoutManager(
             LinearLayoutManager(
                 requireContext(),

@@ -37,7 +37,6 @@ class BottomFilterDialogFragment : BottomSheetDialogFragment() {
     lateinit var priceOptionButton1: MaterialButton
     lateinit var priceOptionButton2: MaterialButton
     lateinit var priceOptionButton3: MaterialButton
-
     lateinit var buttonApply: MaterialButton
     lateinit var buttonReset: MaterialButton
 

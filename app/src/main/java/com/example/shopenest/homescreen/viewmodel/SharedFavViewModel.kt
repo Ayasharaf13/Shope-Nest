@@ -10,10 +10,7 @@ class SharedFavViewModel : ViewModel() {
 
 
     private val _selectedProduct = MutableStateFlow<Product?>(null)
-
-
     val selectedProduct = _selectedProduct.asStateFlow()
-
 
     fun passProductToFav(product: Product) {
         _selectedProduct.value = product

@@ -23,7 +23,6 @@ class ViewPagerAdapterAuth(fm: FragmentActivity) : FragmentStateAdapter(fm) {
         return when (position) {
 
             0 -> OnboardingFragmentOne()
-
             1 -> OnboardingFragmentTwo()
             2 -> OnboardingFragmentThree()
 

@@ -20,20 +20,13 @@ class AddressViewModel(private val repo: RepositoryInterface) : ViewModel() {
 
     private val _updateCustomer = MutableSharedFlow<Response<CustomerResponse>>()
     val updateCustomer = _updateCustomer.asSharedFlow()
-
-
     private val _createCustomerAddress = MutableSharedFlow<CustomerAddressResponse>()
     val createCustomerAddress = _createCustomerAddress.asSharedFlow()
-
-
     private val _address = MutableStateFlow<List<CustomerAddress>?>(null)
 
     // Expose as a read-only StateFlo
     val address: StateFlow<List<CustomerAddress>?> get() = _address
-
-
     private val _addressID = MutableStateFlow<CustomerAddress?>(null)
-
     // Expose as a read-only StateFlo
     val addressID: StateFlow<CustomerAddress?> get() = _addressID
 

@@ -119,8 +119,6 @@ class DisplaySavedAddressFragment : Fragment() {
             })
         itemTouchHelper.attachToRecyclerView(recyclerAddress)
 
-
-
         recyclerAddress.setLayoutManager(
             LinearLayoutManager(
                 requireContext(), LinearLayoutManager.VERTICAL, false

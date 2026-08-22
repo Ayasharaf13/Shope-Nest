@@ -10,13 +10,9 @@ import retrofit2.http.Query
 
 interface RepositoryInterface {
 
-
     suspend fun getBrands(): Brands
-
     suspend fun getAllFavProducts(customerId: Long): Flow<List<Product>>
-
     suspend fun saveProduct(product: Product)
-
     suspend fun getCategory(): Categories
     suspend fun getProductsForSectionKidsCategory(): ShoppingProducts
     suspend fun getProductsForSectionWomenCategory(): ShoppingProducts

@@ -18,13 +18,9 @@ import retrofit2.Response
 
 class HomeViewModel(private val repo: RepositoryInterface) : ViewModel() {
 
-
     private val _draftOrder = MutableStateFlow<Response<ResponseDraftOrderForRequestCreate>?>(null)
-
     // Expose as a read-only StateFlo
     val draftOrder: StateFlow<Response<ResponseDraftOrderForRequestCreate>?> get() = _draftOrder
-
-
     private val _updateDiscount = MutableStateFlow<AppliedDiscount?>(null)
     val appliedDiscount = _updateDiscount
 

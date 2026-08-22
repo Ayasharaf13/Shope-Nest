@@ -37,6 +37,9 @@
         android:id="@+id/recyclerAddress"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:paddingBottom="20dp"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toTopOf="@+id/buttonaddNewAddress"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -49,6 +52,7 @@
         android:layout_height="wrap_content"
 
         android:layout_marginBottom="5dp"
+
         android:backgroundTint="@color/background_buttonSave"
         android:fontFamily="@font/inter18ptregular"
         android:foregroundGravity="center_horizontal"

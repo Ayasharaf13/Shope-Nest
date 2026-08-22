@@ -10,7 +10,6 @@ class SettingViewModel (private val repo: CurrencyRepository) : ViewModel() {
 
 
     val currencyFlow = repo.currencyFlow // UI listens
-
     fun updateCurrency(currency: String) {
         repo.saveCurrency(currency)
     }

@@ -13,12 +13,8 @@ import kotlinx.coroutines.launch
 
 class SearchViewModel(private val repo: RepositoryInterface) : ViewModel() {
 
-
     var titleBrand: String? = null
-
     private val _filterProducts: MutableStateFlow<List<Product>> = MutableStateFlow(emptyList())
-
-
     val filterProducts: StateFlow<List<Product>> get() = _filterProducts
 
 

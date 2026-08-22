@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -31,6 +32,7 @@ import com.example.shopenest.homescreen.viewmodel.HomeViewModelFactory
 import com.example.shopenest.model.Repository
 import com.example.shopenest.network.ShoppingClient
 import com.example.shopenest.utilities.GoogleAuthHelper
+import com.example.shopenest.utilities.NetworkMonitor
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
@@ -38,8 +40,14 @@ import kotlinx.coroutines.*
 import java.util.*
 
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment() , NetworkMonitor.NetworkStatusListener{
 
+
+    private var layoutMainContent: ConstraintLayout? = null
+    private var layoutNoInternet: LinearLayout? = null
+    private var btnRetry: Button? = null
+
+    private lateinit var networkMonitor: NetworkMonitor
     lateinit var images: MutableList<Int>
     lateinit var homeViewModel: HomeViewModel
     lateinit var homeViewModelFactory: HomeViewModelFactory
@@ -184,8 +192,6 @@ class HomeFragment : Fragment() {
         )
 
 
-
-
         viewPagerAds = view.findViewById(R.id.viewpagerAds)
         tablLayout = view.findViewById(R.id.tabLayout03)
         viewPagertabs = view.findViewById(R.id.viewPagerCategory)
@@ -195,7 +201,11 @@ class HomeFragment : Fragment() {
 
         adapter = BrandAdapter(requireView())
 
+        layoutMainContent = view.findViewById(R.id.layoutMainContent)
+        layoutNoInternet = view.findViewById(R.id.layoutNoInternet)
 
+
+        btnRetry?.setOnClickListener { checkAndApplyConnectionState() }
 
         recyclerBrands.setLayoutManager(
             LinearLayoutManager(
@@ -205,7 +215,7 @@ class HomeFragment : Fragment() {
             )
         )
 
-
+        setupNetworkMonitor()
 
         lifecycleScope.launch(Dispatchers.Main) {
 
@@ -406,7 +416,60 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         // اجعل الأداپتر فارغاً قبل تدمير الواجهة
         viewPagertabs.adapter = null
+
+        // Clear view references to avoid memory leaks
+        layoutMainContent = null
+        layoutNoInternet = null
+        btnRetry = null
         super.onDestroyView()
+    }
+
+
+
+    private fun setupNetworkMonitor() {
+        networkMonitor = NetworkMonitor(requireContext())
+    }
+
+    override fun onStart() {
+        super.onStart()
+        networkMonitor.registerNetworkCallback(this)
+        checkAndApplyConnectionState()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        networkMonitor.unregisterNetworkCallback()
+    }
+
+
+
+    private fun checkAndApplyConnectionState() {
+        if (networkMonitor.isOnline) {
+            showMainContent()
+        } else {
+            showNoInternetState()
+        }
+    }
+
+    private fun showMainContent() {
+        layoutMainContent?.visibility = View.VISIBLE
+        layoutNoInternet?.visibility = View.GONE
+        // Load or refresh remote API data here if needed
+    }
+
+    private fun showNoInternetState() {
+        layoutMainContent?.visibility = View.GONE
+        layoutNoInternet?.visibility = View.VISIBLE
+    }
+
+
+
+    override fun onNetworkAvailable() {
+      showMainContent()
+    }
+
+    override fun onNetworkLost() {
+        showNoInternetState()
     }
 
     companion object {

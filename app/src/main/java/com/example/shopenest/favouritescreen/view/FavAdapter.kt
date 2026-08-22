@@ -23,13 +23,10 @@ class FavAdapter  (val cxt:Context ,val context:View, val navFrom :String ,
 
 
         inner class ViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
-
             var imageProduct: ImageView = itemview.findViewById(R.id.productImage)
-
             var nameProduct :TextView = itemview.findViewById(R.id.productTitle)
 
           //  var addFav :ImageView = itemview.findViewById(R.id.imageFav)
-
             var btnDelete:ImageView = itemview.findViewById(R.id.btnRemove)
 
 

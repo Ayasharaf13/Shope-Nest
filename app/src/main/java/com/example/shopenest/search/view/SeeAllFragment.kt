@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -20,8 +21,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.shopenest.R
 import com.example.shopenest.db.ConcreteLocalSource
 import com.example.shopenest.homescreen.view.GenericHomeAdapter
+import com.example.shopenest.homescreen.view.OnFavClickListener
 import com.example.shopenest.homescreen.viewmodel.HomeViewModel
 import com.example.shopenest.homescreen.viewmodel.HomeViewModelFactory
+import com.example.shopenest.homescreen.viewmodel.SharedFavViewModel
+import com.example.shopenest.model.Product
 import com.example.shopenest.model.Repository
 import com.example.shopenest.network.ShoppingClient
 import com.example.shopenest.search.viewmodel.SearchViewModel
@@ -35,14 +39,15 @@ import kotlinx.coroutines.launch
  * create an instance of this fragment.
  */
 
-class SeeAllFragment : Fragment() {
+class SeeAllFragment : Fragment() , OnFavClickListener {
 
     private var savedTitleBrand: String = ""
     lateinit var seeAllViewModel: SearchViewModel
     lateinit var seeAllFactory: SearchViewModelFactory
-
     lateinit var editTextSearch: EditText
     lateinit var searchIconFilter: ImageView
+
+    private val sharedViewModel: SharedFavViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,16 +107,11 @@ class SeeAllFragment : Fragment() {
         seeAllViewModel =
             ViewModelProvider(requireActivity(), seeAllFactory).get(SearchViewModel::class.java)
 
-
-
-
-
-
         editTextSearch = view.findViewById(R.id.searchTextSearchResult)
 
 
         // إذا كانت الدالة (onItemClick) هي آخر معامل في الـ Constructor
-        val adapter = GenericHomeAdapter(requireView()) { proId ->
+        val adapter = GenericHomeAdapter(requireView(),this) { proId ->
             val action =
                 SeeAllFragmentDirections.actionSeeAllFragmentToDetailsProductFragment(proId)
 
@@ -225,6 +225,12 @@ class SeeAllFragment : Fragment() {
         }
 
 
+    }
+
+    override fun onFavClick(product: Product) {
+        sharedViewModel.passProductToFav(product)
+        // تغيير شكل القلب في الـ UI
+        Toast.makeText(context, "Add To Favrouit ", Toast.LENGTH_SHORT).show()
     }
 
 

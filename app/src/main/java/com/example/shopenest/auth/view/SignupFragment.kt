@@ -123,9 +123,7 @@ class SignupFragment : Fragment() {
                             "Customer created: ${response.body()?.customer?.email}"
                         )
                         val customerId = response?.body()?.customer?.id
-
                         val customerEmail = response?.body()?.customer?.email
-
 
                         if (customerId != null && customerEmail != null) {
                             // Save only after successful creation

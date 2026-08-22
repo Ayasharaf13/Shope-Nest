@@ -17,16 +17,12 @@ class CartViewModel(private val repo: RepositoryInterface) : ViewModel() {
 
 
     private val _draftOrder = MutableStateFlow<Response<ResponseDraftOrderForRetrieve>?>(null)
-
     // Expose as a read-only StateFlo
     val draftOrder: StateFlow<Response<ResponseDraftOrderForRetrieve>?> get() = _draftOrder
-
-
     private val _lineItems = MutableStateFlow<List<LineItem>>(emptyList())
 
     // Expose as a read-only StateFlo
     val lineItems: StateFlow<List<LineItem>> get() = _lineItems
-
 
     private val _deleteDraftOrder = MutableStateFlow<Result<Boolean>?>(null)
     val deleteDraftOrder: StateFlow<Result<Boolean>?> get() = _deleteDraftOrder

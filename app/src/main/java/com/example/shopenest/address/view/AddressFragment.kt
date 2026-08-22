@@ -74,7 +74,7 @@ class AddressFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_adress, container, false)
     }
 
-    @SuppressLint("SuspiciousIndentation")
+    @SuppressLint("SuspiciousIndentation", "UnsafeRepeatOnLifecycleDetector")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -239,9 +239,103 @@ class AddressFragment : Fragment() {
                     Log.e("Custome>>>r", "customer_id is null or invalid")
                 }
 
+
+
+            }
+            // دالة موحدة للانتقال
+            fun navigateToSavedAddress() {
+                val action = AddressFragmentDirections
+                    .actionAdressFragmentToDisplaySavedAddressFragment("address")
+                findNavController().navigate(action)
             }
 
-            savebutton.setOnClickListener {
+
+            // دالة مساعدة لمسار التحديث (Update Flow)
+            fun handleUpdateCustomerFlow() {
+                Log.i("nameUpdate::  ", updateCustomer.toString())
+
+                createAddressCustomer()
+
+                customerId?.toLongOrNull()?.let { id ->
+                    addressViewModel.updateCustomer(
+                        id,
+                        CustomerRequest(
+                            CustomerBody(
+                                first_name = editTextName.text.toString(),
+                                phone = editTextPhone.text.toString(),
+                                email = customerEmail.toString()
+                            )
+                        )
+                    )
+                    Log.i("name::  ", "customerupdatedone ")
+                } ?: run {
+                    Log.e("Customer", "customer_id is null or invalid")
+                }
+
+                navigateToSavedAddress()
+            }
+
+            // دالة مسار الإنشاء - تكتفي بإطلاق العملية واستدعاء الـ API
+            fun handleCreateCustomerFlow() {
+                createAddressCustomer()
+
+                println("City: $city")
+                println("Zipcode: $zipcode")
+                println("Country: $country")
+            }
+
+
+            fun setupSaveButtonListener() {
+                savebutton.setOnClickListener {
+                    Toast.makeText(requireContext(), "Save Button :", Toast.LENGTH_SHORT).show()
+                    Log.i("nameUpdate__::  ", updateCustomer.toString())
+
+                    if (!checkAllFields()) return@setOnClickListener
+
+                    if (updateCustomer) {
+                        handleUpdateCustomerFlow()
+                    } else {
+                        handleCreateCustomerFlow()
+                    }
+                }
+            }
+
+
+
+            // مراقبة الـ StateFlow بنمط آمن لمنع تكرار الـ Collectors
+            fun observeCreateCustomerState() {
+                viewLifecycleOwner.lifecycleScope.launch {
+                    viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                        addressViewModel.createCustomerAddress.collect { response ->
+                            if (response != null) {
+                                val namee = response.customer_address.first_name
+                                val createdAddress = response.customer_address
+
+                                Log.e("responcerehhh", "Suucess responce not is null or invalid $namee")
+                                navigateToSavedAddress()
+                            } else {
+                                Snackbar.make(
+                                    requireView(),
+                                    "Failed to create address",
+                                    Snackbar.LENGTH_LONG
+                                ).show()
+
+                                Log.e("responcrehhh", "Not Suucess responce not is null or inva")
+                            }
+                        }
+                    }
+                }
+            }
+
+                // 1. المراقبة تكون هنا مرة واحدة فقط على مستوى الشاشة
+                observeCreateCustomerState()
+
+                // 2. إعداد حدث الضغط للزر
+                setupSaveButtonListener()
+
+
+
+          /*  savebutton.setOnClickListener {
                 Toast.makeText(requireContext(), "Save Button :", Toast.LENGTH_SHORT).show()
                 Log.i("nameUpdate__::  ", updateCustomer.toString())
 
@@ -250,6 +344,7 @@ class AddressFragment : Fragment() {
                     Log.i("nameUpdate::  ", updateCustomer.toString())
 
                     createAddressCustomer()
+
                     customerId?.toLongOrNull()?.let { id ->
                         addressViewModel.updateCustomer(
                             id, CustomerRequest(
@@ -320,7 +415,7 @@ class AddressFragment : Fragment() {
 
 
                 }
-            }
+            }*/
 
         }
 
