@@ -26,7 +26,9 @@
 
 ## 🎬 App Flow Demo & Screenshots
 
-<img width="576" height="1280" alt="video-shopenest_done-ezgif com-video-to-gif-converter" src="https://github.com/user-attachments/assets/be9322dc-a237-4f48-912e-5688e725aa6a" />
+<p align="center">
+<img width="300" alt="video-shopenest_done-ezgif com-video-to-gif-converter" src="https://github.com/user-attachments/assets/be9322dc-a237-4f48-912e-5688e725aa6a" />
+</p>
 
 |<img src="https://github.com/user-attachments/assets/a1971b82-111f-4b4b-8c3f-de752f38d80c" width="220"/> | <img src="https://github.com/user-attachments/assets/2e689eb6-cca0-4f1d-86c8-e07c37c6e5f4" width="220"/> | <img src="https://github.com/user-attachments/assets/a36ce953-32a6-40d3-bf23-de5fcc82a890" width="220"/> |
 | :---: | :---: | :---: |
