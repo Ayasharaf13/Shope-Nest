@@ -174,8 +174,18 @@ class HomeViewModel(private val repo: RepositoryInterface) : ViewModel() {
         Log.i("newIncreaseSave", inventoryMap[productId].toString())
     }
 
-
+    // داخل DetailsProductViewModel
     fun increaseInventory(productId: Long) {
+        val newValue = (inventoryMap[productId] ?: 0) + 1
+        inventoryMap[productId] = newValue
+
+        // Emits a new immutable read-only Map copy
+        _inventoryFlow.value = inventoryMap.toMap() as MutableMap<Long, Int>?
+
+        saveInventory(productId, newValue)
+    }
+
+    /*fun increaseInventory(productId: Long) {
         //  val newValue = getInventory(productId) + 1
 
         val newValue = (inventoryMap[productId] ?: 0) + 1  //getInventory(productId) + 1
@@ -187,14 +197,28 @@ class HomeViewModel(private val repo: RepositoryInterface) : ViewModel() {
 
         saveInventory(productId, newValue)
 
-    }
+    }*/
 
     fun decreaseInventory(productId: Long) {
+        // 1. حساب القيمة الجديدة مع ضمان عدم النزول عن 0
+        val newValue = ((inventoryMap[productId] ?: 0) - 1).coerceAtLeast(0)
+
+        // 2. تحديث الـ Map المحلية بالـ ViewModel
+        inventoryMap[productId] = newValue
+
+        // 3. ⚠️ السطر الناقص: إرسال Instance جديد للـ StateFlow لإيقاظ الـ collect في الـ Fragment
+        _inventoryFlow.value = HashMap(inventoryMap)
+
+        // 4. حفظ القيمة المحدثة في الداتابيز/المخزن الدائم
+        saveInventory(productId, newValue)
+    }
+
+   /* fun decreaseInventory(productId: Long) {
         val newValue = ((inventoryMap[productId]
             ?: 0) - 1).coerceAtLeast(0)//(getInventory(productId) - 1).coerceAtLeast(0)
 
         saveInventory(productId, newValue)
-    }
+    }*/
 
 
     fun increaseItem(lineItemId: Long, customerId: Long) {
@@ -398,17 +422,18 @@ class HomeViewModel(private val repo: RepositoryInterface) : ViewModel() {
 
     }
 
-
     suspend fun getProductDetails(id: Long): ProductResponse {
 
         viewModelScope.launch(Dispatchers.IO) {
 
             _productDetails.value = repo.getProductsDetails(id)
 
+
         }
         return repo.getProductsDetails(id)
 
     }
+
 
 
     suspend fun createDraftOrder(request: DraftOrderRequest)

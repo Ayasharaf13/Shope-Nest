@@ -28,7 +28,7 @@ class CartViewModel(private val repo: RepositoryInterface) : ViewModel() {
     val deleteDraftOrder: StateFlow<Result<Boolean>?> get() = _deleteDraftOrder
 
 
-    fun getDraftOrder() {
+   /* fun getDraftOrder() {
 
         viewModelScope.launch(Dispatchers.IO) {
 
@@ -36,7 +36,7 @@ class CartViewModel(private val repo: RepositoryInterface) : ViewModel() {
             _draftOrder.value = repo.getDraftOrders()
 
         }
-    }
+    }*/
 
     private val _customerId = MutableStateFlow<Long?>(null)
 

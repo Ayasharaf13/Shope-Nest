@@ -292,6 +292,7 @@ class AddressFragment : Fragment() {
 
                     if (!checkAllFields()) return@setOnClickListener
 
+
                     if (updateCustomer) {
                         handleUpdateCustomerFlow()
                     } else {

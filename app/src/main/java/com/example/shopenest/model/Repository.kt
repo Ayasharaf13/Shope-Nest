@@ -99,10 +99,10 @@ class Repository(remoteSource: RemoteSource, localSource: LocalSource) : Reposit
     }
 
 
-    override suspend fun getDraftOrders(): Response<ResponseDraftOrderForRetrieve> {
+   /* override suspend fun getDraftOrders(): Response<ResponseDraftOrderForRetrieve> {
 
         return remoteSource.getDraftOrders()
-    }
+    }*/
 
 
     override suspend fun deleteDraftOrderById(draftOrderId: Long): Response<Unit> {

@@ -82,9 +82,9 @@ interface ShoppingService {
     suspend fun createCartOrder(@Body cartOrder: DraftOrderRequest): Response<ResponseDraftOrderForRequestCreate>
 
 
-    @Headers("X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
+   /* @Headers("X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")
     @GET("draft_orders.json")
-    suspend fun getDraftOrders(): Response<ResponseDraftOrderForRetrieve>
+    suspend fun getDraftOrders(): Response<ResponseDraftOrderForRetrieve>*/
 
 
     @Headers("X-Shopify-Access-Token:${Constants.ACCESS_TOKEN}")

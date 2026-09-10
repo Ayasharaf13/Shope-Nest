@@ -15,10 +15,7 @@ import retrofit2.Response
 
 
 class CheckoutViewModel  (private val repo: RepositoryInterface) : ViewModel()   {
-
-
     val needUpdateCustomer = MutableStateFlow(false)
-
 
     fun setUpdate(update:Boolean){
         needUpdateCustomer.value = update

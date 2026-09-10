@@ -142,10 +142,10 @@ class ShoppingClient : RemoteSource {
         return apiService.createCartOrder(cartOrder)
     }
 
-    override suspend fun getDraftOrders(): Response<ResponseDraftOrderForRetrieve> {
+   /* override suspend fun getDraftOrders(): Response<ResponseDraftOrderForRetrieve> {
 
         return apiService.getDraftOrders()
-    }
+    }*/
 
 
     override suspend fun deleteDraftOrderById(draftOrderId: Long): Response<Unit> {

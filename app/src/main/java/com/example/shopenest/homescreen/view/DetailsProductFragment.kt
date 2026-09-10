@@ -12,8 +12,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.widget.ViewPager2
@@ -169,7 +171,8 @@ class DetailsProductFragment : Fragment() {
                 // Prepare price
                 val price = response.product.variants.firstOrNull()?.price?.toDoubleOrNull() ?: 0.0
 
-                // Format price according to selected currency
+                // Format price according to
+                // selected currency
                 val formatted = when (currency) {
                     "USD" -> NumberFormat.getCurrencyInstance(Locale.US).format(price)
                     "EGP" -> NumberFormat.getCurrencyInstance(Locale("en", "EG")).format(price)
@@ -190,7 +193,6 @@ class DetailsProductFragment : Fragment() {
                 //  var price = response.product.variants.firstOrNull()?.price
 
                 currentIdItem = response.product.variants.firstOrNull()?.inventory_item_id
-
 
                 price = response.product.variants.firstOrNull()?.price
                 idVariants = response.product.variants.firstOrNull()?.id
@@ -232,27 +234,24 @@ class DetailsProductFragment : Fragment() {
 
 
 
-        fun check(availableProduct: Int) {
-            cou = detailsProductViewModel.getInventory(idProduct ?: 0)
-            //  cou = Counter.getInventory(currentIdItem ?:0)
+       fun check(availableProduct: Int) {
+           cou = detailsProductViewModel.getInventory(idProduct ?: 0)
 
             cou?.let { currentCount ->
                 if (availableProduct >= currentCount && currentIdItem != null) {
-
-                    counterText.text = detailsProductViewModel.getInventory(idProduct ?: 0)
-
+                    counterText.text =cou
                         .toString()
-
                     Log.i("countterrr}}}check : ", cou.toString())
 
 
                 } else {
+                    //availableProduct
                     counterText.text =
-                        availableProduct//detailsProductViewModel.getInventory(currentIdItem)
+                        detailsProductViewModel.getInventory(idProduct)
                             .toString()
                     Toast.makeText(
                         requireContext(),
-                        "No Product found in store",
+                        "Products found in the store are: +$availableProduct",
                         Toast.LENGTH_SHORT
                     )
                         .show()
@@ -352,17 +351,13 @@ class DetailsProductFragment : Fragment() {
         }
 
 
-        viewLifecycleOwner.lifecycleScope.launch {
+       viewLifecycleOwner.lifecycleScope.launch {
             detailsProductViewModel.inventory.collect { availableProduct ->
-
 
                 increaseButton.setOnClickListener {
                     idProduct?.let { id ->
 
                         detailsProductViewModel.increaseInventory(id)
-
-                        var test = detailsProductViewModel.getInventory(id)
-                        Log.i("countIcreaseButton : ", test.toString())
 
                         if (availableProduct != null) {
                             check(availableProduct)
@@ -371,11 +366,7 @@ class DetailsProductFragment : Fragment() {
                 }
 
 
-
-
-
                 decreaseButton.setOnClickListener {
-                    //  var coun =   detailsProductViewModel.countter--
                     idProduct?.let { id ->
                         detailsProductViewModel.decreaseInventory(id)
 
@@ -386,10 +377,12 @@ class DetailsProductFragment : Fragment() {
 
                 }
 
-                if (availableProduct != null) {
+              if (availableProduct != null) {
                     check(availableProduct)
                 }
             }
+
+
 
         }
 // 2. برمجة السهم ليعود للخلف عند الضغط عليه

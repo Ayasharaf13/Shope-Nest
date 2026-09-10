@@ -31,6 +31,9 @@ import com.example.shopenest.network.ShoppingClient
 import com.example.shopenest.utilities.CustomerPref
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 
 class DetailsCartFragment : Fragment() {
@@ -78,8 +81,7 @@ class DetailsCartFragment : Fragment() {
                 requireActivity(),
                 detailsProductFactory
             ).get(HomeViewModel::class.java)
-        detailsProductViewModel.getInventory(currentIdItem ?: 0).toString()
-        //  countProduct = detailsProductViewModel.getInventory(currentIdItem ?:0)
+     //  countProduct = detailsProductViewModel.getInventory(currentIdItem ?:0)
 
 
         cartViewModelFactory = CartViewModelFactory(
@@ -127,6 +129,7 @@ class DetailsCartFragment : Fragment() {
         nameOfProduct = view.findViewById(R.id.textViewTitleCardDetails)
         buttonChecout = view.findViewById(R.id.buttonCheckout)
 
+        detailsProductViewModel.getInventory(currentIdItem ?: 0).toString()
 
         val customerId = CustomerPref(requireContext()).getCustomerId()?.toLong()
 
@@ -215,7 +218,19 @@ class DetailsCartFragment : Fragment() {
                 }
 
         }
+// 1. الأزرار ترسل الأوامر فقط للـ ViewModel
 
+
+        // 2. الـ Collect هو المسؤول الوحيد عن تحديث الشاشة واستدعاء check()
+        viewLifecycleOwner.lifecycleScope.launch {
+            detailsProductViewModel.inventory.collect { availableProduct ->
+                if (availableProduct != null) {
+                    // استدعاء دالة check بالتحديث الجديد فور وصوله
+                    check(availableProduct)
+                    Log.i("InventoryCollect", "Updated UI with: $availableProduct")
+                }
+            }
+        }
 
         buttonDecrease.setOnClickListener {
             //  var coun =   detailsProductViewModel.countter--
@@ -253,6 +268,8 @@ class DetailsCartFragment : Fragment() {
         toolbar.setNavigationOnClickListener {
             requireActivity().onBackPressedDispatcher.onBackPressed()
         }
+
+
 
         buttonIncrease.setOnClickListener {
             Log.i("increase_inventory_item_Aval", "inventory_item_Aval = $availableProduct")
@@ -323,10 +340,15 @@ class DetailsCartFragment : Fragment() {
                 textDisplayTotalPrice.text = totlaPreic.toString()
 
                 textDisplayDiscount.text = "45%"
+                // 1. Calculate discounted price as a Double (DO NOT convert to String yet)
+                val discountedPrice = totlaPreic * (1 - 0.45)
+              // 2. Format the Double result directly
+                val symbols = DecimalFormatSymbols(Locale.ROOT)
+                val formatter = DecimalFormat("#.0", symbols)
+                val totalAfterDiscount = formatter.format(discountedPrice) // Returns formatted String e.g. "27.3"
+            // 3. Display the clean formatted String in the TextView
+                textDisplayPriceAfterDiscount.text = totalAfterDiscount
 
-                textDisplayPriceAfterDiscount.text = (totlaPreic * (1 - 0.45)).toString()
-                Toast.makeText(requireContext(), "applayDiscount2222222222", Toast.LENGTH_SHORT)
-                    .show()
 
             }
         }

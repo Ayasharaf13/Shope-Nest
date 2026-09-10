@@ -26,7 +26,7 @@ interface RemoteSource {
     suspend fun getAvailableProducts(@Query("inventory_item_ids") inventoryItemId: Long): ResponseInventory
     suspend fun getDiscount(): ResponseDiscount
     suspend fun createCartOrder(@Body cartOrder: DraftOrderRequest): Response<ResponseDraftOrderForRequestCreate>
-    suspend fun getDraftOrders(): Response<ResponseDraftOrderForRetrieve>
+   // suspend fun getDraftOrders(): Response<ResponseDraftOrderForRetrieve>
     suspend fun deleteDraftOrderById(@Path("id") draftOrderId: Long): Response<Unit>
     suspend fun getCustomerById(@Path("customer_id") customerId: Long): Response<CustomerResponse>
 
